@@ -25,6 +25,15 @@ def main():
     config = json.loads(args.config.read_text())
     env_file = workspace_path(config.get("env_file", ".env"))
     load_dotenv(env_file, override=False)
+    translation = config.get("collection_query_translation", {})
+    for config_key, environment_key in (
+        ("enabled", "LDR_COLLECTION_QUERY_TRANSLATION_ENABLED"),
+        ("endpoint", "LDR_COLLECTION_QUERY_TRANSLATION_QWEN_ENDPOINT"),
+        ("model", "LDR_COLLECTION_QUERY_TRANSLATION_QWEN_MODEL"),
+    ):
+        value = translation.get(config_key)
+        if value is not None:
+            os.environ.setdefault(environment_key, str(value))
     manifest = json.loads(workspace_path(config["collection_manifest"]).read_text())
     # Resolve data location before importing app modules that cache database paths.
     os.environ["LDR_DATA_DIR"] = str(workspace_path(manifest["data_dir"]))

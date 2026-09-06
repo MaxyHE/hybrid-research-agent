@@ -1,11 +1,11 @@
 # 源码来源与发布边界
 
 - 本地快照来源：hybrid-odr-minimal 研发 worktree。
-- 固定源码 revision：67d7b99cb762520231d7580ad47a50036410687b。
+- 基础源码 revision：67d7b99cb762520231d7580ad47a50036410687b；追加同步研发02f9629的查询翻译、Collection连接器和启动器配置（不复制机器配置）。未整体同步后续Qwen候选代码。
 - 本仓库拥有独立 Git 历史，不是原研发仓库的 worktree，不携带原研发提交历史。
 - 应用基础：LearningCircuit/local-deep-research，原作者、包名与许可信息保留。
 - ODR 控制流与部分提示词：langchain-ai/open_deep_research，组件 LICENSE 保留。
-- 预算及未完成任务语义有 deep-research-harness 适配背景；完整采用范围和所需 NOTICE 的发布核对尚待完成。
+- 预算及未完成任务语义适配 deep-research-harness；已补组件 `NOTICE.md` 与固定来源版本的 `HARNESS_LICENSE`，原作者信息保留。
 - 没有设置 GitHub 远端或改变任何现有仓库可见性。
 
 ## 发布前剩余事项

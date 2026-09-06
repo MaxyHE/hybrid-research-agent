@@ -1,0 +1,1784 @@
+[
+  {
+    "id": "R1",
+    "corpus": "papers",
+    "language": "en",
+    "query": "In a language-agent paper, what framework interleaves reasoning traces with actions so that actions can query an external environment?",
+    "targets": [
+      "react"
+    ],
+    "translated_query": "In a language-agent paper, what framework interleaves reasoning traces with actions so that actions can query an external environment?",
+    "original_query": [
+      "lats",
+      "react",
+      "rewoo",
+      "generative_agents",
+      "agentboard",
+      "agentbench",
+      "reflexion",
+      "browsecomp"
+    ],
+    "translated_chinese_query": [
+      "lats",
+      "react",
+      "rewoo",
+      "generative_agents",
+      "agentboard",
+      "agentbench",
+      "reflexion",
+      "browsecomp"
+    ]
+  },
+  {
+    "id": "R2",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Which browser-assisted question-answering system requires collecting references while browsing and uses human feedback to optimize answer quality?",
+    "targets": [
+      "webgpt"
+    ],
+    "translated_query": "Which browser-assisted question-answering system requires collecting references while browsing and uses human feedback to optimize answer quality?",
+    "original_query": [
+      "webgpt",
+      "reflexion",
+      "dpr",
+      "alce",
+      "flare",
+      "rag",
+      "browsecomp",
+      "lats"
+    ],
+    "translated_chinese_query": [
+      "webgpt",
+      "reflexion",
+      "dpr",
+      "alce",
+      "flare",
+      "rag",
+      "browsecomp",
+      "lats"
+    ]
+  },
+  {
+    "id": "R3",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Which agent framework uses verbal feedback stored as episodic memory without updating model weights?",
+    "targets": [
+      "reflexion"
+    ],
+    "translated_query": "Which agent framework uses verbal feedback stored as episodic memory without updating model weights?",
+    "original_query": [
+      "generative_agents",
+      "reflexion",
+      "memgpt",
+      "agentboard",
+      "agentbench",
+      "lats",
+      "react",
+      "browsecomp"
+    ],
+    "translated_chinese_query": [
+      "generative_agents",
+      "reflexion",
+      "memgpt",
+      "agentboard",
+      "agentbench",
+      "lats",
+      "react",
+      "browsecomp"
+    ]
+  },
+  {
+    "id": "R4",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Which augmented language-model approach separates reasoning from tool observations to reduce repeated context and token consumption?",
+    "targets": [
+      "rewoo"
+    ],
+    "translated_query": "Which augmented language-model approach separates reasoning from tool observations to reduce repeated context and token consumption?",
+    "original_query": [
+      "rewoo",
+      "react",
+      "lats",
+      "alce",
+      "gaia",
+      "agentbench",
+      "flare",
+      "memgpt"
+    ],
+    "translated_chinese_query": [
+      "rewoo",
+      "react",
+      "lats",
+      "alce",
+      "gaia",
+      "agentbench",
+      "flare",
+      "memgpt"
+    ]
+  },
+  {
+    "id": "R5",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Which system manages hierarchical memory tiers and interrupts to extend context beyond an LLM context window?",
+    "targets": [
+      "memgpt"
+    ],
+    "translated_query": "Which system manages hierarchical memory tiers and interrupts to extend context beyond an LLM context window?",
+    "original_query": [
+      "memgpt",
+      "agentboard",
+      "longmem",
+      "rewoo",
+      "agentbench",
+      "alce",
+      "reflexion"
+    ],
+    "translated_chinese_query": [
+      "memgpt",
+      "agentboard",
+      "longmem",
+      "rewoo",
+      "agentbench",
+      "alce",
+      "reflexion"
+    ]
+  },
+  {
+    "id": "R6",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Which RAG architecture recursively clusters and summarizes chunks into a hierarchy for long-document retrieval?",
+    "targets": [
+      "raptor"
+    ],
+    "translated_query": "Which RAG architecture recursively clusters and summarizes chunks into a hierarchy for long-document retrieval?",
+    "original_query": [
+      "raptor",
+      "crag",
+      "rag",
+      "memgpt",
+      "flare",
+      "self_rag",
+      "webgpt",
+      "dpr"
+    ],
+    "translated_chinese_query": [
+      "raptor",
+      "crag",
+      "rag",
+      "memgpt",
+      "flare",
+      "self_rag",
+      "webgpt",
+      "dpr"
+    ]
+  },
+  {
+    "id": "R7",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Which retrieval-augmented model uses reflection tokens to decide when to retrieve and to critique generated content?",
+    "targets": [
+      "self_rag"
+    ],
+    "translated_query": "Which retrieval-augmented model uses reflection tokens to decide when to retrieve and to critique generated content?",
+    "original_query": [
+      "self_rag",
+      "flare",
+      "crag",
+      "alce",
+      "rag",
+      "webgpt",
+      "lats"
+    ],
+    "translated_chinese_query": [
+      "self_rag",
+      "flare",
+      "crag",
+      "alce",
+      "rag",
+      "webgpt",
+      "lats"
+    ]
+  },
+  {
+    "id": "R8",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Which multi-turn agent benchmark proposes a progress-rate metric instead of evaluating only final success?",
+    "targets": [
+      "agentboard"
+    ],
+    "translated_query": "Which multi-turn agent benchmark proposes a progress-rate metric instead of evaluating only final success?",
+    "original_query": [
+      "agentboard",
+      "deepresearch_bench",
+      "agentbench",
+      "lats",
+      "gaia",
+      "webgpt",
+      "reflexion",
+      "generative_agents"
+    ],
+    "translated_chinese_query": [
+      "agentboard",
+      "deepresearch_bench",
+      "agentbench",
+      "lats",
+      "gaia",
+      "webgpt",
+      "reflexion",
+      "generative_agents"
+    ]
+  },
+  {
+    "id": "P09",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Find the DPR paper introducing a dual-encoder passage retriever for open-domain QA.",
+    "targets": [
+      "dpr"
+    ],
+    "translated_query": "Find the DPR paper introducing a dual-encoder passage retriever for open-domain QA.",
+    "original_query": [
+      "dpr",
+      "rag",
+      "self_rag",
+      "raptor",
+      "flare",
+      "webgpt",
+      "alce",
+      "memgpt"
+    ],
+    "translated_chinese_query": [
+      "dpr",
+      "rag",
+      "self_rag",
+      "raptor",
+      "flare",
+      "webgpt",
+      "alce",
+      "memgpt"
+    ]
+  },
+  {
+    "id": "P10",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Which work combines a seq2seq model with a Wikipedia vector index and contrasts using the same evidence throughout an answer with changing evidence for individual generated tokens?",
+    "targets": [
+      "rag"
+    ],
+    "translated_query": "Which work combines a seq2seq model with a Wikipedia vector index and contrasts using the same evidence throughout an answer with changing evidence for individual generated tokens?",
+    "original_query": [
+      "self_rag",
+      "alce",
+      "lats",
+      "dpr",
+      "flare",
+      "rag",
+      "react",
+      "webgpt"
+    ],
+    "translated_chinese_query": [
+      "self_rag",
+      "alce",
+      "lats",
+      "dpr",
+      "flare",
+      "rag",
+      "react",
+      "webgpt"
+    ]
+  },
+  {
+    "id": "P11",
+    "corpus": "papers",
+    "language": "en",
+    "query": "I need a generation method that anticipates its next sentence and looks up missing knowledge when it is unsure about words in that sentence.",
+    "targets": [
+      "flare"
+    ],
+    "translated_query": "I need a generation method that anticipates its next sentence and looks up missing knowledge when it is unsure about words in that sentence.",
+    "original_query": [
+      "flare",
+      "crag",
+      "longmem",
+      "memgpt",
+      "rag",
+      "alce",
+      "lats",
+      "self_rag"
+    ],
+    "translated_chinese_query": [
+      "flare",
+      "crag",
+      "longmem",
+      "memgpt",
+      "rag",
+      "alce",
+      "lats",
+      "self_rag"
+    ]
+  },
+  {
+    "id": "P12",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Find a method that checks whether retrieved material is trustworthy, then either repairs the evidence or extends the search beyond the original document store.",
+    "targets": [
+      "crag"
+    ],
+    "translated_query": "Find a method that checks whether retrieved material is trustworthy, then either repairs the evidence or extends the search beyond the original document store.",
+    "original_query": [
+      "crag",
+      "memgpt",
+      "deepresearch_bench",
+      "rewoo",
+      "rag",
+      "alce",
+      "agentbench",
+      "flare"
+    ],
+    "translated_chinese_query": [
+      "crag",
+      "memgpt",
+      "deepresearch_bench",
+      "rewoo",
+      "rag",
+      "alce",
+      "agentbench",
+      "flare"
+    ]
+  },
+  {
+    "id": "P13",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Locate ALCE and its evaluation of citation completeness and correctness in generated answers.",
+    "targets": [
+      "alce"
+    ],
+    "translated_query": "Locate ALCE and its evaluation of citation completeness and correctness in generated answers.",
+    "original_query": [
+      "alce",
+      "deepresearch_bench",
+      "self_rag",
+      "webgpt",
+      "rag"
+    ],
+    "translated_chinese_query": [
+      "alce",
+      "deepresearch_bench",
+      "self_rag",
+      "webgpt",
+      "rag"
+    ]
+  },
+  {
+    "id": "P14",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Which architecture keeps the original language model frozen while a separate residual network reads cached historical representations?",
+    "targets": [
+      "longmem"
+    ],
+    "translated_query": "Which architecture keeps the original language model frozen while a separate residual network reads cached historical representations?",
+    "original_query": [
+      "longmem",
+      "generative_agents",
+      "rag",
+      "agentbench",
+      "self_rag",
+      "raptor",
+      "flare",
+      "memgpt"
+    ],
+    "translated_chinese_query": [
+      "longmem",
+      "generative_agents",
+      "rag",
+      "agentbench",
+      "self_rag",
+      "raptor",
+      "flare",
+      "memgpt"
+    ]
+  },
+  {
+    "id": "P15",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Find the study where simulated people remember their experiences, reflect on them, and coordinate everyday social activities in a small virtual town.",
+    "targets": [
+      "generative_agents"
+    ],
+    "translated_query": "Find the study where simulated people remember their experiences, reflect on them, and coordinate everyday social activities in a small virtual town.",
+    "original_query": [
+      "generative_agents",
+      "react",
+      "memgpt",
+      "agentbench",
+      "agentboard"
+    ],
+    "translated_chinese_query": [
+      "generative_agents",
+      "react",
+      "memgpt",
+      "agentbench",
+      "agentboard"
+    ]
+  },
+  {
+    "id": "P16",
+    "corpus": "papers",
+    "language": "en",
+    "query": "I want an assistant evaluation based on ordinary questions that are easy for people but require several tools and sometimes visual information to solve.",
+    "targets": [
+      "gaia"
+    ],
+    "translated_query": "I want an assistant evaluation based on ordinary questions that are easy for people but require several tools and sometimes visual information to solve.",
+    "original_query": [
+      "gaia",
+      "agentboard",
+      "deepresearch_bench",
+      "lats",
+      "browsecomp",
+      "agentbench",
+      "webgpt",
+      "reflexion"
+    ],
+    "translated_chinese_query": [
+      "gaia",
+      "agentboard",
+      "deepresearch_bench",
+      "lats",
+      "browsecomp",
+      "agentbench",
+      "webgpt",
+      "reflexion"
+    ]
+  },
+  {
+    "id": "P17",
+    "corpus": "papers",
+    "language": "en",
+    "query": "What is AgentBench, and which interactive environments does it use to evaluate LLM decision making?",
+    "targets": [
+      "agentbench"
+    ],
+    "translated_query": "What is AgentBench, and which interactive environments does it use to evaluate LLM decision making?",
+    "original_query": [
+      "agentbench",
+      "agentboard",
+      "gaia",
+      "memgpt",
+      "deepresearch_bench"
+    ],
+    "translated_chinese_query": [
+      "agentbench",
+      "agentboard",
+      "gaia",
+      "memgpt",
+      "deepresearch_bench"
+    ]
+  },
+  {
+    "id": "P18",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Which browsing evaluation deliberately asks for obscure information that may take a long search to find but has a short, easily checked answer?",
+    "targets": [
+      "browsecomp"
+    ],
+    "translated_query": "Which browsing evaluation deliberately asks for obscure information that may take a long search to find but has a short, easily checked answer?",
+    "original_query": [
+      "browsecomp",
+      "webgpt",
+      "self_rag",
+      "crag",
+      "dpr",
+      "alce",
+      "deepresearch_bench",
+      "lats"
+    ],
+    "translated_chinese_query": [
+      "browsecomp",
+      "webgpt",
+      "self_rag",
+      "crag",
+      "dpr",
+      "alce",
+      "deepresearch_bench",
+      "lats"
+    ]
+  },
+  {
+    "id": "P19",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Find the deep research evaluation paper that introduces RACE and FACT for report quality and trustworthy citations.",
+    "targets": [
+      "deepresearch_bench"
+    ],
+    "translated_query": "Find the deep research evaluation paper that introduces RACE and FACT for report quality and trustworthy citations.",
+    "original_query": [
+      "deepresearch_bench",
+      "alce",
+      "crag",
+      "self_rag",
+      "webgpt"
+    ],
+    "translated_chinese_query": [
+      "deepresearch_bench",
+      "alce",
+      "crag",
+      "self_rag",
+      "webgpt"
+    ]
+  },
+  {
+    "id": "P20",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Which language-agent method explores alternative action trajectories with Monte Carlo tree search, a value estimate, and feedback from its environment?",
+    "targets": [
+      "lats"
+    ],
+    "translated_query": "Which language-agent method explores alternative action trajectories with Monte Carlo tree search, a value estimate, and feedback from its environment?",
+    "original_query": [
+      "lats",
+      "agentboard",
+      "generative_agents",
+      "agentbench",
+      "react",
+      "reflexion"
+    ],
+    "translated_chinese_query": [
+      "lats",
+      "agentboard",
+      "generative_agents",
+      "agentbench",
+      "react",
+      "reflexion"
+    ]
+  },
+  {
+    "id": "P21",
+    "corpus": "papers",
+    "language": "zh",
+    "query": "为了减少研究智能体重复读取工具结果的开销，我想比较边推理边行动和先规划再收集工具观察两条路线，请找出各自的代表论文。",
+    "targets": [
+      "react",
+      "rewoo"
+    ],
+    "translated_query": "Comparative analysis of interleaved reasoning and action versus plan-then-observe approaches for reducing redundant tool result reading in LLM agents",
+    "original_query": [
+      "agentbench",
+      "deepresearch_bench",
+      "gaia",
+      "self_rag",
+      "agentboard",
+      "generative_agents",
+      "rag",
+      "react"
+    ],
+    "translated_chinese_query": [
+      "agentbench",
+      "rewoo",
+      "lats",
+      "agentboard",
+      "gaia",
+      "react",
+      "reflexion",
+      "memgpt"
+    ]
+  },
+  {
+    "id": "P22",
+    "corpus": "papers",
+    "language": "zh",
+    "query": "上下文窗口不够时，操作系统式分层记忆管理和冻结主模型后另设长期记忆读取网络有什么区别？请检索这两类工作的原论文。",
+    "targets": [
+      "memgpt",
+      "longmem"
+    ],
+    "translated_query": "Comparison of OS-inspired hierarchical memory management versus frozen main model with separate long-term memory reading network for context window limitations",
+    "original_query": [
+      "deepresearch_bench",
+      "agentboard",
+      "agentbench",
+      "gaia",
+      "self_rag",
+      "generative_agents",
+      "rag",
+      "react"
+    ],
+    "translated_chinese_query": [
+      "memgpt",
+      "longmem",
+      "agentboard",
+      "self_rag",
+      "rag",
+      "generative_agents",
+      "webgpt",
+      "raptor"
+    ]
+  },
+  {
+    "id": "P23",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Compare three decisions in retrieval-augmented generation: using uncertainty in the next sentence, using learned reflection tokens, and checking the quality of already retrieved documents.",
+    "targets": [
+      "flare",
+      "self_rag",
+      "crag"
+    ],
+    "translated_query": "Compare three decisions in retrieval-augmented generation: using uncertainty in the next sentence, using learned reflection tokens, and checking the quality of already retrieved documents.",
+    "original_query": [
+      "crag",
+      "flare",
+      "self_rag",
+      "rag",
+      "memgpt",
+      "alce",
+      "webgpt",
+      "raptor"
+    ],
+    "translated_chinese_query": [
+      "crag",
+      "flare",
+      "self_rag",
+      "rag",
+      "memgpt",
+      "alce",
+      "webgpt",
+      "raptor"
+    ]
+  },
+  {
+    "id": "P24",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Find papers for comparing general assistants on everyday tool-using questions against agents specialized in locating obscure web facts.",
+    "targets": [
+      "gaia",
+      "browsecomp"
+    ],
+    "translated_query": "Find papers for comparing general assistants on everyday tool-using questions against agents specialized in locating obscure web facts.",
+    "original_query": [
+      "gaia",
+      "browsecomp",
+      "rewoo",
+      "deepresearch_bench",
+      "agentboard",
+      "agentbench",
+      "webgpt",
+      "crag"
+    ],
+    "translated_chinese_query": [
+      "gaia",
+      "browsecomp",
+      "rewoo",
+      "deepresearch_bench",
+      "agentboard",
+      "agentbench",
+      "webgpt",
+      "crag"
+    ]
+  },
+  {
+    "id": "P25",
+    "corpus": "papers",
+    "language": "en",
+    "query": "I need both a flat dense passage retrieval baseline and an approach that retrieves at multiple levels of a recursively summarized document tree.",
+    "targets": [
+      "dpr",
+      "raptor"
+    ],
+    "translated_query": "I need both a flat dense passage retrieval baseline and an approach that retrieves at multiple levels of a recursively summarized document tree.",
+    "original_query": [
+      "raptor",
+      "self_rag",
+      "flare",
+      "dpr",
+      "alce",
+      "rag",
+      "memgpt",
+      "webgpt"
+    ],
+    "translated_chinese_query": [
+      "raptor",
+      "self_rag",
+      "flare",
+      "dpr",
+      "alce",
+      "rag",
+      "memgpt",
+      "webgpt"
+    ]
+  },
+  {
+    "id": "P26",
+    "corpus": "papers",
+    "language": "zh",
+    "query": "有没有专门评估大模型答案引用是否正确、是否充分覆盖论断的论文，而不是只检查链接能否打开？",
+    "targets": [
+      "alce"
+    ],
+    "translated_query": "Papers evaluating the correctness and comprehensiveness of citations in large language model answers, beyond merely checking link accessibility",
+    "original_query": [
+      "deepresearch_bench",
+      "agentbench",
+      "rag",
+      "crag",
+      "agentboard",
+      "browsecomp",
+      "gaia",
+      "self_rag"
+    ],
+    "translated_chinese_query": [
+      "alce",
+      "webgpt",
+      "self_rag",
+      "raptor",
+      "deepresearch_bench",
+      "dpr",
+      "rag",
+      "flare"
+    ]
+  },
+  {
+    "id": "P27",
+    "corpus": "papers",
+    "language": "zh",
+    "query": "长篇资料的细节散落在不同段落，哪篇论文通过递归聚类和摘要构建层级结构来支持跨段信息检索？",
+    "targets": [
+      "raptor"
+    ],
+    "translated_query": "Which paper constructs a hierarchical structure through recursive clustering and summarization to support cross-paragraph information retrieval in long documents?",
+    "original_query": [
+      "deepresearch_bench",
+      "agentbench",
+      "self_rag",
+      "agentboard",
+      "react",
+      "alce",
+      "longmem",
+      "crag"
+    ],
+    "translated_chinese_query": [
+      "raptor",
+      "flare",
+      "memgpt",
+      "rag",
+      "dpr",
+      "webgpt",
+      "self_rag",
+      "alce"
+    ]
+  },
+  {
+    "id": "P28",
+    "corpus": "papers",
+    "language": "zh",
+    "query": "智能体失败后不更新模型参数，而是把语言反馈存进记忆供下次尝试使用，这种方案是哪篇论文提出的？",
+    "targets": [
+      "reflexion"
+    ],
+    "translated_query": "Which paper proposes an agent that, upon failure, stores linguistic feedback in memory for future attempts instead of updating model parameters",
+    "original_query": [
+      "agentbench",
+      "gaia",
+      "deepresearch_bench",
+      "agentboard",
+      "reflexion",
+      "self_rag",
+      "crag",
+      "rewoo"
+    ],
+    "translated_chinese_query": [
+      "generative_agents",
+      "agentbench",
+      "agentboard",
+      "lats",
+      "reflexion",
+      "memgpt",
+      "rag",
+      "self_rag"
+    ]
+  },
+  {
+    "id": "P29",
+    "corpus": "papers",
+    "language": "en",
+    "query": "Find the papers needed to trace the progression from browser-assisted answers trained with human feedback, through automatic citation evaluation, to evaluation of long research reports.",
+    "targets": [
+      "webgpt",
+      "alce",
+      "deepresearch_bench"
+    ],
+    "translated_query": "Find the papers needed to trace the progression from browser-assisted answers trained with human feedback, through automatic citation evaluation, to evaluation of long research reports.",
+    "original_query": [
+      "webgpt",
+      "alce",
+      "deepresearch_bench",
+      "browsecomp",
+      "dpr",
+      "self_rag",
+      "crag",
+      "gaia"
+    ],
+    "translated_chinese_query": [
+      "webgpt",
+      "alce",
+      "deepresearch_bench",
+      "browsecomp",
+      "dpr",
+      "self_rag",
+      "crag",
+      "gaia"
+    ]
+  },
+  {
+    "id": "P30",
+    "corpus": "papers",
+    "language": "zh",
+    "query": "我想评估多轮智能体，既需要跨交互环境的任务集，也想知道只看最终成功率会遗漏哪些中间进展，请找出相关的两篇基准论文。",
+    "targets": [
+      "agentbench",
+      "agentboard"
+    ],
+    "translated_query": "Benchmarks for evaluating multi-turn agents: task sets across interactive environments and analysis of intermediate progress missed by final success rate",
+    "original_query": [
+      "agentbench",
+      "deepresearch_bench",
+      "gaia",
+      "self_rag",
+      "rag",
+      "raptor",
+      "generative_agents",
+      "agentboard"
+    ],
+    "translated_chinese_query": [
+      "agentboard",
+      "agentbench",
+      "generative_agents",
+      "lats",
+      "deepresearch_bench",
+      "reflexion"
+    ]
+  },
+  {
+    "id": "1",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "0-dimensional biomaterials show inductive properties.",
+    "targets": [
+      "31715818"
+    ],
+    "translated_query": "0-dimensional biomaterials show inductive properties.",
+    "original_query": [
+      "31715818",
+      "2060137",
+      "36398420",
+      "1065627",
+      "28530299",
+      "12152977",
+      "9433958",
+      "20457190"
+    ],
+    "translated_chinese_query": [
+      "31715818",
+      "2060137",
+      "36398420",
+      "1065627",
+      "28530299",
+      "12152977",
+      "9433958",
+      "20457190"
+    ]
+  },
+  {
+    "id": "100",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "All hematopoietic stem cells segregate their chromosomes randomly.",
+    "targets": [
+      "4381486"
+    ],
+    "translated_query": "All hematopoietic stem cells segregate their chromosomes randomly.",
+    "original_query": [
+      "4381486",
+      "37297740",
+      "5373138",
+      "52868579",
+      "15926408",
+      "36398420",
+      "12152977",
+      "43619625"
+    ],
+    "translated_chinese_query": [
+      "4381486",
+      "37297740",
+      "5373138",
+      "52868579",
+      "15926408",
+      "36398420",
+      "12152977",
+      "43619625"
+    ]
+  },
+  {
+    "id": "1012",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Radioiodine treatment of non-toxic multinodular goitre reduces thyroid volume.",
+    "targets": [
+      "9745001"
+    ],
+    "translated_query": "Radioiodine treatment of non-toxic multinodular goitre reduces thyroid volume.",
+    "original_query": [
+      "9745001",
+      "2958458",
+      "25816994",
+      "30101891",
+      "24443043",
+      "23848916",
+      "11774598",
+      "41646286"
+    ],
+    "translated_chinese_query": [
+      "9745001",
+      "2958458",
+      "25816994",
+      "30101891",
+      "24443043",
+      "23848916",
+      "11774598",
+      "41646286"
+    ]
+  },
+  {
+    "id": "1014",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Rapamycin decreases the concentration of triacylglycerols in fruit flies.",
+    "targets": [
+      "6277638"
+    ],
+    "translated_query": "Rapamycin decreases the concentration of triacylglycerols in fruit flies.",
+    "original_query": [
+      "6277638",
+      "4387784",
+      "3770750",
+      "16557565",
+      "11603066",
+      "32955023",
+      "11899391",
+      "2274272"
+    ],
+    "translated_chinese_query": [
+      "6277638",
+      "4387784",
+      "3770750",
+      "16557565",
+      "11603066",
+      "32955023",
+      "11899391",
+      "2274272"
+    ]
+  },
+  {
+    "id": "1019",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Rapid phosphotransfer rates govern fidelity in two component systems",
+    "targets": [
+      "11603066"
+    ],
+    "translated_query": "Rapid phosphotransfer rates govern fidelity in two component systems",
+    "original_query": [
+      "11603066",
+      "4387784",
+      "1292369",
+      "5956016",
+      "24443043",
+      "30101891",
+      "2060137",
+      "25300426"
+    ],
+    "translated_chinese_query": [
+      "11603066",
+      "4387784",
+      "1292369",
+      "5956016",
+      "24443043",
+      "30101891",
+      "2060137",
+      "25300426"
+    ]
+  },
+  {
+    "id": "1020",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Rapid up-regulation and higher basal expression of interferon-induced genes increase survival of granule cell neurons that are infected by West Nile virus.",
+    "targets": [
+      "9433958"
+    ],
+    "translated_query": "Rapid up-regulation and higher basal expression of interferon-induced genes increase survival of granule cell neurons that are infected by West Nile virus.",
+    "original_query": [
+      "9433958",
+      "30933307",
+      "5867846",
+      "2274272",
+      "1292369",
+      "25050969",
+      "36830715",
+      "46478393"
+    ],
+    "translated_chinese_query": [
+      "9433958",
+      "30933307",
+      "5867846",
+      "2274272",
+      "1292369",
+      "25050969",
+      "36830715",
+      "46478393"
+    ]
+  },
+  {
+    "id": "1021",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Rapid up-regulation and higher basal expression of interferon-induced genes reduce survival of granule cell neurons that are infected by West Nile virus.",
+    "targets": [
+      "9433958"
+    ],
+    "translated_query": "Rapid up-regulation and higher basal expression of interferon-induced genes reduce survival of granule cell neurons that are infected by West Nile virus.",
+    "original_query": [
+      "9433958",
+      "30933307",
+      "5867846",
+      "2274272",
+      "1292369",
+      "25050969",
+      "46478393",
+      "36830715"
+    ],
+    "translated_chinese_query": [
+      "9433958",
+      "30933307",
+      "5867846",
+      "2274272",
+      "1292369",
+      "25050969",
+      "46478393",
+      "36830715"
+    ]
+  },
+  {
+    "id": "1024",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Recurrent mutations occur frequently within CTCF anchor sites adjacent to oncogenes.",
+    "targets": [
+      "5373138"
+    ],
+    "translated_query": "Recurrent mutations occur frequently within CTCF anchor sites adjacent to oncogenes.",
+    "original_query": [
+      "5373138",
+      "25300426",
+      "15926408",
+      "16626264",
+      "46478393",
+      "2356950",
+      "39048693",
+      "4387784"
+    ],
+    "translated_chinese_query": [
+      "5373138",
+      "25300426",
+      "15926408",
+      "16626264",
+      "46478393",
+      "2356950",
+      "39048693",
+      "4387784"
+    ]
+  },
+  {
+    "id": "1029",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Reduced responsiveness to interleukin-2 in regulatory T cells is associated with greater resistance to autoimmune diseases such as Type 1 Diabetes.",
+    "targets": [
+      "13923140",
+      "13940200",
+      "11899391"
+    ],
+    "translated_query": "Reduced responsiveness to interleukin-2 in regulatory T cells is associated with greater resistance to autoimmune diseases such as Type 1 Diabetes.",
+    "original_query": [
+      "11899391",
+      "13940200",
+      "13923140",
+      "10831818",
+      "20457190",
+      "43619625",
+      "5867846",
+      "36547290"
+    ],
+    "translated_chinese_query": [
+      "11899391",
+      "13940200",
+      "13923140",
+      "10831818",
+      "20457190",
+      "43619625",
+      "5867846",
+      "36547290"
+    ]
+  },
+  {
+    "id": "1041",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Replacement of histone H2A with H2A.Z slows gene activation in yeasts by stabilizing +1 nucleosomes.",
+    "targets": [
+      "25254425",
+      "16626264"
+    ],
+    "translated_query": "Replacement of histone H2A with H2A.Z slows gene activation in yeasts by stabilizing +1 nucleosomes.",
+    "original_query": [
+      "15778034",
+      "25254425",
+      "16626264",
+      "34034749",
+      "36547290",
+      "46478393",
+      "1065627",
+      "12152977"
+    ],
+    "translated_chinese_query": [
+      "15778034",
+      "25254425",
+      "16626264",
+      "34034749",
+      "36547290",
+      "46478393",
+      "1065627",
+      "12152977"
+    ]
+  },
+  {
+    "id": "S11",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Find evidence on whether several unhealthy habits cluster more strongly among less educated adults and whether this inequality changes over time.",
+    "targets": [
+      "456304"
+    ],
+    "translated_query": "Find evidence on whether several unhealthy habits cluster more strongly among less educated adults and whether this inequality changes over time.",
+    "original_query": [
+      "456304",
+      "12709184",
+      "3770750",
+      "32463364",
+      "3981244",
+      "6945285",
+      "4506702",
+      "2613775"
+    ],
+    "translated_chinese_query": [
+      "456304",
+      "12709184",
+      "3770750",
+      "32463364",
+      "3981244",
+      "6945285",
+      "4506702",
+      "2613775"
+    ]
+  },
+  {
+    "id": "S12",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Can the stiffness around a breast cancer cell change its sensitivity to a targeted drug through mechanosensitive transcription factors?",
+    "targets": [
+      "1065627"
+    ],
+    "translated_query": "Can the stiffness around a breast cancer cell change its sensitivity to a targeted drug through mechanosensitive transcription factors?",
+    "original_query": [
+      "1065627",
+      "2060137",
+      "15926408",
+      "10486817",
+      "19529370",
+      "3851329",
+      "32421068",
+      "11603066"
+    ],
+    "translated_chinese_query": [
+      "1065627",
+      "2060137",
+      "15926408",
+      "10486817",
+      "19529370",
+      "3851329",
+      "32421068",
+      "11603066"
+    ]
+  },
+  {
+    "id": "S13",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Which study connects the physical stability and aggregate shape of infectious proteins to how efficiently they spread into the brain?",
+    "targets": [
+      "1292369"
+    ],
+    "translated_query": "Which study connects the physical stability and aggregate shape of infectious proteins to how efficiently they spread into the brain?",
+    "original_query": [
+      "1292369",
+      "9433958",
+      "2060137",
+      "2274272",
+      "13903052",
+      "34034749",
+      "46478393",
+      "14492964"
+    ],
+    "translated_chinese_query": [
+      "1292369",
+      "9433958",
+      "2060137",
+      "2274272",
+      "13903052",
+      "34034749",
+      "46478393",
+      "14492964"
+    ]
+  },
+  {
+    "id": "S14",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Find the N-cadherin study on force sensing and cytoskeletal organization in cardiac myocytes.",
+    "targets": [
+      "2060137"
+    ],
+    "translated_query": "Find the N-cadherin study on force sensing and cytoskeletal organization in cardiac myocytes.",
+    "original_query": [
+      "2060137",
+      "24443043",
+      "14492964",
+      "11603066",
+      "6993046",
+      "1065627",
+      "3851329",
+      "31715818"
+    ],
+    "translated_chinese_query": [
+      "2060137",
+      "24443043",
+      "14492964",
+      "11603066",
+      "6993046",
+      "1065627",
+      "3851329",
+      "31715818"
+    ]
+  },
+  {
+    "id": "S15",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Find the evidence linking human IRGM to autophagy and intracellular mycobacterial clearance.",
+    "targets": [
+      "2274272"
+    ],
+    "translated_query": "Find the evidence linking human IRGM to autophagy and intracellular mycobacterial clearance.",
+    "original_query": [
+      "2274272",
+      "25300426",
+      "9433958",
+      "12225214",
+      "1292369",
+      "30933307",
+      "5867846",
+      "5373138"
+    ],
+    "translated_chinese_query": [
+      "2274272",
+      "25300426",
+      "9433958",
+      "12225214",
+      "1292369",
+      "30933307",
+      "5867846",
+      "5373138"
+    ]
+  },
+  {
+    "id": "S16",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Which regulatory chain connects a DNA methylation reader, a microRNA, and a developmental protein to the balance between neural stem-cell proliferation and differentiation?",
+    "targets": [
+      "2356950"
+    ],
+    "translated_query": "Which regulatory chain connects a DNA methylation reader, a microRNA, and a developmental protein to the balance between neural stem-cell proliferation and differentiation?",
+    "original_query": [
+      "2356950",
+      "52868579",
+      "5373138",
+      "12152977",
+      "16626264",
+      "28530299",
+      "25254425",
+      "25050969"
+    ],
+    "translated_chinese_query": [
+      "2356950",
+      "52868579",
+      "5373138",
+      "12152977",
+      "16626264",
+      "28530299",
+      "25254425",
+      "25050969"
+    ]
+  },
+  {
+    "id": "S17",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Find a review connecting an infant's sleep environment and smoke exposure with failure of protective arousal and sudden unexplained death.",
+    "targets": [
+      "2613775"
+    ],
+    "translated_query": "Find a review connecting an infant's sleep environment and smoke exposure with failure of protective arousal and sudden unexplained death.",
+    "original_query": [
+      "2613775",
+      "456304",
+      "4506702",
+      "6993046",
+      "6945285",
+      "3981244",
+      "32421068",
+      "3770750"
+    ],
+    "translated_chinese_query": [
+      "2613775",
+      "456304",
+      "4506702",
+      "6993046",
+      "6945285",
+      "3981244",
+      "32421068",
+      "3770750"
+    ]
+  },
+  {
+    "id": "S18",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "How do maternal metabolism, placental hormone production, and signals from the fetus jointly regulate growth before birth?",
+    "targets": [
+      "2958458"
+    ],
+    "translated_query": "How do maternal metabolism, placental hormone production, and signals from the fetus jointly regulate growth before birth?",
+    "original_query": [
+      "2958458",
+      "32955023",
+      "14492964",
+      "28530299",
+      "16557565",
+      "52868579",
+      "36398420",
+      "3770750"
+    ],
+    "translated_chinese_query": [
+      "2958458",
+      "32955023",
+      "14492964",
+      "28530299",
+      "16557565",
+      "52868579",
+      "36398420",
+      "3770750"
+    ]
+  },
+  {
+    "id": "S19",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Find the systematic review and meta-analysis of SSB intake and weight gain in children and adults.",
+    "targets": [
+      "3770750"
+    ],
+    "translated_query": "Find the systematic review and meta-analysis of SSB intake and weight gain in children and adults.",
+    "original_query": [
+      "3770750",
+      "12709184",
+      "32955023",
+      "456304",
+      "32463364",
+      "6945285",
+      "4506702",
+      "32421068"
+    ],
+    "translated_chinese_query": [
+      "3770750",
+      "12709184",
+      "32955023",
+      "456304",
+      "32463364",
+      "6945285",
+      "4506702",
+      "32421068"
+    ]
+  },
+  {
+    "id": "S20",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Which cancer-treatment review discusses why early drugs targeting cell-cycle kinases had only modest activity and what subsequent clinical development should learn?",
+    "targets": [
+      "3851329"
+    ],
+    "translated_query": "Which cancer-treatment review discusses why early drugs targeting cell-cycle kinases had only modest activity and what subsequent clinical development should learn?",
+    "original_query": [
+      "3851329",
+      "32421068",
+      "1065627",
+      "24323695",
+      "24624992",
+      "24790460",
+      "6650933",
+      "15926408"
+    ],
+    "translated_chinese_query": [
+      "3851329",
+      "32421068",
+      "1065627",
+      "24323695",
+      "24624992",
+      "24790460",
+      "6650933",
+      "15926408"
+    ]
+  },
+  {
+    "id": "S21",
+    "corpus": "scifact",
+    "language": "zh",
+    "query": "细胞外基质变硬后，乳腺癌细胞为什么可能对拉帕替尼更耐受？有没有涉及机械信号转录因子的实验？",
+    "targets": [
+      "1065627"
+    ],
+    "translated_query": "Why do breast cancer cells develop lapatinib resistance after extracellular matrix stiffening, and are there experiments involving mechanotranscription factors?",
+    "original_query": [
+      "37297740",
+      "12225214",
+      "24624992",
+      "15778034",
+      "4387784",
+      "20457190",
+      "4381486",
+      "57762078"
+    ],
+    "translated_chinese_query": [
+      "1065627",
+      "2060137",
+      "15926408",
+      "10486817",
+      "25300426",
+      "12225214",
+      "36830715",
+      "12152977"
+    ]
+  },
+  {
+    "id": "S22",
+    "corpus": "scifact",
+    "language": "zh",
+    "query": "甲基化DNA结合蛋白通过微小RNA调节神经干细胞增殖和分化的机制，有什么实验证据？",
+    "targets": [
+      "2356950"
+    ],
+    "translated_query": "Experimental evidence for the mechanism by which methyl-CpG binding proteins regulate neural stem cell proliferation and differentiation through microRNAs",
+    "original_query": [
+      "52868579",
+      "34034749",
+      "25254425",
+      "10486817",
+      "15778034",
+      "37297740",
+      "15926408",
+      "12225214"
+    ],
+    "translated_chinese_query": [
+      "2356950",
+      "25050969",
+      "28530299",
+      "12152977",
+      "52868579",
+      "9433958",
+      "5373138",
+      "36830715"
+    ]
+  },
+  {
+    "id": "S23",
+    "corpus": "scifact",
+    "language": "zh",
+    "query": "造血干细胞分裂时会把旧DNA链特殊保留下来吗？请找直接用标记追踪染色体分配的研究。",
+    "targets": [
+      "4381486"
+    ],
+    "translated_query": "Does hematopoietic stem cell division retain old DNA strands? Find studies directly tracking chromosome segregation using labeled DNA",
+    "original_query": [
+      "52868579",
+      "37297740",
+      "15926408",
+      "24624992",
+      "4381486",
+      "25254425",
+      "15778034",
+      "34034749"
+    ],
+    "translated_chinese_query": [
+      "4381486",
+      "15926408",
+      "52868579",
+      "16626264",
+      "5373138",
+      "12152977",
+      "34034749",
+      "37297740"
+    ]
+  },
+  {
+    "id": "S24",
+    "corpus": "scifact",
+    "language": "zh",
+    "query": "对于不适合手术的非毒性多结节性甲状腺肿，有没有随访放射性碘治疗后体积和甲状腺功能变化的研究？",
+    "targets": [
+      "9745001"
+    ],
+    "translated_query": "Studies on the changes in volume and thyroid function after radioactive iodine therapy in non-toxic multinodular goiter patients who are not suitable for surgery",
+    "original_query": [
+      "19529370",
+      "12225214",
+      "57762078",
+      "2613775",
+      "2356950",
+      "20457190",
+      "3981244",
+      "2060137"
+    ],
+    "translated_chinese_query": [
+      "9745001",
+      "25816994",
+      "2958458",
+      "24443043",
+      "30101891",
+      "23848916",
+      "24323695",
+      "32421068"
+    ]
+  },
+  {
+    "id": "S25",
+    "corpus": "scifact",
+    "language": "zh",
+    "query": "为什么不同脑区的神经元对同一种病毒的易感程度不同？想找比较其先天免疫基因程序的研究。",
+    "targets": [
+      "9433958"
+    ],
+    "translated_query": "Comparative analysis of innate immune gene programs underlying differential neuronal susceptibility to viral infection across brain regions",
+    "original_query": [
+      "12225214",
+      "52868579",
+      "25254425",
+      "4381486",
+      "25050969",
+      "37297740",
+      "6993046",
+      "36398420"
+    ],
+    "translated_chinese_query": [
+      "9433958",
+      "1292369",
+      "30933307",
+      "10831818",
+      "13903052",
+      "5867846",
+      "13923140",
+      "2274272"
+    ]
+  },
+  {
+    "id": "S26",
+    "corpus": "scifact",
+    "language": "zh",
+    "query": "CheA与CheY的相互作用特异性由哪些结构位点决定，能否通过突变重定向磷酸转移？",
+    "targets": [
+      "11603066"
+    ],
+    "translated_query": "Which structural sites determine the specificity of the CheA-CheY interaction, and can phosphoryl transfer be redirected by mutations?",
+    "original_query": [
+      "11603066",
+      "6650933",
+      "24624992",
+      "4387784",
+      "20457190",
+      "32421068",
+      "2613775",
+      "24323695"
+    ],
+    "translated_chinese_query": [
+      "11603066",
+      "4387784",
+      "3851329",
+      "5373138",
+      "10486817",
+      "52868579",
+      "3868322",
+      "2060137"
+    ]
+  },
+  {
+    "id": "S27",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Find both mouse and human evidence linking genetic disruption of the interleukin-2 pathway to impaired regulatory T-cell function and autoimmune susceptibility.",
+    "targets": [
+      "13923140",
+      "11899391"
+    ],
+    "translated_query": "Find both mouse and human evidence linking genetic disruption of the interleukin-2 pathway to impaired regulatory T-cell function and autoimmune susceptibility.",
+    "original_query": [
+      "13923140",
+      "11899391",
+      "13940200",
+      "10831818",
+      "43619625",
+      "36547290",
+      "9433958",
+      "5373138"
+    ],
+    "translated_chinese_query": [
+      "13923140",
+      "11899391",
+      "13940200",
+      "10831818",
+      "43619625",
+      "36547290",
+      "9433958",
+      "5373138"
+    ]
+  },
+  {
+    "id": "S28",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Find complementary studies on how histone variants influence promoter activation and on how different variant combinations change nucleosome stability.",
+    "targets": [
+      "16626264",
+      "25254425"
+    ],
+    "translated_query": "Find complementary studies on how histone variants influence promoter activation and on how different variant combinations change nucleosome stability.",
+    "original_query": [
+      "25254425",
+      "15778034",
+      "16626264",
+      "34034749",
+      "36547290",
+      "12152977",
+      "5373138",
+      "52868579"
+    ],
+    "translated_chinese_query": [
+      "25254425",
+      "15778034",
+      "16626264",
+      "34034749",
+      "36547290",
+      "12152977",
+      "5373138",
+      "52868579"
+    ]
+  },
+  {
+    "id": "S29",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Compare evidence that mechanical properties of the cellular surroundings influence cancer drug response and the organization of heart muscle cells.",
+    "targets": [
+      "1065627",
+      "2060137"
+    ],
+    "translated_query": "Compare evidence that mechanical properties of the cellular surroundings influence cancer drug response and the organization of heart muscle cells.",
+    "original_query": [
+      "2060137",
+      "1065627",
+      "3851329",
+      "10486817",
+      "6650933",
+      "32421068",
+      "6993046",
+      "24443043"
+    ],
+    "translated_chinese_query": [
+      "2060137",
+      "1065627",
+      "3851329",
+      "10486817",
+      "6650933",
+      "32421068",
+      "6993046",
+      "24443043"
+    ]
+  },
+  {
+    "id": "S30",
+    "corpus": "scifact",
+    "language": "en",
+    "query": "Find studies illustrating different consequences of autophagy: clearance of intracellular bacteria and extension of lifespan in fruit flies.",
+    "targets": [
+      "2274272",
+      "6277638"
+    ],
+    "translated_query": "Find studies illustrating different consequences of autophagy: clearance of intracellular bacteria and extension of lifespan in fruit flies.",
+    "original_query": [
+      "6277638",
+      "2274272",
+      "37297740",
+      "9433958",
+      "1292369",
+      "23746313",
+      "25300426",
+      "32955023"
+    ],
+    "translated_chinese_query": [
+      "6277638",
+      "2274272",
+      "37297740",
+      "9433958",
+      "1292369",
+      "23746313",
+      "25300426",
+      "32955023"
+    ]
+  }
+]

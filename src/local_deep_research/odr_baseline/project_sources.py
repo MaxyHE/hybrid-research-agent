@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 from typing import Any, Generator, Iterable, Mapping
 from urllib.parse import urlsplit
 
+from .collection_query_translation import CollectionQueryTranslator
 from .sources import DiscoveredResource, FetchedResource
 
 
@@ -252,6 +253,7 @@ class ProjectCollectionConnector:
         user_password: str | None = None,
         settings_snapshot: Mapping[str, Any],
         max_results: int = 8,
+        query_translator: CollectionQueryTranslator | None = None,
     ) -> None:
         self._collection_id = collection_id
         self._collection_name = collection_name
@@ -264,6 +266,20 @@ class ProjectCollectionConnector:
             "policy.egress_scope": "adaptive",
         }
         self._max_results = max_results
+        self._query_translator = (
+            query_translator or CollectionQueryTranslator.from_environment()
+        )
+        self._last_query_translation_metadata: dict[str, Any] | None = None
+
+    @property
+    def last_query_translation_metadata(self) -> dict[str, Any] | None:
+        """Compact metadata from the most recent Collection search translation."""
+
+        return (
+            dict(self._last_query_translation_metadata)
+            if self._last_query_translation_metadata is not None
+            else None
+        )
 
     @contextmanager
     def _collection_runtime(self) -> Generator[None, None, None]:
@@ -311,6 +327,8 @@ class ProjectCollectionConnector:
             CollectionSearchEngine,
         )
 
+        translation = self._query_translator.translate(query)
+        self._last_query_translation_metadata = translation.metadata()
         with self._collection_runtime():
             engine = CollectionSearchEngine(
                 collection_id=self._collection_id,
@@ -325,7 +343,7 @@ class ProjectCollectionConnector:
                 # chunk pool, then retain the earliest hit for each Document;
                 # the public contract remains max_results Documents.
                 raw_results = engine.search(
-                    query,
+                    translation.query,
                     limit=self._max_results
                     * _COLLECTION_RAW_CANDIDATE_MULTIPLIER,
                 )

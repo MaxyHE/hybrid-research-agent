@@ -1,6 +1,6 @@
 # 运行准备
 
-当前是本地发布候选源码包，尚未在全新环境完成安装演示。不要使用上游 pip 包或上游 Docker 镜像来验证本仓库改造。
+已在macOS arm64独立Python 3.14环境完成源码安装、依赖一致性检查、前端构建及浏览器注册/首页检查。完整模型研究任务尚待可用模型服务验证。不要使用上游pip包或上游Docker镜像代替本仓库。
 
 ## 依赖与前端
 
@@ -9,17 +9,21 @@
 在本目录创建环境并安装源码，构建静态资源：
 
 ```bash
-python3 -m venv .venv
+python3.14 -m venv .venv
 .venv/bin/pip install -e .
 npm ci
 npm run build
 ```
+
+也可选Python 3.12/3.13；先确认解释器版本，系统自带Python可能太旧。macOS若SQLCipher编译/加载失败，需要先安装系统SQLCipher开发库再安装Python依赖；Linux x86_64依赖中提供二进制包。前端依赖以package-lock.json为准，Python以上命令按声明版本范围解析，并非严格按pdm.lock同步。
 
 ## 普通应用入口
 
 ```bash
 .venv/bin/ldr-web
 ```
+
+需要隔离端口和数据时，在启动进程设置 `LDR_WEB_HOST=127.0.0.1`、`LDR_WEB_PORT=8767` 和 `LDR_DATA_DIR=/absolute/path/to/your/data`。默认只在本机演示；本指南不部署公网服务。
 
 具体端口以启动输出为准。创建账号，在文库界面导入有权使用的文档并建立索引，配置模型与搜索服务。不要复制他人的数据库或账号凭据。
 

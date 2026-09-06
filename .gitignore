@@ -14,3 +14,4 @@ dist/
 build/
 *.egg-info/
 .DS_Store
+src/local_deep_research/web/static/css/themes.css
