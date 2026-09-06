@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% from "components/custom_dropdown.html" import render_dropdown %}
+
+{% set active_page = 'new-research' %}
+
+{% block title %}深度研究 · Local Deep Research{% endblock %}
+
+{% block extra_head %}
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<link rel="stylesheet" href="/static/css/custom_dropdown.css">
+<link rel="stylesheet" href="/static/css/deep_research.css">
+{% endblock %}
+
+{% block content %}
+<div class="ldr-page active ldr-deep-page" id="new-research">
+    <div class="ldr-page-header ldr-deep-hero">
+        <div>
+            <div class="ldr-deep-eyebrow"><span aria-hidden="true"></span> DEEP RESEARCH</div>
+            <h1>把问题交给可核查的研究。</h1>
+            <p>系统会围绕你的问题组织研究、阅读来源，并生成带链接引用的报告。</p>
+        </div>
+        <div class="ldr-deep-hero-note" aria-label="研究来源说明">
+            <span class="ldr-deep-hero-note-mark" aria-hidden="true"></span>
+            <div>
+                <strong>公开 Web × 本地文库</strong>
+                <small>按本次选择组合研究来源</small>
+            </div>
+        </div>
+    </div>
+    <div class="ldr-card ldr-research-card">
+        <div class="ldr-card-content">
+            <form id="research-form">
+                <input type="radio" id="mode-quick" name="research_mode" value="quick" checked class="sr-only">
+                <input type="hidden" id="agent_research_profile" name="agent_research_profile" value="hybrid_odr">
+                <div class="ldr-form-group">
+                    <label class="ldr-deep-query-label" for="query">你想研究什么？</label>
+                    <textarea id="query" name="query" rows="4" placeholder="例如：比较不同方案的证据、限制与适用条件" autofocus aria-required="true"></textarea>
+                    <div class="ldr-deep-query-hint"><kbd>Enter</kbd> 开始研究　<kbd>Shift</kbd> + <kbd>Enter</kbd> 换行</div>
+                </div>
+
+                <section class="ldr-deep-scope" aria-labelledby="research-source-scope-title">
+                    <div class="ldr-deep-scope-heading">
+                        <div>
+                            <span class="ldr-deep-section-label">研究来源</span>
+                            <h2 id="research-source-scope-title">这次研究查阅哪些资料？</h2>
+                        </div>
+                        <p id="research-source-summary" aria-live="polite">当前：仅公开 Web</p>
+                    </div>
+                    <fieldset class="ldr-deep-source-options">
+                        <legend class="sr-only">选择研究来源</legend>
+                        <label class="ldr-deep-source-option is-selected" data-source-scope="web">
+                            <input type="radio" name="research_source_scope" value="web" checked>
+                            <span class="ldr-deep-source-symbol" aria-hidden="true">W</span>
+                            <span><strong>公开 Web</strong><small>围绕问题发现并阅读公开网页</small></span>
+                        </label>
+                        <label class="ldr-deep-source-option" data-source-scope="hybrid">
+                            <input type="radio" name="research_source_scope" value="hybrid">
+                            <span class="ldr-deep-source-symbol" aria-hidden="true">W＋L</span>
+                            <span><strong>混合研究</strong><small>公开 Web 与本地文库共同参与</small></span>
+                        </label>
+                        <label class="ldr-deep-source-option" data-source-scope="collection">
+                            <input type="radio" name="research_source_scope" value="collection">
+                            <span class="ldr-deep-source-symbol" aria-hidden="true">L</span>
+                            <span><strong>仅本地文库</strong><small>只查阅所选文库，不搜索公开 Web</small></span>
+                        </label>
+                    </fieldset>
+                    <div class="ldr-deep-library-picker" id="general-collection-container" hidden>
+                        <label for="general_collection_id">选择本地文库</label>
+                        <select id="general_collection_id" name="general_collection_id" class="ldr-form-control" disabled>
+                            <option value="">选择一个可用于研究的文库</option>
+                        </select>
+                        <span class="ldr-input-help" id="general-collection-help">所选文库会与公开 Web 一起参与本次研究。</span>
+                    </div>
+                </section>
+
+                <section class="ldr-deep-model" aria-labelledby="research-model-title">
+                    <div class="ldr-deep-scope-heading">
+                        <h2 id="research-model-title">研究模型</h2>
+                        <a href="/settings">连接与其他设置 ↗</a>
+                    </div>
+                    <div class="ldr-deep-model-row">
+                        <div class="ldr-form-group">
+                            <label for="model_provider">模型服务</label>
+                            <select id="model_provider" name="model_provider" class="ldr-form-control" data-initial-value="{{ settings.llm_provider }}">
+                                <option value="{{ settings.llm_provider }}">{{ settings.llm_provider or '加载模型服务…' }}</option>
+                            </select>
+                        </div>
+                        <div class="ldr-form-group">
+                            {{ render_dropdown(input_id="model", dropdown_id="model-dropdown", placeholder="选择或输入模型名称", label="模型", show_refresh=True, refresh_aria_label="刷新模型列表", data_initial_value=settings.llm_model) }}
+                        </div>
+                    </div>
+                    <p class="ldr-input-help">本地文库指资料来源，不代表模型在本地运行；使用云端模型时，问题与选用的材料会发送给模型服务。</p>
+                </section>
+                <div id="research-alert" class="ldr-settings-alert-container" role="alert" aria-atomic="true" style="display:none"></div>
+                <div id="research-error-alert" class="ldr-settings-error-container" style="display:none"></div>
+                <div class="ldr-deep-submit-row">
+                    <button type="submit" class="btn btn-primary" id="start-research-btn"><i aria-hidden="true" class="fas fa-arrow-right"></i> 开始深度研究</button>
+                    <span>自动组织研究，保留来源与引用。</span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block component_scripts %}
+<script defer src="/static/js/components/custom_dropdown.js"></script>
+<script defer src="/static/js/components/research.js"></script>
+{% endblock %}

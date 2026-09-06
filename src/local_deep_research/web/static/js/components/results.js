@@ -1,0 +1,1297 @@
+/**
+ * Results Component
+ * Handles the display of research results
+ */
+(function() {
+    // DOM Elements
+    let resultsContainer = null;
+    let exportBtn = null;
+    let pdfBtn = null;
+    let researchId = null;
+    let researchData = null;
+
+    function hybridRunStatus(metadata) {
+        const details = metadata && typeof metadata.hybrid_odr === 'object'
+            ? metadata.hybrid_odr
+            : null;
+        if (!details) {
+            return {
+                className: '',
+                title: '报告已生成',
+                copy: '请结合报告中的引用与来源清单阅读本次研究。',
+                metrics: ''
+            };
+        }
+        const status = String(details.status || '').toLowerCase();
+        const terminalReason = String(details.terminal_reason || '');
+        const count = (value, label) => Number.isFinite(Number(value)) ? `${label} ${Number(value)}` : null;
+        const metrics = [
+            {web_only: '公开 Web', collection_only: '仅本地文库', hybrid_available: '混合研究'}[details.source_mode],
+            count(details.task_count, '任务'),
+            count(details.fetched_source_count, '来源'),
+            count(details.model_calls_used, '模型调用'),
+            count(details.tool_calls_used, '工具调用')
+        ].filter(Boolean).join(' · ');
+        if (status === 'complete') {
+            return {
+                className: 'is-complete',
+                title: '研究完成',
+                copy: terminalReason === 'citation_url_audit_passed'
+                    ? '引用链接检查已通过。报告内容仍应结合来源自行判断。'
+                    : '报告已生成。请结合引用与来源清单阅读本次研究。',
+                metrics
+            };
+        }
+        if (status === 'needs_review') {
+            return {
+                className: 'is-review',
+                title: '引用需要复核',
+                copy: '报告已生成，但引用链接需要人工复核；请先查看来源清单。',
+                metrics
+            };
+        }
+        if (status === 'incomplete') {
+            return {
+                className: 'is-incomplete',
+                title: '研究未完整完成',
+                copy: '以下内容可能为部分结果。请查看来源，或重新发起研究。',
+                metrics
+            };
+        }
+        return {
+            className: '',
+            title: '报告已生成',
+            copy: '请结合报告中的引用与来源清单阅读本次研究。',
+            metrics
+        };
+    }
+
+    function renderRunStatus(data) {
+        const panel = document.getElementById('research-run-status');
+        const title = document.getElementById('research-run-status-title');
+        const copy = document.getElementById('research-run-status-copy');
+        const metrics = document.getElementById('research-run-metrics');
+        const runId = document.getElementById('research-run-id');
+        const state = hybridRunStatus(data && data.metadata);
+        if (panel) panel.className = `ldr-deep-result-status ${state.className}`.trim();
+        if (title) title.textContent = state.title;
+        if (copy) copy.textContent = state.copy;
+        if (metrics) metrics.textContent = state.metrics;
+        if (runId) runId.textContent = researchId || '—';
+    }
+
+    function normaliseSource(source) {
+        if (typeof source === 'string') {
+            return { url: source, title: source, sourceType: 'web' };
+        }
+        if (!source || typeof source !== 'object' || typeof source.url !== 'string') return null;
+        const url = source.url.trim();
+        if (!url) return null;
+        const sourceType = String(source.source_type || source.channel || 'web');
+        return {
+            url,
+            title: typeof source.title === 'string' && source.title.trim() ? source.title.trim() : url,
+            sourceType
+        };
+    }
+
+    function isSafeReportSourceUrl(url) {
+        return /^https?:\/\//i.test(url) || /^\/library\/document\/[A-Za-z0-9][A-Za-z0-9_-]*(?:\/pdf)?$/.test(url);
+    }
+
+    function sourceLabel(source) {
+        if (['local_collection', 'library', 'collection'].includes(source.sourceType) || /^\/library\/document\//.test(source.url)) {
+            return '本地文库';
+        }
+        try {
+            return new URL(source.url, window.location.origin).hostname || '公开 Web';
+        } catch (_error) {
+            return '公开 Web';
+        }
+    }
+
+    function createSourceGroup(title, sources) {
+        const group = document.createElement('section');
+        group.className = 'ldr-deep-source-group';
+        const heading = document.createElement('h3');
+        heading.textContent = title;
+        const list = document.createElement('ul');
+        list.className = 'ldr-deep-source-list';
+        for (const source of sources) {
+            const item = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = source.url;
+            link.textContent = source.title;
+            if (/^https?:\/\//i.test(source.url)) {
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+            }
+            const detail = document.createElement('small');
+            detail.textContent = sourceLabel(source);
+            item.append(link, detail);
+            list.appendChild(item);
+        }
+        group.append(heading, list);
+        return group;
+    }
+
+    function renderSources(sources) {
+        const panel = document.getElementById('research-sources-panel');
+        const count = document.getElementById('research-sources-count');
+        if (!panel) return;
+        const safeSources = (Array.isArray(sources) ? sources : [])
+            .map(normaliseSource)
+            .filter(source => source && isSafeReportSourceUrl(source.url));
+        panel.replaceChildren();
+        if (count) count.textContent = `${safeSources.length} 项`;
+        if (!safeSources.length) {
+            const empty = document.createElement('p');
+            empty.className = 'ldr-deep-sources-empty';
+            empty.textContent = '本次报告没有可展示的来源链接。';
+            panel.appendChild(empty);
+            return;
+        }
+        const local = safeSources.filter(source => ['local_collection', 'library', 'collection'].includes(source.sourceType) || /^\/library\/document\//.test(source.url));
+        const web = safeSources.filter(source => !local.includes(source));
+        if (web.length) panel.appendChild(createSourceGroup('公开 Web', web));
+        if (local.length) panel.appendChild(createSourceGroup('本地文库', local));
+    }
+
+    /**
+     * Inline fallback for HTML escaping - provides XSS protection even if
+     * xss-protection.js fails to load.
+     * NOTE: This declaration is safe because it is INSIDE an IIFE (function scope).
+     * Do NOT move it to top-level scope — it would conflict with the global
+     * escapeHtmlFallback in services/ui.js and crash the page.
+     */
+    // bearer:disable javascript_lang_manual_html_sanitization
+    const escapeHtmlFallback = (str) => String(str).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
+
+    /**
+     * Initialize the results component
+     */
+    function initializeResults() {
+        // Get DOM elements
+        resultsContainer = document.getElementById('results-content');
+        exportBtn = document.getElementById('export-markdown-btn');
+        pdfBtn = document.getElementById('download-pdf-btn');
+
+        if (!resultsContainer) {
+            SafeLogger.error('Results container not found');
+            return;
+        }
+
+        SafeLogger.log('Results component initialized');
+
+        // Get research ID from URL
+        researchId = getResearchIdFromUrl();
+
+        if (!researchId) {
+            showError('Research ID not found in URL');
+            return;
+        }
+
+        // Set up event listeners
+        setupEventListeners();
+
+        // Load research results
+        loadResearchResults();
+
+        // Initialize star rating
+        initializeStarRating();
+
+        // Note: Log panel is now automatically initialized by logpanel.js
+        // No need to manually initialize it here
+    }
+
+    /**
+     * Set up event listeners
+     */
+    function setupEventListeners() {
+        // View metrics button
+        const metricsBtn = document.getElementById('view-metrics-btn');
+        if (metricsBtn) {
+            metricsBtn.addEventListener('click', () => {
+                URLValidator.safeAssign(window.location, 'href', URLBuilder.detailsPage(researchId));
+            });
+        }
+
+        // Export button (Markdown)
+        if (exportBtn) {
+            exportBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                handleExport();
+            });
+        }
+
+        // PDF button
+        if (pdfBtn) {
+            pdfBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                handlePdfExport();
+            });
+        }
+
+        // LaTeX export button
+        const latexBtn = document.getElementById('export-latex-btn');
+        if (latexBtn) {
+            latexBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                handleFormatExport('latex');
+            });
+        }
+
+        // Quarto export button
+        const quartoBtn = document.getElementById('export-quarto-btn');
+        if (quartoBtn) {
+            quartoBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                handleFormatExport('quarto');
+            });
+        }
+
+        // ODT export button
+        const odtBtn = document.getElementById('export-odt-btn');
+        if (odtBtn) {
+            odtBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                handleFormatExport('odt');
+            });
+        }
+
+        // RIS export button (for Zotero)
+        const risBtn = document.getElementById('export-ris-btn');
+        if (risBtn) {
+            risBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                handleFormatExport('ris');
+            });
+        }
+
+        // Back to history button
+        const backBtn = document.getElementById('back-to-history');
+        if (backBtn) {
+            backBtn.addEventListener('click', () => {
+                URLValidator.safeAssign(window.location, 'href', URLS.PAGES.HISTORY);
+            });
+        }
+
+        const rerunBtn = document.getElementById('rerun-research-btn');
+        if (rerunBtn) {
+            rerunBtn.addEventListener('click', () => {
+                const query = researchData?.metadata?.query || researchData?.query;
+                if (typeof query === 'string' && query.trim()) {
+                    try {
+                        sessionStorage.setItem('rerunConfig', JSON.stringify({ query, mode: 'quick' }));
+                    } catch (error) {
+                        SafeLogger.warn('Could not save research rerun config:', error);
+                    }
+                }
+                URLValidator.safeAssign(window.location, 'href', '/research');
+            });
+        }
+
+    }
+
+    /**
+     * Get research ID from URL using centralized URL system
+     * @returns {string|null} Research ID
+     */
+    function getResearchIdFromUrl() {
+        return URLBuilder.extractResearchIdFromPattern('results');
+    }
+
+    /**
+     * Load research results from API
+     */
+    async function loadResearchResults() {
+        try {
+            // Show loading state
+            resultsContainer.innerHTML = '<div class="text-center my-5"><i class="fas fa-spinner fa-pulse"></i><p class="mt-3">Loading research results...</p></div>';
+
+            // Fetch result from report API (reports are stored in database now)
+            const response = await fetch(`/api/report/${researchId}`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error ${response.status}`);
+            }
+
+            const responseData = await response.json();
+            SafeLogger.log('Original API response:', responseData);
+
+            // Store data for export
+            researchData = responseData;
+
+            // Check if we have data to display
+            if (!responseData) {
+                throw new Error('No data received from server');
+            }
+
+            // Use the API metadata directly
+            if (responseData.metadata && typeof responseData.metadata === 'object') {
+                SafeLogger.log('Using metadata directly from API response:', responseData.metadata);
+                populateMetadataFromApiResponse(responseData);
+            } else {
+                // Fallback to content extraction if no metadata in response
+                populateMetadata(responseData);
+            }
+
+            renderRunStatus(responseData);
+            renderSources(responseData.sources);
+
+            // Render the content
+            if (responseData.content && typeof responseData.content === 'string') {
+                SafeLogger.log('Rendering content from API response');
+                renderResults(responseData.content);
+            } else {
+                // Try to find content in other response formats
+                SafeLogger.log('No direct content found, trying to find content in response');
+                findAndRenderContent(responseData);
+            }
+
+            // Enable export buttons
+            if (exportBtn) exportBtn.disabled = false;
+            if (pdfBtn) pdfBtn.disabled = false;
+
+            // Check for context overflow after loading results
+            checkContextOverflow();
+
+        } catch (error) {
+            SafeLogger.error('Error loading research results:', error.message || error);
+            showError(`Error loading research results: ${error.message}`);
+
+            // Disable export buttons
+            if (exportBtn) exportBtn.disabled = true;
+            if (pdfBtn) pdfBtn.disabled = true;
+        }
+    }
+
+    /**
+     * Populate metadata directly from API response metadata
+     * @param {Object} data - API response with metadata
+     */
+    function populateMetadataFromApiResponse(data) {
+        const metadata = data.metadata || {};
+        SafeLogger.log('Using API response metadata:', metadata);
+
+        // Query field
+        const queryElement = document.getElementById('result-query');
+        if (queryElement) {
+            // Prefer processed query over original query for news subscriptions
+            const query = metadata.processed_query || metadata.query || metadata.title || data.query || 'Untitled Research';
+            SafeLogger.log('Setting query to:', query);
+            queryElement.textContent = query;
+        }
+
+        // Generated date field
+        const dateElement = document.getElementById('result-date');
+        if (dateElement) {
+            let dateStr = 'Unknown date';
+
+            // Try multiple sources for the timestamp - first from the API response directly, then from metadata
+            const timestamp = data.created_at || data.timestamp || data.date ||
+                            metadata.created_at || metadata.timestamp || metadata.date;
+
+            SafeLogger.log('Found timestamp:', timestamp);
+
+            if (timestamp) {
+                if (window.formatting && typeof window.formatting.formatDate === 'function') {
+                    dateStr = window.formatting.formatDate(timestamp);
+                    SafeLogger.log('Formatting timestamp with formatter:', timestamp, '→', dateStr);
+                } else {
+                    try {
+                        const date = new Date(timestamp);
+                        dateStr = date.toLocaleString();
+                        SafeLogger.log('Formatting timestamp with toLocaleString:', timestamp, '→', dateStr);
+                    } catch (e) {
+                        SafeLogger.error('Error parsing date:', e);
+                    }
+                }
+
+                // Add duration if available - format as "Xm Ys" for values over 60 seconds
+                if (metadata.duration || metadata.duration_seconds || data.duration_seconds) {
+                    const durationSeconds = parseInt(metadata.duration || metadata.duration_seconds || data.duration_seconds, 10);
+
+                    if (!isNaN(durationSeconds)) {
+                        let durationStr;
+                        if (durationSeconds < 60) {
+                            durationStr = `${durationSeconds}s`;
+                        } else {
+                            const minutes = Math.floor(durationSeconds / 60);
+                            const seconds = durationSeconds % 60;
+                            durationStr = `${minutes}m ${seconds}s`;
+                        }
+                        dateStr += ` (${durationStr})`;
+                    }
+                }
+            }
+
+            SafeLogger.log('Setting date to:', dateStr);
+            dateElement.textContent = dateStr;
+        }
+
+        // Mode field
+        const modeElement = document.getElementById('result-mode');
+        if (modeElement) {
+            // Get mode from metadata or main response
+            let mode = metadata.mode || metadata.research_mode || metadata.type ||
+                      data.mode || data.research_mode || data.type;
+
+            // Detect if this is a detailed report based on content structure
+            if (!mode && data.content) {
+                if (data.content.toLowerCase().includes('table of contents') ||
+                    data.content.match(/^#.*\n+##.*\n+###/m)) {
+                    mode = 'detailed';
+                } else {
+                    mode = 'quick';
+                }
+            }
+
+            // Format mode using available formatter
+            if (window.formatting && typeof window.formatting.formatMode === 'function') {
+                mode = window.formatting.formatMode(mode);
+                SafeLogger.log('Formatted mode:', mode);
+            }
+
+            SafeLogger.log('Setting mode to:', mode || 'Quick');
+            modeElement.textContent = mode || 'Quick';
+        }
+    }
+
+    /**
+     * Find and render content from various response formats
+     * @param {Object} data - Research data to extract content from
+     */
+    function findAndRenderContent(data) {
+        if (data.content && typeof data.content === 'string') {
+            // Direct content property (newer format)
+            SafeLogger.log('Rendering from data.content');
+            renderResults(data.content);
+        } else if (data.research && data.research.content) {
+            // Nested content in research object (older format)
+            SafeLogger.log('Rendering from data.research.content');
+            renderResults(data.research.content);
+        } else if (data.report && typeof data.report === 'string') {
+            // Report format
+            SafeLogger.log('Rendering from data.report');
+            renderResults(data.report);
+        } else if (data.results && data.results.content) {
+            // Results with content field
+            SafeLogger.log('Rendering from data.results.content');
+            renderResults(data.results.content);
+        } else if (data.results && typeof data.results === 'string') {
+            // Results as direct string
+            SafeLogger.log('Rendering from data.results string');
+            renderResults(data.results);
+        } else if (typeof data === 'string') {
+            // Plain string format
+            SafeLogger.log('Rendering from string data');
+            renderResults(data);
+        } else {
+            // Look for any property that might contain the content
+            const contentProps = ['markdown', 'text', 'summary', 'output', 'research_output'];
+            let foundContent = false;
+
+            for (const prop of contentProps) {
+                if (data[prop] && typeof data[prop] === 'string') {
+                    SafeLogger.log(`Rendering from data.${prop}`);
+                    renderResults(data[prop]);
+                    foundContent = true;
+                    break;
+                }
+            }
+
+            if (!foundContent) {
+                // Last resort: try to render the entire data object
+                SafeLogger.log('No clear content found, rendering entire data object');
+                renderResults(data);
+            }
+        }
+    }
+
+    /**
+     * Populate metadata fields with information from the research data
+     * @param {Object} data - Research data with metadata
+     */
+    function populateMetadata(data) {
+        // Debug the data structure
+        SafeLogger.log('API response data:', data);
+        SafeLogger.log('Data type:', typeof data);
+        SafeLogger.log('Available top-level keys:', Object.keys(data));
+
+        // Direct extraction from content
+        if (data.content && typeof data.content === 'string') {
+            SafeLogger.log('Attempting to extract metadata from content');
+
+            // Extract the query from content first line or header
+            // Avoid matching "Table of Contents" as query
+            const queryMatch = data.content.match(/^#\s*([^\n]+)/m) || // First heading
+                             data.content.match(/Query:\s*([^\n]+)/i) || // Explicit query label
+                             data.content.match(/Question:\s*([^\n]+)/i) || // Question label
+                             data.content.match(/^([^\n#]+)(?=\n)/); // First line if not starting with #
+
+            if (queryMatch && queryMatch[1] && !queryMatch[1].toLowerCase().includes('table of contents')) {
+                const queryElement = document.getElementById('result-query');
+                if (queryElement) {
+                    const extractedQuery = queryMatch[1].trim();
+                    SafeLogger.log('Extracted query from content:', extractedQuery);
+                    queryElement.textContent = extractedQuery;
+                }
+            } else {
+                // Try to find the second heading if first was "Table of Contents".
+                // The captured heading text starts with a non-whitespace char (\S)
+                // to avoid backtracking ambiguity with the preceding [ \t]+
+                // (regexp/no-super-linear-backtracking).
+                const secondHeadingMatch = data.content.match(/^#[ \t]+(\S[^\n]*)\n[\s\S]*?^##[ \t]+(\S[^\n]*)/m);
+                if (secondHeadingMatch && secondHeadingMatch[2]) {
+                    const queryElement = document.getElementById('result-query');
+                    if (queryElement) {
+                        const extractedQuery = secondHeadingMatch[2].trim();
+                        SafeLogger.log('Extracted query from second heading:', extractedQuery);
+                        queryElement.textContent = extractedQuery;
+                    }
+                }
+            }
+
+            // Extract generated date/time - Try multiple formats
+            const dateMatch = data.content.match(/Generated at:\s*([^\n]+)/i) ||
+                           data.content.match(/Date:\s*([^\n]+)/i) ||
+                           data.content.match(/Generated:\s*([^\n]+)/i) ||
+                           data.content.match(/Created:\s*([^\n]+)/i);
+
+            if (dateMatch && dateMatch[1]) {
+                const dateElement = document.getElementById('result-date');
+                if (dateElement) {
+                    const extractedDate = dateMatch[1].trim();
+                    SafeLogger.log('Extracted date from content:', extractedDate);
+
+                    // Format the date using the available formatter
+                    let formattedDate = extractedDate;
+                    if (window.formatting && typeof window.formatting.formatDate === 'function') {
+                        formattedDate = window.formatting.formatDate(extractedDate);
+                        SafeLogger.log('Date formatted using formatter:', formattedDate);
+                    }
+
+                    dateElement.textContent = formattedDate || new Date().toLocaleString();
+                }
+            }
+
+            // Extract mode
+            const modeMatch = data.content.match(/Mode:\s*([^\n]+)/i) ||
+                            data.content.match(/Research type:\s*([^\n]+)/i);
+
+            if (modeMatch && modeMatch[1]) {
+                const modeElement = document.getElementById('result-mode');
+                if (modeElement) {
+                    const extractedMode = modeMatch[1].trim();
+                    SafeLogger.log('Extracted mode from content:', extractedMode);
+
+                    // Format mode using available formatter
+                    let formattedMode = extractedMode;
+                    if (window.formatting && typeof window.formatting.formatMode === 'function') {
+                        formattedMode = window.formatting.formatMode(extractedMode);
+                        SafeLogger.log('Mode formatted using formatter:', formattedMode);
+                    }
+
+                    modeElement.textContent = formattedMode || 'Standard';
+                }
+            } else {
+                // Detect mode based on content structure and keywords
+                const modeElement = document.getElementById('result-mode');
+                if (modeElement) {
+                    if (data.content.toLowerCase().includes('table of contents') ||
+                        data.content.toLowerCase().includes('detailed report') ||
+                        data.content.match(/^#.*\n+##.*\n+###/m)) { // Has H1, H2, H3 structure
+                        modeElement.textContent = 'Detailed';
+                    } else if (data.content.toLowerCase().includes('quick research') ||
+                              data.content.toLowerCase().includes('summary')) {
+                        modeElement.textContent = 'Quick';
+                    } else {
+                        modeElement.textContent = 'Standard'; // Better default
+                    }
+                }
+            }
+
+            return; // Exit early since we've handled extraction from content
+        }
+
+        // Also check the metadata field which likely contains the actual metadata
+        const metadata = data.metadata || {};
+        SafeLogger.log('Metadata object:', metadata);
+        if (metadata) {
+            SafeLogger.log('Metadata keys:', Object.keys(metadata));
+        }
+
+        // Extract research object if nested
+        const dataObj = data.research || data;
+
+        // Debug nested structure if exists
+        if (data.research) {
+            SafeLogger.log('Nested research data:', data.research);
+            SafeLogger.log('Research keys:', Object.keys(data.research));
+        }
+
+        // Query field
+        const queryElement = document.getElementById('result-query');
+        if (queryElement) {
+            // Try different possible locations for query data
+            let query = 'Unknown query';
+
+            if (metadata.query) {
+                query = metadata.query;
+            } else if (metadata.title) {
+                query = metadata.title;
+            } else if (dataObj.query) {
+                query = dataObj.query;
+            } else if (dataObj.prompt) {
+                query = dataObj.prompt;
+            } else if (dataObj.title) {
+                query = dataObj.title;
+            } else if (dataObj.question) {
+                query = dataObj.question;
+            } else if (dataObj.input) {
+                query = dataObj.input;
+            }
+
+            SafeLogger.log('Setting query to:', query);
+            queryElement.textContent = query;
+        }
+
+        // Generated date field
+        const dateElement = document.getElementById('result-date');
+        if (dateElement) {
+            let dateStr = 'Unknown date';
+            let timestampField = null;
+
+            // Try different possible date fields
+            if (metadata.created_at) {
+                timestampField = metadata.created_at;
+            } else if (metadata.timestamp) {
+                timestampField = metadata.timestamp;
+            } else if (metadata.date) {
+                timestampField = metadata.date;
+            } else if (dataObj.timestamp) {
+                timestampField = dataObj.timestamp;
+            } else if (dataObj.created_at) {
+                timestampField = dataObj.created_at;
+            } else if (dataObj.date) {
+                timestampField = dataObj.date;
+            } else if (dataObj.time) {
+                timestampField = dataObj.time;
+            }
+
+            // Format the date using the available formatter
+            if (timestampField) {
+                if (window.formatting && typeof window.formatting.formatDate === 'function') {
+                    dateStr = window.formatting.formatDate(timestampField);
+                    SafeLogger.log('Using formatter for timestamp:', timestampField, '→', dateStr);
+                } else {
+                    try {
+                        const date = new Date(timestampField);
+                        dateStr = date.toLocaleString();
+                        SafeLogger.log('Using timestamp:', timestampField, '→', dateStr);
+                    } catch (e) {
+                        SafeLogger.error('Error parsing date:', timestampField, e);
+                    }
+                }
+            }
+
+            // Add duration if available
+            if (metadata.duration) {
+                dateStr += ` (${metadata.duration} seconds)`;
+            } else if (metadata.duration_seconds) {
+                dateStr += ` (${metadata.duration_seconds} seconds)`;
+            } else if (dataObj.duration) {
+                dateStr += ` (${dataObj.duration} seconds)`;
+            }
+
+            SafeLogger.log('Setting date to:', dateStr);
+            dateElement.textContent = dateStr;
+        }
+
+        // Mode field
+        const modeElement = document.getElementById('result-mode');
+        if (modeElement) {
+            let mode = 'Quick'; // Default to Quick
+
+            if (metadata.mode) {
+                mode = metadata.mode;
+            } else if (metadata.research_mode) {
+                mode = metadata.research_mode;
+            } else if (metadata.type) {
+                mode = metadata.type;
+            } else if (dataObj.mode) {
+                mode = dataObj.mode;
+            } else if (dataObj.research_mode) {
+                mode = dataObj.research_mode;
+            } else if (dataObj.type) {
+                mode = dataObj.type;
+            }
+
+            // Format mode using available formatter
+            if (window.formatting && typeof window.formatting.formatMode === 'function') {
+                mode = window.formatting.formatMode(mode);
+            }
+
+            SafeLogger.log('Setting mode to:', mode);
+            modeElement.textContent = mode;
+        }
+    }
+
+    /**
+     * Render research results in the container
+     * @param {Object|string} data - Research data to render
+     */
+    function renderResults(data) {
+        try {
+            // Clear container
+            resultsContainer.innerHTML = '';
+
+            // Determine the content to render
+            let content = '';
+
+            if (typeof data === 'string') {
+                // Direct string content
+                content = data;
+            } else if (data.markdown) {
+                // Markdown content
+                content = data.markdown;
+            } else if (data.html) {
+                // HTML content - sanitize for security
+                if (window.sanitizeHtml) {
+                    // bearer:disable javascript_lang_dangerous_insert_html
+                    resultsContainer.innerHTML = window.sanitizeHtml(data.html);
+                } else if (window.escapeHtml) {
+                    // Fallback to HTML escaping if DOMPurify not available
+                    // bearer:disable javascript_lang_dangerous_insert_html
+                    resultsContainer.innerHTML = window.escapeHtml(data.html);
+                } else {
+                    // Last resort: use textContent to prevent XSS if no sanitization available
+                    SafeLogger.warn('XSS protection not available, displaying HTML as text');
+                    resultsContainer.textContent = data.html;
+                }
+                return; // Return early since we've set content directly
+            } else if (data.text) {
+                // Text content
+                content = data.text;
+            } else if (data.summary) {
+                // Summary content
+                content = data.summary;
+            } else if (data.results) {
+                // Results array (old format)
+                if (Array.isArray(data.results)) {
+                    content = data.results.join('\n\n');
+                } else {
+                    content = JSON.stringify(data.results, null, 2);
+                }
+            } else {
+                // Last resort: stringify the entire object
+                content = JSON.stringify(data, null, 2);
+            }
+
+            // Render the content as Markdown if possible
+            if (window.ui && window.ui.renderMarkdown) {
+                const renderedHtml = window.ui.renderMarkdown(content);
+                // bearer:disable javascript_lang_dangerous_insert_html
+                // eslint-disable-next-line no-unsanitized/property -- audited 2026-03-28: renderMarkdown() sanitizes internally via DOMPurify
+                resultsContainer.innerHTML = renderedHtml;
+            } else {
+                // Fallback: escape content and display as preformatted text for security
+                // Using regex-based partial markdown is fragile and a security risk
+                SafeLogger.warn('Markdown rendering unavailable. Displaying as plaintext.');
+                const escaped = (window.escapeHtml || escapeHtmlFallback)(content);
+                // bearer:disable javascript_lang_dangerous_insert_html
+                // eslint-disable-next-line no-unsanitized/property -- audited 2026-03-28: all interpolations use escapeHtml/esc, numeric coercion, or hardcoded strings
+                resultsContainer.innerHTML = `<div class="ldr-markdown-content">
+                    <div class="alert alert-warning" style="margin-bottom: 1rem;">
+                        <i class="fas fa-exclamation-triangle"></i> Markdown rendering unavailable. Displaying as plaintext.
+                    </div>
+                    <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: inherit;">${escaped}</pre>
+                </div>`;
+            }
+
+            // Add syntax highlighting if Prism is available
+            if (window.Prism) {
+                window.Prism.highlightAllUnder(resultsContainer);
+            }
+
+        } catch (error) {
+            SafeLogger.error('Error rendering results:', error);
+            showError(`Error rendering results: ${error.message}`);
+        }
+    }
+
+    /**
+     * Show error message in the results container
+     * @param {string} message - Error message
+     */
+    function showError(message) {
+        // eslint-disable-next-line no-unsanitized/property -- audited 2026-03-28: plugin bug — LogicalExpression callee (github.com/mozilla/eslint-plugin-no-unsanitized/issues/263)
+        const escapedMessage = (window.escapeHtml || escapeHtmlFallback)(message);
+        // bearer:disable javascript_lang_dangerous_insert_html
+        // eslint-disable-next-line no-unsanitized/property -- audited 2026-03-28: variable built from escaped/numeric values above
+        resultsContainer.innerHTML = `
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-triangle"></i> ${escapedMessage}
+            </div>
+            <p class="text-center mt-3">
+                <a href="/research" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Back to Research
+                </a>
+            </p>
+        `;
+    }
+
+    /**
+     * Handle export button click
+     */
+    function handleExport() {
+        try {
+            if (!researchData) {
+                throw new Error('No research data available');
+            }
+
+            // Get metadata from DOM (which should be populated by now)
+            const query = document.getElementById('result-query')?.textContent || 'Unknown query';
+            const generated = document.getElementById('result-date')?.textContent || 'Unknown date';
+            const mode = document.getElementById('result-mode')?.textContent || 'Quick';
+            const runStatus = document.getElementById('research-run-status-title')?.textContent || '';
+
+            // Create markdown header with metadata
+            let markdownHeader = `# Research Results: ${query}\n\n`;
+            markdownHeader += `- **Generated:** ${generated}\n`;
+            markdownHeader += `- **Mode:** ${mode}\n`;
+            if (runStatus) markdownHeader += `- **Research status:** ${runStatus}\n`;
+            markdownHeader += '\n';
+            markdownHeader += `---\n\n`;
+
+            // Extract the content to export
+            let markdownContent = '';
+
+            // Try to extract the markdown content from various possible locations
+            if (typeof researchData === 'string') {
+                markdownContent = researchData;
+            } else {
+                // Check for content in standard locations
+                const contentProps = [
+                    'content',
+                    'report',
+                    'markdown',
+                    'text',
+                    'summary',
+                    'output',
+                    'research_output'
+                ];
+
+                let found = false;
+
+                // First check direct properties
+                for (const prop of contentProps) {
+                    if (researchData[prop] && typeof researchData[prop] === 'string') {
+                        markdownContent = researchData[prop];
+                        SafeLogger.log(`Using ${prop} for markdown content`);
+                        found = true;
+                        break;
+                    }
+                }
+
+                // Then check nested properties
+                if (!found && researchData.research) {
+                    for (const prop of contentProps) {
+                        if (researchData.research[prop] && typeof researchData.research[prop] === 'string') {
+                            markdownContent = researchData.research[prop];
+                            SafeLogger.log(`Using research.${prop} for markdown content`);
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+
+                // Check results property
+                if (!found && researchData.results) {
+                    if (typeof researchData.results === 'string') {
+                        markdownContent = researchData.results;
+                        SafeLogger.log('Using results string for markdown content');
+                    } else {
+                        for (const prop of contentProps) {
+                            if (researchData.results[prop] && typeof researchData.results[prop] === 'string') {
+                                markdownContent = researchData.results[prop];
+                                SafeLogger.log(`Using results.${prop} for markdown content`);
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Last resort
+                if (!markdownContent) {
+                    SafeLogger.warn('Could not extract markdown content, using JSON');
+                    markdownContent = "```json\n" + JSON.stringify(researchData, null, 2) + "\n```";
+                }
+            }
+
+            // Combine header and content
+            const fullMarkdown = markdownHeader + markdownContent;
+
+            // Create blob and trigger download
+            const blob = new Blob([fullMarkdown], { type: 'text/markdown' });
+            const link = document.createElement('a');
+            URLValidator.safeAssign(link, 'href', URL.createObjectURL(blob));
+            link.download = `research_${researchId}.md`;
+
+            // Trigger download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+        } catch (error) {
+            SafeLogger.error('Error exporting markdown:', error);
+            alert(`Error exporting markdown: ${error.message}`);
+        }
+    }
+
+    /**
+     * Handle export to specific format (LaTeX or Quarto)
+     * @param {string} format - Export format ('latex' or 'quarto')
+     */
+    async function handleFormatExport(format) {
+        try {
+            if (!researchId) {
+                throw new Error('No research ID available');
+            }
+
+            const formatName = format === 'latex' ? 'LaTeX' :
+                               format === 'quarto' ? 'Quarto' :
+                               format === 'odt' ? 'ODT' : 'RIS';
+            SafeLogger.log(`Exporting to ${formatName}...`);
+
+            // Get CSRF token
+            const csrfToken = window.api ? window.api.getCsrfToken() : '';
+
+            // Call API to export the report
+            const response = await fetch(`/api/v1/research/${researchId}/export/${format}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                }
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || `Failed to export to ${formatName}`);
+            }
+
+            // Get the blob from response
+            const blob = await response.blob();
+
+            // Determine file extension
+            const extension = format === 'latex' ? 'tex' :
+                              format === 'quarto' ? 'qmd' :
+                              format === 'odt' ? 'odt' : 'ris';
+
+            // Create download link
+            const link = document.createElement('a');
+            URLValidator.safeAssign(link, 'href', URL.createObjectURL(blob));
+            link.download = `research_${researchId}.${extension}`;
+
+            // Trigger download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            SafeLogger.log(`Successfully exported to ${formatName}`);
+
+        } catch (error) {
+            SafeLogger.error(`Error exporting to ${format}:`, error);
+            alert(`Failed to export to ${format}: ${error.message}`);
+        }
+    }
+
+
+    /**
+     * Handle PDF export button click
+     */
+    function handlePdfExport() {
+        try {
+            if (!researchId) {
+                throw new Error('No research ID available');
+            }
+
+            SafeLogger.log('PDF export initiated for research ID:', researchId);
+
+            // Show loading indicator
+            pdfBtn.disabled = true;
+            pdfBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
+
+            // Get CSRF token
+            const csrfToken = window.api ? window.api.getCsrfToken() : '';
+
+            // Call the backend API to generate PDF using WeasyPrint
+            fetch(`/api/v1/research/${researchId}/export/pdf`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                // Create download link
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                URLValidator.safeAssign(a, 'href', url);
+                a.download = `research_${researchId}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                SafeLogger.log('PDF downloaded successfully');
+                // Reset button
+                pdfBtn.disabled = false;
+                pdfBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Download PDF';
+            })
+            .catch(error => {
+                SafeLogger.error('Error generating PDF:', error);
+                alert(`Error generating PDF: ${error.message || 'Unknown error'}`);
+
+                // Reset button
+                pdfBtn.disabled = false;
+                pdfBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Download PDF';
+            });
+
+        } catch (error) {
+            SafeLogger.error('Error exporting PDF:', error);
+            alert(`Error exporting PDF: ${error.message || 'Unknown error'}`);
+
+            // Reset button
+            if (pdfBtn) {
+                pdfBtn.disabled = false;
+                pdfBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Download PDF';
+            }
+        }
+    }
+
+    /**
+     * Check for context overflow and display warning if detected
+     */
+    async function checkContextOverflow() {
+        try {
+            const response = await fetch(`/metrics/api/research/${researchId}/context-overflow`);
+            if (!response.ok) {
+                SafeLogger.log('Context overflow API not available');
+                return;
+            }
+
+            const data = await response.json();
+            if (data.status === 'success' && data.data?.overview?.truncation_occurred) {
+                const overview = data.data.overview;
+                const warningBanner = document.getElementById('context-overflow-warning');
+                const warningMessage = document.getElementById('context-overflow-message');
+                const warningAction = document.getElementById('context-overflow-action');
+
+                if (warningBanner && warningMessage) {
+                    const tokensLost = overview.tokens_lost || 0;
+                    const truncatedCount = overview.truncated_count || 0;
+                    const contextLimit = overview.context_limit;
+
+                    let message = `Research was truncated ${truncatedCount} time(s) due to context limits.`;
+                    if (tokensLost > 0) {
+                        message += ` ~${tokensLost.toLocaleString()} tokens lost.`;
+                    }
+                    if (contextLimit) {
+                        message += ` Context limit: ${contextLimit.toLocaleString()} tokens.`;
+                    }
+                    message += ' Consider increasing context window size for better results.';
+
+                    warningMessage.textContent = message;
+                    if (warningAction && researchId) {
+                        URLValidator.safeAssign(
+                            warningAction,
+                            'href',
+                            URLBuilder.detailsPage(researchId) + '#context-overflow-section'
+                        );
+                    }
+                    warningBanner.style.display = 'flex';
+
+                    // Highlight the metrics button
+                    const metricsBtn = document.getElementById('view-metrics-btn');
+                    if (metricsBtn) {
+                        metricsBtn.classList.add('ldr-metrics-btn-overflow');
+                        if (!metricsBtn.querySelector('.fa-exclamation-triangle')) {
+                            const icon = document.createElement('i');
+                            icon.setAttribute('aria-hidden', 'true');
+                            icon.className = 'fas fa-exclamation-triangle';
+                            metricsBtn.insertBefore(icon, metricsBtn.firstChild);
+                        }
+                        if (!metricsBtn.querySelector('.ldr-badge-overflow')) {
+                            const badge = document.createElement('span');
+                            badge.className = 'ldr-badge-overflow';
+                            badge.textContent = 'OVERFLOW';
+                            metricsBtn.appendChild(badge);
+                        }
+                    }
+
+                    SafeLogger.log('Context overflow warning displayed:', overview);
+                }
+            }
+        } catch (error) {
+            SafeLogger.error('Error checking context overflow:', error);
+        }
+    }
+
+    /**
+     * Initialize star rating functionality
+     */
+    function initializeStarRating() {
+        const starRating = document.getElementById('research-rating');
+        if (!starRating || !researchId) return;
+
+        const stars = starRating.querySelectorAll('.ldr-star');
+        const toggleBtn = document.getElementById('ldr-detailed-rating-toggle');
+        const detailPanel = document.getElementById('ldr-detailed-rating');
+        let currentRating = 0;
+
+        // Load existing rating
+        loadExistingRating();
+
+        // Add hover effects
+        stars.forEach((star, index) => {
+            star.addEventListener('mouseenter', () => {
+                highlightStars(index + 1);
+            });
+
+            star.addEventListener('click', () => {
+                const rating = index + 1;
+                setRating(rating);
+                saveRating(rating);
+
+                // Show detailed rating toggle after first star click
+                if (toggleBtn) toggleBtn.style.display = 'inline';
+
+                // Visual feedback for saving
+                starRating.style.opacity = '0.7';
+                setTimeout(() => {
+                    starRating.style.opacity = '1';
+                }, 500);
+            });
+        });
+
+        starRating.addEventListener('mouseleave', () => {
+            setRating(currentRating);
+        });
+
+        // Toggle detailed rating panel
+        if (toggleBtn && detailPanel) {
+            toggleBtn.addEventListener('click', () => {
+                const expanded = detailPanel.style.display !== 'none';
+                detailPanel.style.display = expanded ? 'none' : 'block';
+                toggleBtn.textContent = expanded ? 'Details ▾' : 'Details ▴';
+                toggleBtn.setAttribute('aria-expanded', String(!expanded));
+            });
+        }
+
+        // Update dimension value labels when sliders change. Mark a slider as
+        // "touched" so we only submit dimensions the user actually set — sliders
+        // default to 3, and submitting untouched ones would pollute the averages.
+        document.querySelectorAll('.ldr-dimension-slider').forEach(slider => {
+            slider.addEventListener('input', () => {
+                slider.dataset.touched = 'true';
+                slider.nextElementSibling.textContent = slider.value;
+            });
+        });
+
+        function highlightStars(rating) {
+            stars.forEach((star, index) => {
+                star.classList.remove('ldr-hover', 'active');
+                if (index < rating) {
+                    star.classList.add('ldr-hover');
+                }
+            });
+        }
+
+        function setRating(rating) {
+            currentRating = rating;
+            stars.forEach((star, index) => {
+                star.classList.remove('ldr-hover', 'active');
+                if (index < rating) {
+                    star.classList.add('active');
+                }
+            });
+        }
+
+        async function loadExistingRating() {
+            try {
+                const response = await fetch(`/metrics/api/ratings/${researchId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.rating) {
+                        setRating(data.rating);
+                        if (toggleBtn) toggleBtn.style.display = 'inline';
+                    }
+                }
+            } catch {
+                SafeLogger.log('No existing rating found');
+            }
+        }
+
+        async function saveRating(rating) {
+            try {
+                const csrfToken = window.api ? window.api.getCsrfToken() : '';
+
+                const headers = {
+                    'Content-Type': 'application/json',
+                };
+
+                if (csrfToken) {
+                    headers['X-CSRFToken'] = csrfToken;
+                }
+
+                const payload = { rating };
+
+                // Include sub-dimensions only if the panel is open AND the user
+                // moved the slider (default is 3; untouched sliders are skipped so
+                // they don't fabricate dimension data).
+                if (detailPanel && detailPanel.style.display !== 'none') {
+                    document.querySelectorAll('.ldr-dimension-slider').forEach(slider => {
+                        if (slider.dataset.touched === 'true') {
+                            payload[slider.dataset.dimension] = parseInt(slider.value, 10);
+                        }
+                    });
+                    const feedback = document.getElementById('ldr-rating-feedback');
+                    if (feedback && feedback.value.trim()) {
+                        payload.feedback = feedback.value.trim();
+                    }
+                }
+
+                const response = await fetch(`/metrics/api/ratings/${researchId}`, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    SafeLogger.log('Rating saved successfully');
+                } else {
+                    SafeLogger.error('Failed to save rating:', response.status);
+                }
+            } catch (error) {
+                SafeLogger.error('Error saving rating:', error);
+            }
+        }
+    }
+
+    // Initialize on DOM content loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeResults);
+    } else {
+        initializeResults();
+    }
+})();

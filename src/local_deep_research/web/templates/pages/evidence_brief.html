@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% set active_page = 'evidence-brief' %}
+
+{% block title %}可追溯研究简报 · Local Deep Research{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="/static/css/evidence_brief.css">
+{% endblock %}
+
+{% block content %}
+<div class="ldr-evidence-page" id="evidence-brief-page">
+    <header class="ldr-evidence-hero">
+        <div class="ldr-evidence-hero-copy">
+            <a class="ldr-evidence-back" href="/" aria-label="返回新建研究">← 新建研究</a>
+            <p class="ldr-evidence-kicker"><span aria-hidden="true"></span> TRACEABLE RESEARCH · FROZEN RUN</p>
+            <h1>先看结论，<em>再回到证据。</em></h1>
+            <p class="ldr-evidence-subtitle">{{ brief.subtitle }}</p>
+        </div>
+        <aside class="ldr-evidence-run-stamp" aria-label="本次研究状态">
+            <span class="ldr-evidence-run-stamp-label">本次运行</span>
+            <strong>{{ '已完整交付' if brief.status == 'complete' else brief.status }}</strong>
+            <span>{{ brief.run_date }} · {{ brief.model_label }}</span>
+            <code>{{ brief.run_label }}</code>
+        </aside>
+    </header>
+
+    <section class="ldr-evidence-thesis" aria-labelledby="evidence-brief-title">
+        <div class="ldr-evidence-thesis-title">
+            <p class="ldr-evidence-section-label">RESEARCH BRIEF</p>
+            <h2 id="evidence-brief-title">{{ brief.title }}</h2>
+        </div>
+        <p class="ldr-evidence-question">{{ brief.question }}</p>
+        <div class="ldr-evidence-source-braid" aria-label="两条来源通道被明确隔离">
+            <div class="ldr-evidence-braid-arm is-collection"><span>01</span><strong>论文定义</strong><small>{{ brief.collection_name }}</small></div>
+            <div class="ldr-evidence-braid-joint" aria-hidden="true"><i></i><i></i></div>
+            <div class="ldr-evidence-braid-arm is-web"><span>02</span><strong>当前公开入口</strong><small>Official Web</small></div>
+        </div>
+    </section>
+
+    <div class="ldr-evidence-layout">
+        <main class="ldr-evidence-cards" aria-label="已审阅证据卡">
+            {% for card in brief.cards %}
+            <article class="ldr-evidence-card is-{{ card.channel }}">
+                <div class="ldr-evidence-card-rail" aria-hidden="true">
+                    <span>{{ loop.index }}</span>
+                </div>
+                <div class="ldr-evidence-card-body">
+                    <div class="ldr-evidence-card-topline">
+                        <span class="ldr-evidence-channel">{{ card.channel_label }}</span>
+                        <span class="ldr-evidence-requirement-id">{{ card.id }}</span>
+                    </div>
+                    <h2>{{ card.heading }}</h2>
+                    <p class="ldr-evidence-boundary">{{ card.boundary }}</p>
+                    <div class="ldr-evidence-requirement">
+                        <span>本次需要回答</span>
+                        <p>{{ card.requirement }}</p>
+                    </div>
+                    <blockquote>
+                        <p>{{ card.quote_preview }}</p>
+                    </blockquote>
+                    <details class="ldr-evidence-full-quote">
+                        <summary>查看完整审阅原文</summary>
+                        <pre>{{ card.quote }}</pre>
+                    </details>
+                    <footer class="ldr-evidence-card-source">
+                        <div>
+                            <span>原始来源</span>
+                            {% if card.source_url.startswith('http') %}
+                            <a href="{{ card.source_url }}" target="_blank" rel="noopener noreferrer">{{ card.source_title }} <span aria-hidden="true">↗</span></a>
+                            {% else %}
+                            <a href="{{ card.source_url }}">{{ card.source_title }}</a>
+                            {% endif %}
+                        </div>
+                        <code>snapshot {{ card.source_range }}</code>
+                    </footer>
+                </div>
+            </article>
+            {% endfor %}
+        </main>
+
+        <aside class="ldr-evidence-audit-rail" aria-label="本次运行核验">
+            <section>
+                <p class="ldr-evidence-section-label">INTEGRITY CHECK</p>
+                <h2>这份简报能核查什么？</h2>
+                <div class="ldr-evidence-audits">
+                    {% for audit in brief.audits %}
+                    <div class="ldr-evidence-audit is-{{ audit.tone }}">
+                        <span>{{ audit.label }}</span>
+                        <strong>{{ audit.value }}</strong>
+                        <small>{{ audit.detail }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            <section class="ldr-evidence-metrics">
+                <p class="ldr-evidence-section-label">RUN RECORD</p>
+                <dl>
+                    {% for metric in brief.metrics %}
+                    <div><dt>{{ metric.label }}</dt><dd>{{ metric.value }}</dd></div>
+                    {% endfor %}
+                </dl>
+            </section>
+            <section class="ldr-evidence-limit">
+                <p class="ldr-evidence-section-label">READ THIS CORRECTLY</p>
+                <p>它交付的是两张来源隔离、可回查的证据卡；不是自由生成的 GAIA 复现教程，也不是通用准确率分数。</p>
+            </section>
+        </aside>
+    </div>
+</div>
+{% endblock %}

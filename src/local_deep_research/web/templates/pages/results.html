@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% block title %}研究报告 · Local Deep Research{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="/static/css/deep_research.css">
+{% endblock %}
+
+
+{% block content %}
+<div class="ldr-page active ldr-deep-page" id="research-results">
+    <div class="ldr-page-header">
+        <div class="ldr-deep-results-header">
+            <div>
+                <div class="ldr-deep-result-kicker">DEEP RESEARCH · REPORT</div>
+                <h1>研究报告</h1>
+            </div>
+            <div class="ldr-results-actions">
+                <div class="ldr-deep-primary-actions">
+                    <button class="btn ldr-btn-outline" id="rerun-research-btn" title="以同一问题重新发起研究"><i aria-hidden="true" class="fas fa-redo"></i> 重新研究</button>
+                    <div class="dropdown d-inline-block">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="export-dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false" title="导出研究报告">
+                        <i aria-hidden="true" class="fas fa-download"></i> 导出
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="export-dropdown-btn">
+                        <li><a class="dropdown-item" href="#" id="export-markdown-btn"><i aria-hidden="true" class="fas fa-file-alt"></i> Markdown</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="export-latex-btn"><i aria-hidden="true" class="fas fa-file-code"></i> LaTeX</a></li>
+                        <li><a class="dropdown-item" href="#" id="export-quarto-btn"><i aria-hidden="true" class="fas fa-file-code"></i> Quarto</a></li>
+                        <li><a class="dropdown-item" href="#" id="export-odt-btn"><i aria-hidden="true" class="fas fa-file-word"></i> ODT (LibreOffice)</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="export-ris-btn"><i aria-hidden="true" class="fas fa-file-export"></i> RIS (Zotero)</a></li>
+                    </ul>
+                    </div>
+                </div>
+                <div class="dropdown d-inline-block ldr-deep-more-actions">
+                    <button class="btn ldr-btn-outline dropdown-toggle" type="button" id="more-actions-btn" data-bs-toggle="dropdown" aria-expanded="false">更多操作</button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="more-actions-btn">
+                        <li><button class="dropdown-item" id="ask-followup-btn" type="button" onclick="window.followUpResearch ? followUpResearch.showFollowUpModal() : alert('Follow-up feature loading...')"><i aria-hidden="true" class="fas fa-question-circle"></i> 继续研究</button></li>
+                        <li><button class="dropdown-item" id="view-metrics-btn" type="button"><i aria-hidden="true" class="fas fa-chart-bar"></i> 查看指标</button></li>
+                        <li><button class="dropdown-item" id="download-pdf-btn" type="button"><i aria-hidden="true" class="fas fa-file-pdf"></i> 下载 PDF</button></li>
+                        <li><button class="dropdown-item" id="save-to-collection-btn" type="button"><i aria-hidden="true" class="fas fa-folder-plus"></i> 保存到文库</button></li>
+                        <li><button class="dropdown-item" id="research-save-as-note-top-btn" type="button"><i aria-hidden="true" class="fas fa-sticky-note"></i> 保存为笔记</button></li>
+                        <li><button class="dropdown-item" id="report-issue-btn" type="button"><i aria-hidden="true" class="fas fa-hands-helping"></i> 帮助与反馈</button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item" id="back-to-history" type="button"><i aria-hidden="true" class="fas fa-history"></i> 研究历史</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ldr-card ldr-results-card">
+        <div class="ldr-card-content">
+            <div class="ldr-deep-result-status" id="research-run-status" role="status" aria-live="polite">
+                <div><strong id="research-run-status-title">正在载入研究状态</strong><span id="research-run-status-copy">报告及其来源正在载入。</span><span id="research-run-metrics"></span></div>
+                <code class="ldr-deep-run-id" id="research-run-id">—</code>
+            </div>
+            <div id="context-overflow-warning" class="ldr-alert ldr-alert-warning" role="region" aria-label="上下文溢出提示" style="display: none;">
+                <i aria-hidden="true" class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <strong>检测到上下文溢出</strong>
+                    <span id="context-overflow-message"></span>
+                    <a id="context-overflow-action" class="ldr-alert-action">
+                        查看详情
+                        <span aria-hidden="true">→</span>
+                    </a>
+                </div>
+            </div>
+            <div class="ldr-deep-result-grid">
+                <article class="ldr-deep-report-column">
+                    <div class="ldr-deep-report-meta" id="research-metadata">
+                        <span><b id="result-query"></b></span>
+                        <span id="result-date"></span>
+                        <span id="result-mode"></span>
+                    </div>
+                    <div class="ldr-results-content" id="results-content">
+                        <div class="ldr-loading-spinner ldr-centered" role="status" aria-label="正在载入研究报告"><div class="ldr-spinner"></div></div>
+                    </div>
+                </article>
+                <aside class="ldr-deep-sources" aria-labelledby="research-sources-title">
+                    <div class="ldr-deep-sources-header"><h2 id="research-sources-title">来源</h2><span class="ldr-deep-sources-count" id="research-sources-count">—</span></div>
+                    <div id="research-sources-panel"><p class="ldr-deep-sources-empty">报告生成后将在此列出本次研究使用的来源。</p></div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notes on this research (reverse direction of the notes feature's
+         research linking; populated by components/research_notes.js) -->
+    <div class="ldr-card" id="research-notes-section">
+        <div class="ldr-card-content">
+            <div class="ldr-research-notes-header">
+                <h3 class="ldr-research-notes-heading"><i aria-hidden="true" class="fas fa-sticky-note"></i> Notes</h3>
+                <div class="ldr-research-notes-actions">
+                    <button class="btn ldr-btn-outline btn-sm" id="research-add-note-btn" title="Start a note linked to this research — your comments, caveats, and follow-up ideas">
+                        <i aria-hidden="true" class="fas fa-plus"></i> Add note
+                    </button>
+                    <button class="btn ldr-btn-outline btn-sm" id="research-save-as-note-btn" title="Copy this report into a new editable note (the report itself stays unchanged)">
+                        <i aria-hidden="true" class="fas fa-copy"></i> Save report as note
+                    </button>
+                </div>
+            </div>
+            <p class="ldr-research-notes-hint">Tip: select text in the report to comment on it (highlighted, Word-review style) or clip it into a quote note.</p>
+            <div id="research-notes-list" class="ldr-research-notes-list"></div>
+            <p class="ldr-research-notes-empty" id="research-notes-empty" style="display:none">No notes on this research yet.</p>
+        </div>
+    </div>
+
+    <!-- Help Improve Modal -->
+    <div class="modal fade" id="reportIssueModal" tabindex="-1" aria-labelledby="reportIssueModalLabel" aria-hidden="true" style="z-index: 10000;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportIssueModalLabel"><i aria-hidden="true" class="fas fa-hands-helping"></i> Help Improve LDR</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ldr-feedback-options">
+                        <a href="https://github.com/LearningCircuit/local-deep-research/issues/new?labels=bug&template=bug_report.md"
+                           target="_blank" rel="noopener noreferrer" class="ldr-feedback-option">
+                            <i aria-hidden="true" class="fas fa-bug"></i>
+                            <div>
+                                <strong>Report a Bug</strong>
+                                <small>Something isn't working correctly</small>
+                            </div>
+                        </a>
+
+                        <a href="https://github.com/LearningCircuit/local-deep-research/issues/new?labels=enhancement&template=feature_request.md"
+                           target="_blank" rel="noopener noreferrer" class="ldr-feedback-option">
+                            <i aria-hidden="true" class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>Suggest an Idea</strong>
+                                <small>Feature request or improvement</small>
+                            </div>
+                        </a>
+
+                        <a href="https://discord.gg/ttcqQeFcJ3"
+                           target="_blank" rel="noopener noreferrer" class="ldr-feedback-option">
+                            <i aria-hidden="true" class="fab fa-discord"></i>
+                            <div>
+                                <strong>Ask a Question</strong>
+                                <small>Get help from the community</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save to Collection Modal -->
+    <div class="modal fade" id="saveToCollectionModal" tabindex="-1" aria-labelledby="saveToCollectionModalLabel" aria-hidden="true" style="z-index: 10000;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="saveToCollectionModalLabel"><i aria-hidden="true" class="fas fa-folder-plus"></i> Save to Collection</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted mb-3">Save this research (report and sources) to a collection for semantic search.</p>
+                    <div id="collection-list-loading" class="text-center py-3">
+                        <i aria-hidden="true" class="fas fa-spinner fa-spin"></i> Loading collections...
+                    </div>
+                    <div id="collection-list" style="display: none;">
+                        <div class="list-group" id="collection-items">
+                            <!-- Collection items will be populated here -->
+                        </div>
+                    </div>
+                    <div id="collection-error" class="alert alert-danger" role="alert" aria-live="assertive" style="display: none;"></div>
+                    <div id="collection-success" class="alert alert-success" role="status" aria-live="polite" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+<!-- formatting.js, api.js already loaded by base.html -->
+<!-- Fallback utilities in case main services are not available -->
+<script defer src="/static/js/components/fallback/ui.js"></script>
+<script defer src="/static/js/components/fallback/formatting.js"></script>
+
+<script defer src="/static/js/services/pdf.js?v={{ range(1000, 9999) | random }}"></script>
+
+<!-- Results component -->
+<script defer src="/static/js/components/results.js"></script>
+
+<!-- Follow-up Research component -->
+<script defer src="/static/js/followup.js"></script>
+
+<!-- Report Issue / Feedback component -->
+<script defer src="/static/js/components/report_issue.js"></script>
+<!-- Save to Collection component -->
+<script defer src="/static/js/components/save_to_collection.js"></script>
+
+<script defer src="/static/js/components/notes_shared.js"></script>
+<script defer src="/static/js/components/annotation_surface.js"></script>
+<script defer src="/static/js/components/research_notes.js"></script>
+{% endblock %}

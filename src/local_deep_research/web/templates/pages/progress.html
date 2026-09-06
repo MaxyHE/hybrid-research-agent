@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}研究进行中 · Local Deep Research{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="/static/css/deep_research.css">
+{% endblock %}
+
+{% block content %}
+<div class="ldr-page active ldr-deep-page" id="research-progress">
+    <header class="ldr-deep-progress-header">
+        <div class="ldr-deep-run-kicker">DEEP RESEARCH · RUNNING</div>
+        <h1>研究正在进行</h1>
+    </header>
+
+    <section class="ldr-card" aria-labelledby="research-progress-title">
+        <div class="ldr-card-content">
+            <h2 id="research-progress-title" class="sr-only">研究运行状态</h2>
+            <div class="ldr-deep-run-query">
+                <span>研究问题</span>
+                <strong id="current-query">正在载入…</strong>
+            </div>
+
+            <div class="ldr-deep-progress-meter">
+                <div class="ldr-progress-container">
+                    <div class="ldr-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="研究进度">
+                        <div id="progress-bar" class="ldr-progress-fill"></div>
+                    </div>
+                </div>
+                <div id="progress-percentage" class="ldr-progress-percentage" aria-hidden="true">0%</div>
+            </div>
+
+            <dl class="ldr-deep-run-status">
+                <dt>运行状态</dt>
+                <dd id="status-text" class="ldr-status-indicator" aria-live="polite" aria-atomic="true">准备研究</dd>
+                <dt>当前信息</dt>
+                <dd id="current-task" class="ldr-task-text">等待后端状态更新…</dd>
+            </dl>
+
+            <p class="ldr-deep-run-method"><strong>本次运行</strong>会依据已选来源组织研究并准备报告。页面仅显示后端实际返回的运行信息；详细来源将在报告生成后提供。</p>
+
+            <div class="ldr-progress-actions">
+                <button id="cancel-research-btn" class="btn ldr-btn-outline ldr-terminate-btn">
+                    <i aria-hidden="true" class="fas fa-stop-circle"></i> 终止研究
+                </button>
+                <a id="view-results-btn" class="btn btn-primary" style="display: none;">
+                    查看报告 <i aria-hidden="true" class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+<script defer src="/static/js/services/audio.js"></script>
+<script defer src="/static/js/components/progress.js"></script>
+{% endblock %}

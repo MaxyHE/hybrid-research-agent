@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+.venv/
+node_modules/
+local_only/
+outputs/
+__pycache__/
+*.pyc
+*.db
+*.sqlite*
+*.log
+dist/
+build/
+*.egg-info/
+.DS_Store

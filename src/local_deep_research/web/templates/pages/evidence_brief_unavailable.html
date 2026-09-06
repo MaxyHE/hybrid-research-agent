@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% set active_page = 'evidence-brief' %}
+
+{% block title %}可追溯研究简报 · Local Deep Research{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="/static/css/evidence_brief.css">
+{% endblock %}
+
+{% block content %}
+<div class="ldr-evidence-page ldr-evidence-unavailable">
+    <section class="ldr-evidence-unavailable-card" aria-labelledby="evidence-brief-unavailable-title">
+        <p class="ldr-evidence-kicker"><span aria-hidden="true"></span> TRACEABLE RESEARCH</p>
+        <h1 id="evidence-brief-unavailable-title">当前没有可展示的冻结运行。</h1>
+        <p>{{ message }}</p>
+        <a class="btn btn-primary" href="/">发起一项研究</a>
+    </section>
+</div>
+{% endblock %}
