@@ -449,6 +449,8 @@
      * @param {Object} data - The progress data
      */
     function updateProgressUI(data) {
+        const currentQueryEl = document.getElementById('current-query');
+        if (currentQueryEl && data.query) currentQueryEl.textContent = data.query;
         SafeLogger.log('Updating progress UI with data:', data);
 
         // Update progress bar

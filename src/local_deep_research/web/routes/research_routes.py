@@ -2462,6 +2462,7 @@ def get_research_status(research_id):
 
             response_data = {
                 "status": status,
+                "query": research.query,
                 "progress": progress,
                 "completed_at": completed_at,
                 "metadata": filtered_metadata,

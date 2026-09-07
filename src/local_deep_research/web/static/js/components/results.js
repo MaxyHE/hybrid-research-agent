@@ -287,7 +287,7 @@
                         SafeLogger.warn('Could not save research rerun config:', error);
                     }
                 }
-                URLValidator.safeAssign(window.location, 'href', '/research');
+                URLValidator.safeAssign(window.location, 'href', '/');
             });
         }
 
@@ -835,7 +835,7 @@
                 <i class="fas fa-exclamation-triangle"></i> ${escapedMessage}
             </div>
             <p class="text-center mt-3">
-                <a href="/research" class="btn btn-primary">
+                <a href="/" class="btn btn-primary">
                     <i class="fas fa-arrow-left"></i> Back to Research
                 </a>
             </p>

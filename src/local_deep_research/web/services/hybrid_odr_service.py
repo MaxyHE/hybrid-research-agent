@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+import os
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -34,9 +35,46 @@ def run_hybrid_odr(
     search_engine_name: str = "serper",
     egress_context: Any = None,
 ) -> HybridOdrRunResult:
-    """Run the shared H-off/default writer route with the selected sources."""
+    """Run hosted research or the explicitly configured Qwen evidence workflow."""
 
     source_mode = source_mode or ("hybrid_available" if collection_id else "web_only")
+    qwen_model = os.environ.get("LDR_HYBRID_QWEN_MODEL", "").strip()
+    use_qwen = bool(qwen_model and getattr(llm, "model_name", None) == qwen_model)
+    policy = odr_p1_deep_policy()
+    options = {}
+    if use_qwen:
+        from ...odr_baseline.qwen_candidate import QwenCandidateRunner
+
+        catalogue = []
+        if collection_id and source_mode != "web_only":
+            from ...database.models.library import Document, DocumentCollection
+            from ...database.session_context import get_user_db_session
+
+            with get_user_db_session(username, password=user_password) as session:
+                rows = (
+                    session.query(Document.id, Document.title)
+                    .join(DocumentCollection, DocumentCollection.document_id == Document.id)
+                    .filter(DocumentCollection.collection_id == collection_id)
+                    .order_by(Document.id).all()
+                )
+                catalogue = [{"document_id": row.id, "title": row.title or "Untitled"} for row in rows]
+
+        class WebQwenRunner(QwenCandidateRunner):
+            def __init__(self, **kwargs):
+                super().__init__(
+                    source_mode="hybrid" if source_mode == "hybrid_available" else source_mode,
+                    collection_catalogue=catalogue,
+                    **kwargs,
+                )
+
+        options = {"runner_class": WebQwenRunner, "thinking_mode": "disabled"}
+        policy = replace(
+            policy, max_concurrent_research_units=1,
+            initial_delegation_strategy="adaptive",
+            source_handle_evidence_handoff=True,
+            evidence_excerpt_max_chars=1200,
+            evidence_brief_enabled=False, evidence_narrative_brief_enabled=True,
+        )
     runner = build_hybrid_odr_runner(
         run_id=run_id,
         query=query,
@@ -46,11 +84,12 @@ def run_hybrid_odr(
         settings_snapshot=settings_snapshot,
         collection_id=collection_id,
         source_mode=source_mode,
-        policy=odr_p1_deep_policy(),
+        policy=policy,
         egress_context=egress_context,
         search_engine_name=search_engine_name,
+        **options,
     )
-    result = runner.run()
+    result = runner.run_evidence_ledger_repair_workflow() if use_qwen else runner.run()
     # Keep snapshots, trace, and citation-audit artifacts on the server. Their
     # location is intentionally not copied into browser-visible run metadata.
     runner.write_artifacts(result, artifact_root=output_root)
@@ -80,8 +119,8 @@ def run_hybrid_odr(
                 "fetched_source_count": len(source_rows),
                 "selected_collection_id": collection_id,
                 "source_mode": source_mode,
-                "execution_profile": "p1-deep",
-                "writer_context_version": "default-h-off",
+                "execution_profile": "qwen-evidence-ledger" if use_qwen else "p1-deep",
+                "writer_context_version": runner.candidate_implementation if use_qwen else "default-h-off",
             }
         },
         task_count=len(result.research_tasks),

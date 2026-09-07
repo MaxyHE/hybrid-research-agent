@@ -45,4 +45,10 @@ scripts/start-hybrid-research.py 使用本机 local_only/web_app.json，读取�
 .venv/bin/python scripts/start-hybrid-research.py
 ```
 
-模型凭据通过本机 .env 或应用设置配置，不提交 Git。本地专用 Qwen 策略的独立运行配方尚待从研发入口整理，当前网页入口不能代替对应固定评测。
+模型凭据通过本机 .env 或应用设置配置，不提交 Git。
+
+### 网页使用本地 Qwen 证据流程
+
+在启动服务前配置 `LDR_LLM_OPENAI_ENDPOINT_URL` 为已有本地 OpenAI-compatible 服务的 `/v1` 地址，`LDR_HYBRID_QWEN_MODEL` 为该服务返回的准确模型名。首页选择 OpenAI-Compatible Endpoint 和相同模型名，即进入需求计划、证据卡与多片段综合流程；未匹配的模型仍走默认托管控制流。模型服务应按部署配方关闭 thinking，并设置适合设备的输出上限。本项目不自动下载或启动模型。
+
+网页本地路线使用当前仓库的 Qwen candidate 与产品来源连接器，运行元数据记录实际版本；它不是冻结 v6.2 的 30 题评测入口，不继承旧版评测成绩。
