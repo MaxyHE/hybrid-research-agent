@@ -4124,7 +4124,22 @@ into one-claim-per-bullet output merely because the research had multiple tasks.
             title = re.sub(r"[\[\]]", "", source.title).strip() or source.source_id
             return f"[{title}]({source.url})"
 
-        return _SOURCE_ID_CITATION_RE.sub(replacement, report)
+        report = _SOURCE_ID_CITATION_RE.sub(replacement, report)
+        # Models sometimes turn a relative library locator into a web host.
+        # Repair only exact destinations of documents read in this run.
+        for source in self._sources_by_id.values():
+            if (
+                source.content
+                and source.channel == "collection"
+                and source.url.startswith("/library/document/")
+                and (allowed_source_ids is None or source.source_id in allowed_source_ids)
+            ):
+                for scheme in ("https://", "http://"):
+                    report = report.replace(
+                        f"]({scheme}{source.url.lstrip('/')})",
+                        f"]({source.url})",
+                    )
+        return report
 
     def _audit_citations(
         self,
