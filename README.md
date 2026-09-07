@@ -109,6 +109,8 @@
 
 网页默认使用托管研究控制流。设置 `LDR_HYBRID_QWEN_MODEL` 为本地端点的准确模型名后，选择该模型会进入 Qwen 需求驱动证据流程；两条路线共用来源选择、报告和历史入口。连接方法见[快速开始](docs/QUICKSTART.md)。本地 30 题成绩对应冻结 v6.2，后续开发代码与旧版成绩分别记录。
 
+[真实网页演示与截图](docs/DEMO_RUNS.md)：RAPTOR 本地论文 × 官方 GitHub，包含完整执行记录、引用链接修复及报告复核说明。
+
 ## 开源来源与许可
 
 应用基础采用 [local-deep-research](https://github.com/LearningCircuit/local-deep-research)，研究控制流与部分提示词改编自 [Open Deep Research](https://github.com/langchain-ai/open_deep_research)，部分预算语义参考 deep-research-harness。
