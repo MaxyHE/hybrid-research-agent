@@ -47,6 +47,10 @@ scripts/start-hybrid-research.py 使用本机 local_only/web_app.json，读取�
 
 模型凭据通过本机 .env 或应用设置配置，不提交 Git。
 
+### 可选本地重排
+
+已有重排模型缓存时，启动前设置`LDR_COLLECTION_CROSS_ENCODER_RERANK=1`即可对文库候选排序。模型、缓存路径及语言处理见[文档重排](COLLECTION_RERANKING.md)。不需要额外生成API费用。
+
 ### 网页使用本地 Qwen 证据流程
 
 在启动服务前配置 `LDR_LLM_OPENAI_ENDPOINT_URL` 为已有本地 OpenAI-compatible 服务的 `/v1` 地址，`LDR_HYBRID_QWEN_MODEL` 为该服务返回的准确模型名。首页选择 OpenAI-Compatible Endpoint 和相同模型名，即进入需求计划、证据卡与多片段综合流程；未匹配的模型仍走默认托管控制流。模型服务应按部署配方关闭 thinking，并设置适合设备的输出上限。本项目不自动下载或启动模型。
