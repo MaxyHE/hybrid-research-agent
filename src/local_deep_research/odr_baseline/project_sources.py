@@ -9,6 +9,10 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from datetime import datetime, timezone
+from functools import lru_cache
+import os
+import re
+import time
 from typing import Any, Generator, Iterable, Mapping
 from urllib.parse import urlsplit
 
@@ -42,6 +46,12 @@ _SAFE_FETCH_FAILURE_CODES = frozenset(
 
 _PUBLIC_FETCH_FALLBACKS = frozenset({"disabled", "jina"})
 _COLLECTION_RAW_CANDIDATE_MULTIPLIER = 8
+_COLLECTION_RERANK_ENV = "LDR_COLLECTION_CROSS_ENCODER_RERANK"
+_COLLECTION_RERANK_CACHE_ENV = "LDR_COLLECTION_CROSS_ENCODER_CACHE"
+_COLLECTION_RERANK_MODEL = "cross-encoder/ms-marco-MiniLM-L6-v2"
+_COLLECTION_RERANK_MAX_LENGTH = 512
+_COLLECTION_RERANK_BATCH_SIZE = 16
+_CHINESE_TEXT = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]")
 
 
 def safe_fetch_failure_code(exc: Exception) -> str:
@@ -81,11 +91,11 @@ def _matches_host_suffix(url: str, allowed_suffixes: tuple[str, ...]) -> bool:
 
 
 def _distinct_collection_document_results(
-    raw_results: object, *, max_documents: int
+    raw_results: object, *, max_documents: int | None
 ) -> tuple[Mapping[str, Any], ...]:
     """Keep the first chunk hit for each Document in vector rank order."""
 
-    if not isinstance(raw_results, list):
+    if not isinstance(raw_results, (list, tuple)):
         return ()
     distinct: list[Mapping[str, Any]] = []
     seen_document_ids: set[str] = set()
@@ -104,9 +114,39 @@ def _distinct_collection_document_results(
             continue
         seen_document_ids.add(document_id)
         distinct.append(raw)
-        if len(distinct) == max_documents:
+        if max_documents is not None and len(distinct) == max_documents:
             break
     return tuple(distinct)
+
+
+def _collection_rerank_enabled() -> bool:
+    return os.environ.get(_COLLECTION_RERANK_ENV, "").lower() in {
+        "1", "true", "yes", "on"
+    }
+
+
+@lru_cache(maxsize=1)
+def _load_collection_cross_encoder():
+    """Load the explicit local-only reranker once per process."""
+
+    import torch
+    from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+    device = (
+        "mps"
+        if getattr(torch.backends, "mps", None) and torch.backends.mps.is_available()
+        else "cpu"
+    )
+    cache_dir = os.environ.get(_COLLECTION_RERANK_CACHE_ENV) or None
+    tokenizer = AutoTokenizer.from_pretrained(
+        _COLLECTION_RERANK_MODEL, cache_dir=cache_dir, local_files_only=True
+    )
+    model = AutoModelForSequenceClassification.from_pretrained(
+        _COLLECTION_RERANK_MODEL, cache_dir=cache_dir, local_files_only=True
+    )
+    model.to(device)
+    model.eval()
+    return tokenizer, model, torch, device
 
 
 class ProjectPublicWebConnector:
@@ -270,6 +310,7 @@ class ProjectCollectionConnector:
             query_translator or CollectionQueryTranslator.from_environment()
         )
         self._last_query_translation_metadata: dict[str, Any] | None = None
+        self._last_rerank_metadata: dict[str, Any] | None = None
 
     @property
     def last_query_translation_metadata(self) -> dict[str, Any] | None:
@@ -279,6 +320,107 @@ class ProjectCollectionConnector:
             dict(self._last_query_translation_metadata)
             if self._last_query_translation_metadata is not None
             else None
+        )
+
+    @property
+    def last_rerank_metadata(self) -> dict[str, Any] | None:
+        """Compact metadata from the most recent optional Collection rerank."""
+
+        return (
+            dict(self._last_rerank_metadata)
+            if self._last_rerank_metadata is not None
+            else None
+        )
+
+    def _rerank_collection_documents(
+        self,
+        *,
+        query: str,
+        original_query: str,
+        translation_status: str,
+        candidates: tuple[Mapping[str, Any], ...],
+    ) -> tuple[Mapping[str, Any], ...]:
+        if not _collection_rerank_enabled():
+            self._last_rerank_metadata = {"enabled": False, "applied": False}
+            return candidates
+        if _CHINESE_TEXT.search(original_query) and translation_status != "translated":
+            self._last_rerank_metadata = {
+                "enabled": True,
+                "applied": False,
+                "reason": "untranslated_chinese_query",
+                "model": _COLLECTION_RERANK_MODEL,
+            }
+            return candidates
+
+        from local_deep_research.advanced_search_system.tools.fetch.library_resolver import (
+            resolve_library_document,
+        )
+
+        fetch_started = time.perf_counter()
+        scored: list[tuple[int, Mapping[str, Any], str]] = []
+        unavailable: list[tuple[int, Mapping[str, Any]]] = []
+        for position, candidate in enumerate(candidates):
+            locator = candidate.get("link") or candidate.get("url")
+            if not isinstance(locator, str):
+                unavailable.append((position, candidate))
+                continue
+            document = resolve_library_document(locator, self._username)
+            content = document.get("content") if isinstance(document, Mapping) else None
+            if not isinstance(content, str) or not content.strip():
+                unavailable.append((position, candidate))
+                continue
+            title = _result_text(document.get("title") if isinstance(document, Mapping) else None, _result_text(candidate.get("title"), "Collection document"))
+            scored.append((position, candidate, f"{title}\n\n{content}"))
+
+        load_started = time.perf_counter()
+        tokenizer, model, torch, device = _load_collection_cross_encoder()
+        model_load_seconds = time.perf_counter() - load_started
+        truncated = sum(
+            len(tokenizer(query, passage, add_special_tokens=True, truncation=False)["input_ids"])
+            > _COLLECTION_RERANK_MAX_LENGTH
+            for _, _, passage in scored
+        )
+        scoring_started = time.perf_counter()
+        scores: list[float] = []
+        for start in range(0, len(scored), _COLLECTION_RERANK_BATCH_SIZE):
+            batch = scored[start : start + _COLLECTION_RERANK_BATCH_SIZE]
+            features = tokenizer(
+                [query] * len(batch),
+                [passage for _, _, passage in batch],
+                padding=True,
+                truncation="only_second",
+                max_length=_COLLECTION_RERANK_MAX_LENGTH,
+                return_tensors="pt",
+            )
+            features = {name: value.to(device) for name, value in features.items()}
+            with torch.inference_mode():
+                scores.extend(
+                    float(value)
+                    for value in model(**features).logits.reshape(-1).detach().float().cpu().tolist()
+                )
+        scoring_seconds = time.perf_counter() - scoring_started
+        ranked = sorted(
+            zip(scored, scores), key=lambda item: (-item[1], item[0][0])
+        )
+        self._last_rerank_metadata = {
+            "enabled": True,
+            "applied": True,
+            "model": _COLLECTION_RERANK_MODEL,
+            "device": device,
+            "candidate_documents": len(candidates),
+            "scored_documents": len(scored),
+            "unavailable_documents": len(unavailable),
+            "pair_truncation": "only_second",
+            "max_length": _COLLECTION_RERANK_MAX_LENGTH,
+            "truncated_pairs": truncated,
+            "model_load_seconds": model_load_seconds,
+            "fetch_and_input_prepare_seconds": scoring_started - fetch_started - model_load_seconds,
+            "scoring_seconds": scoring_seconds,
+            "extra_seconds": time.perf_counter() - fetch_started,
+        }
+        return tuple(
+            [candidate for (_, candidate, _), _ in ranked]
+            + [candidate for _, candidate in unavailable]
         )
 
     @contextmanager
@@ -351,6 +493,14 @@ class ProjectCollectionConnector:
                 close = getattr(engine, "close", None)
                 if callable(close):
                     close()
+            reranked_results = self._rerank_collection_documents(
+                query=translation.query,
+                original_query=query,
+                translation_status=translation.status,
+                candidates=_distinct_collection_document_results(
+                    raw_results, max_documents=None
+                ),
+            )
         return tuple(
             DiscoveredResource(
                 resource_locator=url,
@@ -359,7 +509,8 @@ class ProjectCollectionConnector:
                 channel="collection",
             )
             for raw in _distinct_collection_document_results(
-                raw_results, max_documents=self._max_results
+                reranked_results,
+                max_documents=self._max_results,
             )
             if isinstance((url := raw.get("link") or raw.get("url")), str)
             and url.startswith("/library/document/")
