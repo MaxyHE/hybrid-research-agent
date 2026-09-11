@@ -11,7 +11,7 @@ export LDR_COLLECTION_CROSS_ENCODER_CACHE=/path/to/existing/hf_cache
 
 - 输入：实际检索query与候选文档标题、正文。
 - 文档端截断至pair总长512 token，batch size 16；同分保留原候选顺序。
-- 使用MPS（可用时）或CPU，同一进程复用模型。
+- 使用CPU，同一进程复用模型；冷启动与重排串行访问共享实例，避免并行Researcher争用模型和tokenizer状态。其他研究与Web调用仍可并行。
 - 中文查询经现有翻译功能得到英文译文时可重排；未译中文保持原文档排序。
 - `ProjectCollectionConnector.last_rerank_metadata`记录是否应用、候选数、截断数、加载与排序耗时。
 

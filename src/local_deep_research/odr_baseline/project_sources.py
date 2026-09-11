@@ -10,6 +10,7 @@ from __future__ import annotations
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from functools import lru_cache
+from threading import Lock
 import os
 import re
 import time
@@ -125,18 +126,26 @@ def _collection_rerank_enabled() -> bool:
     }
 
 
-@lru_cache(maxsize=1)
+_COLLECTION_MODEL_LOAD_LOCK = Lock()
+_COLLECTION_RERANK_LOCK = Lock()
+
+
 def _load_collection_cross_encoder():
+    # lru_cache alone permits duplicate first loads from concurrent Researchers.
+    with _COLLECTION_MODEL_LOAD_LOCK:
+        return _cached_collection_cross_encoder()
+
+
+@lru_cache(maxsize=1)
+def _cached_collection_cross_encoder():
     """Load the explicit local-only reranker once per process."""
 
     import torch
     from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-    device = (
-        "mps"
-        if getattr(torch.backends, "mps", None) and torch.backends.mps.is_available()
-        else "cpu"
-    )
+    # This small model runs on CPU: concurrent MPS initialization crashed in
+    # the product research process. Do not change devices across launch modes.
+    device = "cpu"
     cache_dir = os.environ.get(_COLLECTION_RERANK_CACHE_ENV) or None
     tokenizer = AutoTokenizer.from_pretrained(
         _COLLECTION_RERANK_MODEL, cache_dir=cache_dir, local_files_only=True
@@ -333,6 +342,15 @@ class ProjectCollectionConnector:
         )
 
     def _rerank_collection_documents(
+        self,
+        **kwargs,
+    ) -> tuple[Mapping[str, Any], ...]:
+        # Tokenizer calls temporarily change truncation/padding state. Sharing
+        # it between Researchers without serialization can bypass truncation.
+        with _COLLECTION_RERANK_LOCK:
+            return self._rerank_collection_documents_serial(**kwargs)
+
+    def _rerank_collection_documents_serial(
         self,
         *,
         query: str,
