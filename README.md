@@ -44,6 +44,8 @@
 
 核心代码：[runtime.py](src/local_deep_research/odr_baseline/runtime.py) · [harness.py](src/local_deep_research/odr_baseline/harness.py)
 
+[真实执行实例](docs/EXECUTION_EXAMPLE.md)：查看一次正常Hybrid研究中的三任务分发、预算分配、来源动作及Writer交接。
+
 ### 2. Document 级检索：让候选位覆盖更多研究对象
 
 多文档调研需要的是不同文档，而不仅是高相似度片段。将原始 chunk 候选池扩大至 64，按 Document 保留首次命中，再向 Agent 返回最多 8 篇文档；Agent 按需回读正文。
