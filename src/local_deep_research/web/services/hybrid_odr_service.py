@@ -7,6 +7,11 @@ import os
 from pathlib import Path
 from typing import Any, Mapping
 
+from loguru import logger
+
+from ...exceptions import ResearchTerminatedException
+from .hybrid_task_control import HybridTaskProgress, save_cancelled_research
+
 from ...odr_baseline import (
     build_hybrid_odr_runner,
     odr_p1_deep_policy,
@@ -34,10 +39,14 @@ def run_hybrid_odr(
     user_password: str | None = None,
     search_engine_name: str = "serper",
     egress_context: Any = None,
+    should_cancel=None,
+    on_progress=None,
 ) -> HybridOdrRunResult:
     """Run hosted research or the explicitly configured Qwen evidence workflow."""
 
     source_mode = source_mode or ("hybrid_available" if collection_id else "web_only")
+    if should_cancel is not None and should_cancel():
+        raise ResearchTerminatedException("Hybrid research cancelled before start")
     qwen_model = os.environ.get("LDR_HYBRID_QWEN_MODEL", "").strip()
     use_qwen = bool(qwen_model and getattr(llm, "model_name", None) == qwen_model)
     use_located = not use_qwen and os.environ.get("LDR_HYBRID_EVIDENCE_HANDOFF", "").strip().lower() == "located"
@@ -97,9 +106,19 @@ def run_hybrid_odr(
         policy=policy,
         egress_context=egress_context,
         search_engine_name=search_engine_name,
+        should_cancel=should_cancel,
+        on_event=HybridTaskProgress(on_progress),
         **options,
     )
-    result = runner.run_evidence_ledger_repair_workflow() if use_qwen else runner.run()
+    try:
+        result = runner.run_evidence_ledger_repair_workflow() if use_qwen else runner.run()
+        runner._check_cancelled()
+    except ResearchTerminatedException:
+        try:
+            save_cancelled_research(runner, output_root)
+        except Exception:
+            logger.exception("Could not save cancelled Hybrid research {}", run_id)
+        raise
     # Keep snapshots, trace, and citation-audit artifacts on the server. Their
     # location is intentionally not copied into browser-visible run metadata.
     runner.write_artifacts(result, artifact_root=output_root)

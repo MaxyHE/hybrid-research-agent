@@ -186,6 +186,8 @@ def build_hybrid_odr_runner(
     public_fetch_fallback: str = "disabled",
     allowed_web_host_suffixes: Iterable[str] | None = None,
     runner_class: type[OdrBaselineRunner] = OdrBaselineRunner,
+    should_cancel=None,
+    on_event=None,
 ) -> OdrBaselineRunner:
     """Build a Web, Collection-only, or Hybrid run using the shared source wiring."""
 
@@ -238,6 +240,8 @@ def build_hybrid_odr_runner(
         development_transcript_path=development_transcript_path,
         progress_path=progress_path,
         thinking_mode=thinking_mode,
+        should_cancel=should_cancel,
+        on_event=on_event,
     )
     if not explicit_source_mode:
         # Existing Qwen and historical experiment callers keep their original

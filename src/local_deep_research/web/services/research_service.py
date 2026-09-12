@@ -1740,6 +1740,12 @@ def run_research_process(research_id, query, mode, **kwargs):
                     user_password=user_password,
                     search_engine_name=search_engine or "serper",
                     egress_context=_egress_ctx,
+                    # The API cancel path also removes the active task entry.
+                    should_cancel=lambda: (
+                        is_termination_requested(research_id)
+                        or not is_research_active(research_id)
+                    ),
+                    on_progress=progress_callback,
                 )
                 system.all_links_of_system = list(hybrid_run.source_rows)
                 results = {

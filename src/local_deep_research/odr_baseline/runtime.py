@@ -19,11 +19,12 @@ from datetime import datetime, timezone
 from hashlib import sha256
 from math import log1p
 from pathlib import Path
-from threading import RLock
+from threading import Event, RLock
 from time import monotonic
-from typing import Any, Iterable, Mapping
+from typing import Any, Callable, Iterable, Mapping
 from urllib.parse import urlsplit
 from uuid import uuid4
+from local_deep_research.exceptions import ResearchTerminatedException
 
 from langchain_core.messages import message_to_dict, messages_to_dict
 from langchain_core.utils.function_calling import convert_to_openai_tool
@@ -987,8 +988,13 @@ class OdrBaselineRunner:
         development_transcript_path: str | Path | None = None,
         progress_path: str | Path | None = None,
         thinking_mode: str | None = None,
+        should_cancel: Callable[[], bool] | None = None,
+        on_event: Callable[[OdrTraceEvent], None] | None = None,
     ) -> None:
         self.run_id = _safe_identifier(run_id, field_name="run_id")
+        self._cancelled = Event()
+        self._should_cancel = should_cancel
+        self._on_event = on_event
         self.query = query.strip() if isinstance(query, str) else ""
         if not self.query:
             raise ValueError("query must be non-empty")
@@ -1064,6 +1070,12 @@ class OdrBaselineRunner:
             depth_budget=self.policy.depth_budget,
         )
 
+    def _check_cancelled(self) -> None:
+        if self._should_cancel is not None and self._should_cancel():
+            self._cancelled.set()
+        if self._cancelled.is_set():
+            raise ResearchTerminatedException("Hybrid research cancelled by user")
+
     def _event(self, kind: str, **data: object) -> None:
         with self._lock:
             event = OdrTraceEvent(
@@ -1074,6 +1086,16 @@ class OdrBaselineRunner:
             )
             self._trace.append(event)
             self._capture_progress_event(event)
+        # Release this event's lock before notifying consumers. Budget-blocked
+        # events can still originate under an outer lock; UI adapters ignore them.
+        if self._on_event is not None:
+            self._check_cancelled()
+            try:
+                self._on_event(event)
+            except ResearchTerminatedException:
+                # Web cleanup clears the shared flag; queued workers must still stop.
+                self._cancelled.set()
+                raise
 
     def _capture_progress_event(self, event: OdrTraceEvent) -> None:
         """Append safe, low-volume liveness facts for an opt-in live monitor.
@@ -1264,6 +1286,7 @@ class OdrBaselineRunner:
         tool_binding_options: Mapping[str, object] | None = None,
         decision_stream_id: str | None = None,
     ) -> Any:
+        self._check_cancelled()
         with self._lock:
             try:
                 call_index = (
@@ -1296,6 +1319,7 @@ class OdrBaselineRunner:
             thinking_mode=self._thinking_mode,
         )
         try:
+            self._check_cancelled()
             response = model.invoke(messages)
         except Exception as exc:
             self._capture_development_transcript(
@@ -1347,6 +1371,7 @@ class OdrBaselineRunner:
                 if isinstance(call, Mapping)
             ],
         )
+        self._check_cancelled()
         return response
 
     def _spend_tool(
@@ -1356,6 +1381,7 @@ class OdrBaselineRunner:
         task: str,
         task_budget: _ResearchTaskToolBudget | None,
     ) -> bool:
+        self._check_cancelled()
         with self._lock:
             if (
                 self.policy.max_tool_calls is not None
