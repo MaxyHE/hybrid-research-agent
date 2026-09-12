@@ -30,3 +30,8 @@ Refreshing a cancelled run shows its terminated status and labels the prior
 progress message as the last record before termination. The local Hybrid launch
 script initializes the same milestone logging and log processing used by the
 standard Web entry point.
+
+Queued research receives the application context needed by its background worker.
+After a running task releases its user slot, the next queued task can execute
+through the same research service. Model-provider choices describe supported
+connections; configure the service address and credentials before first use.

@@ -477,7 +477,9 @@ def create_app():
     if queue_processor_enabled:
         from .queue.processor_v2 import queue_processor
 
-        queue_processor.start()
+        # Queued workers need the same Flask context as direct submissions.
+        with app.app_context():
+            queue_processor.start()
         logger.info("Started research queue processor v2")
     else:
         logger.info("Queue processor v2 disabled - not starting")

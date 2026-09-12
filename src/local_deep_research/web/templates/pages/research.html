@@ -89,6 +89,7 @@
                             {{ render_dropdown(input_id="model", dropdown_id="model-dropdown", placeholder="选择或输入模型名称", label="模型", show_refresh=True, refresh_aria_label="刷新模型列表", data_initial_value=settings.llm_model) }}
                         </div>
                     </div>
+                    <p class="ldr-input-help">模型服务列表表示支持的连接类型，不代表已连接。首次使用请先在“连接与其他设置”中配置服务地址与凭据。</p>
                     <p class="ldr-input-help">本地文库指资料来源，不代表模型在本地运行；使用云端模型时，问题与选用的材料会发送给模型服务。</p>
                 </section>
                 <div id="research-alert" class="ldr-settings-alert-container" role="alert" aria-atomic="true" style="display:none"></div>

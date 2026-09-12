@@ -25,6 +25,7 @@ from ...database.session_context import get_user_db_session
 from ...database.session_passwords import session_password_store
 from ...exceptions import DuplicateResearchError, SystemAtCapacityError
 from ...security.log_sanitizer import redact_secrets
+from ...utilities.threading_utils import thread_context, thread_with_app_context
 from ...notifications.queue_helpers import (
     send_research_completed_notification_from_session,
     send_research_failed_notification_from_session,
@@ -235,7 +236,9 @@ class QueueProcessorV2:
         # teardown stops it.
         self._stop_event.clear()
         self.thread = threading.Thread(
-            target=self._process_queue_loop, daemon=True
+            target=thread_with_app_context(self._process_queue_loop),
+            args=(thread_context(),),
+            daemon=True
         )
         self.thread.start()
         logger.info("Queue processor v2 started")
