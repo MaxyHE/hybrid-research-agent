@@ -48,3 +48,9 @@ runs. After signing in, the owner can read saved notes, located evidence
 excerpts, and source snapshots. Missing archives show an empty-state message;
 refresh after cancellation finishes saving. This view presents partial work,
 not a completed report, and does not resume execution.
+
+Task details distinguish recorded model usage from the submitted model
+configuration. Hybrid runs show their execution mode, while absent metrics
+show a no-data message. Cancelled tasks prioritize retained materials instead
+of a report link. Cancellation preserves existing submission metadata; older
+records whose metadata was already lost remain explicitly unrecorded.

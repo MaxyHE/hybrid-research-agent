@@ -228,6 +228,8 @@ def get_research_details(research_id):
                 "status": research.status,
                 "created_at": research.created_at,
                 "completed_at": research.completed_at,
+                "progress": research.progress,
+                "metadata": strip_settings_snapshot(research.research_meta),
             }
     except Exception:
         logger.exception("Database error")
@@ -267,7 +269,7 @@ def get_research_details(research_id):
     progress = (
         snapshot["progress"]
         if snapshot is not None
-        else (100 if research_data["status"] == ResearchStatus.COMPLETED else 0)
+        else (100 if research_data["status"] == ResearchStatus.COMPLETED else research_data["progress"])
     )
 
     return jsonify(
@@ -277,6 +279,7 @@ def get_research_details(research_id):
             "mode": research_data["mode"],
             "status": research_data["status"],
             "strategy": strategy_name,
+            "metadata": research_data["metadata"],
             "progress": progress,
             "created_at": research_data["created_at"],
             "completed_at": research_data["completed_at"],

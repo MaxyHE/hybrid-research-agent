@@ -3,6 +3,7 @@ Queue processor v2 - uses encrypted user databases instead of service.db
 Supports both direct execution and queue modes.
 """
 
+import json
 import threading
 import time
 import uuid
@@ -1586,7 +1587,17 @@ class QueueProcessorV2:
                     elif op_type == "error_update":
                         research.status = op_data.get("status", "failed")
                         research.error_message = op_data.get("error_message")
-                        research.research_meta = op_data.get("metadata")
+                        if research.status == ResearchStatus.SUSPENDED:
+                            # Cancellation adds terminal information; preserve
+                            # the submitted model and research configuration.
+                            metadata = research.research_meta or {}
+                            if isinstance(metadata, str):
+                                metadata = json.loads(metadata)
+                            research.research_meta = {
+                                **metadata, **(op_data.get("metadata") or {})
+                            }
+                        else:
+                            research.research_meta = op_data.get("metadata")
                         research.completed_at = op_data.get("completed_at")
                         report_path = op_data.get("report_path")
                         if report_path:

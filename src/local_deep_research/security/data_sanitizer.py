@@ -30,6 +30,7 @@ _HYBRID_ODR_PUBLIC_METADATA_FIELDS = frozenset(
         "task_count",
         "fetched_source_count",
         "selected_collection_id",
+        "execution_profile",
     }
 )
 

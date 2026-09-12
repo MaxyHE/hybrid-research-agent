@@ -76,8 +76,8 @@
             const data = result.data;
 
             // Show the link analytics sections
-            document.getElementById('source-distribution-section').style.display = 'block';
-            document.getElementById('link-analytics-section').style.display = 'block';
+            document.getElementById('source-distribution-section').style.display = data.total_links > 0 ? 'block' : 'none';
+            document.getElementById('link-analytics-section').style.display = data.total_links > 0 ? 'block' : 'none';
 
             // Update summary metrics
             document.getElementById('total-links').textContent = data.total_links || 0;
@@ -306,18 +306,8 @@
             const metricsResponse = await fetch(URLBuilder.build(URLS.METRICS_API.RESEARCH, researchId));
             SafeLogger.log('Metrics response status:', metricsResponse.status);
 
-            if (!metricsResponse.ok) {
-                throw new Error(`Metrics API failed: ${metricsResponse.status}`);
-            }
-
-            const metricsResult = await metricsResponse.json();
-            SafeLogger.log('Metrics result:', metricsResult);
-
-            if (metricsResult.status !== 'success') {
-                throw new Error('Failed to load research metrics');
-            }
-
-            metricsData = metricsResult.metrics;
+            const metricsResult = metricsResponse.ok ? await metricsResponse.json() : {};
+            metricsData = metricsResult.status === 'success' ? (metricsResult.metrics || {}) : {};
             SafeLogger.log('Metrics data loaded:', metricsData);
 
             // Display research details first
@@ -392,19 +382,22 @@
             const searchMetricsSection = document.getElementById('search-metrics-section');
 
             if (tokenMetricsSection) {
-                tokenMetricsSection.style.display = 'block';
+                tokenMetricsSection.style.display = metricsData.total_calls > 0 ? 'block' : 'none';
                 SafeLogger.log('Token metrics section shown');
             }
 
             const tokenUsageTopChart = document.getElementById('token-usage-top-chart');
             if (tokenUsageTopChart) {
-                tokenUsageTopChart.style.display = 'block';
+                tokenUsageTopChart.style.display = timelineData?.timeline?.length ? 'block' : 'none';
             }
 
             if (searchMetricsSection) {
-                searchMetricsSection.style.display = 'block';
+                searchMetricsSection.style.display = searchData?.total_searches > 0 ? 'block' : 'none';
                 SafeLogger.log('Search metrics section shown');
             }
+
+            const missingMetrics = document.getElementById('missing-metrics');
+            if (missingMetrics) missingMetrics.hidden = metricsData.total_calls > 0 || searchData?.total_searches > 0;
 
             // Force visibility with CSS overrides
             contentEl.style.visibility = 'visible';
@@ -447,21 +440,33 @@
             document.getElementById('research-date').textContent = date.toLocaleString();
         }
 
-        // Update strategy information
-        if (details.strategy) {
-            document.getElementById('research-strategy').textContent = details.strategy;
-        } else {
-            document.getElementById('research-strategy').textContent = 'Not recorded';
-        }
+        const metadata = details.metadata || {};
+        const submission = metadata.submission || {};
+        const hybrid = metadata.hybrid_odr || {};
+        const isHybrid = submission.agent_research_profile === 'hybrid_odr' || !!metadata.hybrid_odr;
+        document.getElementById('research-strategy').textContent = isHybrid
+            ? (hybrid.execution_profile === 'qwen-evidence-ledger' ? 'Hybrid · Qwen 证据研究' : 'Hybrid Research')
+            : (details.strategy || '未记录');
+        if (isHybrid) document.getElementById('research-mode').textContent = '深度研究';
+        document.getElementById('model-used').textContent = submission.model
+            ? `${submission.model_provider || ''} / ${submission.model}（提交配置）` : '未记录';
+        const labels = {suspended: '已终止', completed: '已完成', in_progress: '研究中', queued: '排队中', failed: '失败'};
+        const status = document.getElementById('research-status');
+        if (status) status.textContent = labels[details.status] || details.status || '状态未记录';
+        const journalsButton = document.getElementById('view-journals-btn');
+        if (journalsButton) journalsButton.style.display = details.status === 'completed' ? '' : 'none';
+        const reportButton = document.getElementById('view-results-btn');
+        if (reportButton) reportButton.style.display = details.status === 'completed' ? '' : 'none';
+        const materialsButton = document.getElementById('view-materials-btn');
+        if (materialsButton) materialsButton.style.display = details.status === 'suspended' ? '' : 'none';
 
-        // Update progress
-        if (details.progress !== undefined) {
-            const progressFill = document.getElementById('detail-progress-fill');
-            const progressText = document.getElementById('detail-progress-percentage');
-            if (progressFill && progressText) {
-                progressFill.style.width = `${details.progress}%`;
-                progressText.textContent = `${details.progress}%`;
-            }
+        const progressFill = document.getElementById('detail-progress-fill');
+        const progressText = document.getElementById('detail-progress-percentage');
+        if (progressFill && progressText) {
+            const hasProgress = typeof details.progress === 'number';
+            progressFill.style.width = hasProgress ? `${details.progress}%` : '0%';
+            progressText.textContent = details.status === 'suspended' ? '已终止'
+                : (hasProgress ? `${details.progress}%` : '暂无数据');
         }
     }
 
@@ -470,6 +475,13 @@
         SafeLogger.log('displayResearchMetrics called with:', metricsData);
         if (!metricsData) {
             SafeLogger.error('No metrics data available');
+            return;
+        }
+
+        if (!metricsData.model_usage?.length && !(metricsData.total_calls > 0)) {
+            for (const id of ['total-tokens', 'prompt-tokens', 'completion-tokens', 'llm-calls', 'avg-response-time', 'success-rate']) {
+                document.getElementById(id).textContent = '暂无数据';
+            }
             return;
         }
 
@@ -483,16 +495,12 @@
         let totalPromptTokens = 0;
         let totalCompletionTokens = 0;
         let totalCalls = 0;
-        let model = 'Unknown';
 
         if (metricsData.model_usage && metricsData.model_usage.length > 0) {
             metricsData.model_usage.forEach(usage => {
                 totalPromptTokens += usage.prompt_tokens || 0;
                 totalCompletionTokens += usage.completion_tokens || 0;
                 totalCalls += usage.calls || 0;
-                if (model === 'Unknown') {
-                    model = usage.model || 'Unknown';
-                }
             });
         }
 
@@ -501,7 +509,8 @@
         document.getElementById('llm-calls').textContent = formatNumber(metricsData.total_calls || totalCalls);
 
         // Update model info
-        document.getElementById('model-used').textContent = model;
+        const recordedModels = [...new Set((metricsData.model_usage || []).filter(usage => usage.model).map(usage => `${usage.provider || ''} / ${usage.model}`))];
+        if (recordedModels.length) document.getElementById('model-used').textContent = recordedModels.join('、');
 
         // Response time will be updated by timeline data
         document.getElementById('avg-response-time').textContent = '0s';
@@ -511,22 +520,12 @@
     function displayTimelineMetrics(timelineData) {
         if (!timelineData) return;
 
-        // Update research info from timeline data
-        if (timelineData.research_details) {
-            const details = timelineData.research_details;
-            document.getElementById('research-query').textContent = details.query || 'Unknown';
-            document.getElementById('research-mode').textContent = details.mode || 'Unknown';
-            if (details.created_at) {
-                const date = new Date(details.created_at);
-                document.getElementById('research-date').textContent = date.toLocaleString();
-            }
-        }
-
         // Update summary info
         if (timelineData.summary) {
             const summary = timelineData.summary;
             const avgResponseTime = (summary.avg_response_time || 0) / 1000;
-            document.getElementById('avg-response-time').textContent = `${avgResponseTime.toFixed(1)}s`;
+            document.getElementById('avg-response-time').textContent = summary.total_calls > 0 ? `${avgResponseTime.toFixed(1)}s` : '暂无数据';
+            document.getElementById('success-rate').textContent = summary.total_calls > 0 && typeof summary.success_rate === 'number' ? `${summary.success_rate}%` : '暂无数据';
         }
 
         // Display phase breakdown
@@ -1085,7 +1084,7 @@
             const result = await response.json();
             if (result.status === 'success' && result.data) {
                 displayContextOverflow(result.data);
-                document.getElementById('context-overflow-section').style.display = 'block';
+                document.getElementById('context-overflow-section').style.display = result.data.requests?.length ? 'block' : 'none';
             }
         } catch (error) {
             SafeLogger.error('Error loading context overflow data:', error);
