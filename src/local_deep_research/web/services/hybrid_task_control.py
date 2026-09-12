@@ -92,3 +92,28 @@ def save_cancelled_research(runner, output_root):
         "evidence_packets": getattr(runner, "_located_packets", {}),
         "resumable": False,
     }, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def load_cancelled_research(output_root, run_id):
+    """Read a completed cancellation archive; a missing run record may still be saving."""
+    folder = Path(output_root) / run_id
+    try:
+        run = json.loads((folder / "run.json").read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return None
+    if run.get("terminal_reason") != "user_cancelled":
+        return None
+    try:
+        sources = json.loads((folder / "sources.json").read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        sources = []
+    snapshot_root = (folder / "source_snapshots").resolve()
+    for source in sources:
+        snapshot = (snapshot_root / f"{source['source_id']}.txt").resolve()
+        if not snapshot.is_relative_to(snapshot_root):
+            raise ValueError("Source snapshot lies outside the archive")
+        try:
+            source["content"] = snapshot.read_text(encoding="utf-8")
+        except FileNotFoundError:
+            source["content"] = None
+    return {"run": run, "sources": sources}

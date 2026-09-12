@@ -40,6 +40,7 @@
             <p class="ldr-deep-run-method"><strong>本次运行</strong>会依据已选来源组织研究并准备报告。页面仅显示后端实际返回的运行信息；详细来源将在报告生成后提供。</p>
 
             <div class="ldr-progress-actions">
+                <a class="btn ldr-btn-outline" href="{{ url_for('research.cancelled_research_materials', research_id=research_id) }}">查看终止后材料</a>
                 <button id="cancel-research-btn" class="btn ldr-btn-outline ldr-terminate-btn">
                     <i aria-hidden="true" class="fas fa-stop-circle"></i> 终止研究
                 </button>

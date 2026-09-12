@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}已保存的研究材料{% endblock %}
+{% block content %}
+<div class="ldr-page active">
+    <div class="ldr-page-header">
+        <h1>已保存的研究材料</h1>
+        <p>{{ query }}</p>
+        <a class="btn ldr-btn-outline" href="{{ url_for('research.research_details_page', research_id=research_id) }}">返回任务详情</a>
+        <a class="btn ldr-btn-outline" href="{{ url_for('research.cancelled_research_materials', research_id=research_id) }}">刷新材料</a>
+    </div>
+    <div class="ldr-card"><div class="ldr-card-content">
+        <p>这些是终止前保留下来的资料与笔记，不是完整报告。目前不支持从这里继续运行。</p>
+        {% if materials is none %}
+        <p role="status">{{ message }}</p>
+        {% else %}
+        <h2>研究笔记</h2>
+        {% for note in materials.run.get('research_notes', []) %}
+        <pre style="white-space: pre-wrap; overflow-wrap: anywhere;">{{ note }}</pre>
+        {% else %}<p>尚未形成研究笔记。</p>{% endfor %}
+        {% for task, packet in materials.run.get('evidence_packets', {}).items() %}
+        <h3>{{ task }}</h3>
+        {% for finding in packet.get('findings', []) %}<p>{{ finding.finding }}</p>{% endfor %}
+        {% for key, evidence in packet.get('evidence', {}).items() %}
+        <details><summary>原文片段 · {{ evidence.source_id }} · 字符 {{ evidence.start }}–{{ evidence.end }}</summary>
+        <pre style="white-space: pre-wrap; overflow-wrap: anywhere;">{{ evidence.text }}</pre></details>
+        {% endfor %}
+        {% endfor %}
+        <h2>来源（{{ materials.sources|length }}）</h2>
+        {% for source in materials.sources %}
+        <section>
+            <h3>{{ source.title or source.source_id }}</h3>
+            <p style="overflow-wrap: anywhere;">{{ source.url }}</p>
+            {% if source.content is not none %}
+            <details><summary>查看已保存原文</summary>
+            <pre style="white-space: pre-wrap; overflow-wrap: anywhere;">{{ source.content }}</pre></details>
+            {% else %}
+            <p>此来源未保存原文。</p>
+            {% if source.snippet %}<p>{{ source.snippet }}</p>{% endif %}
+            {% endif %}
+        </section>
+        {% else %}<p>尚未保存来源。</p>{% endfor %}
+        {% endif %}
+    </div></div>
+</div>
+{% endblock %}

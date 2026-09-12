@@ -146,7 +146,7 @@ def redirect_static(path):
 def progress_page(research_id):
     """Render the research progress page"""
     return render_template_with_defaults(
-        "pages/progress.html", agent_console=get_agent_console_config()
+        "pages/progress.html", agent_console=get_agent_console_config(), research_id=research_id
     )
 
 
@@ -154,7 +154,38 @@ def progress_page(research_id):
 @login_required
 def research_details_page(research_id):
     """Render the research details page"""
-    return render_template_with_defaults("pages/details.html")
+    return render_template_with_defaults("pages/details.html", research_id=research_id)
+
+
+@research_bp.route("/materials/<string:research_id>")
+@login_required
+def cancelled_research_materials(research_id):
+    """Show retained work only after checking the current user's research DB."""
+    from ..services.hybrid_task_control import load_cancelled_research
+    from ..services.research_service import OUTPUT_DIR
+
+    with get_user_db_session(session["username"]) as db_session:
+        research = db_session.query(ResearchHistory).filter_by(id=research_id).first()
+        if research is None:
+            return _research_not_found(research_id)
+        query, status = research.query, research.status
+
+    materials = None
+    message = "尚无可显示的存档：可能仍在保存，或此次终止未留下材料。可稍后刷新。"
+    if status == ResearchStatus.SUSPENDED:
+        try:
+            # IDs are generated UUIDs; never interpret a URL parameter as a path.
+            run_id = str(UUID(research_id))
+            materials = load_cancelled_research(OUTPUT_DIR / "hybrid_odr", run_id)
+        except (ValueError, OSError):
+            logger.exception("Unable to read retained research materials")
+            message = "暂时无法读取已保存材料。"
+    else:
+        message = "此页用于查看已终止研究的材料。正在运行的任务请查看进度，完成的任务请查看报告。"
+    return render_template_with_defaults(
+        "pages/research_materials.html", research_id=research_id,
+        query=query, materials=materials, message=message,
+    )
 
 
 @research_bp.route("/results/<string:research_id>")

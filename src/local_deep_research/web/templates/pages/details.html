@@ -12,6 +12,7 @@
         <div class="ldr-results-header">
             <h1>Research Details</h1>
             <div class="ldr-results-actions">
+                <a class="btn ldr-btn-outline" href="{{ url_for('research.cancelled_research_materials', research_id=research_id) }}">查看终止后材料</a>
                 <button class="btn ldr-btn-outline" id="view-results-btn"><i class="fas fa-file-text"></i> View Results</button>
                 <button class="btn ldr-btn-outline" id="view-journals-btn"><i class="fas fa-book"></i> View Journals</button>
                 <button class="btn ldr-btn-outline" id="back-to-history"><i class="fas fa-arrow-left"></i> Back to History</button>

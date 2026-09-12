@@ -42,3 +42,9 @@ required API key are labelled unconfigured and the submission form explains
 where to configure it. This check does not verify connectivity or credentials;
 keyless local and custom endpoints remain supported. The configured Qwen route
 recognizes both OpenAI-style and Ollama-style model-name fields.
+
+The progress and task-details pages link to retained materials for cancelled
+runs. After signing in, the owner can read saved notes, located evidence
+excerpts, and source snapshots. Missing archives show an empty-state message;
+refresh after cancellation finishes saving. This view presents partial work,
+not a completed report, and does not resume execution.
