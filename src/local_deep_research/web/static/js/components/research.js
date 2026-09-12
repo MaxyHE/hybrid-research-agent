@@ -968,8 +968,12 @@
                 }
 
                 // Update model options based on provider
-                // Don't reset model selection - preserve it if valid for new provider
+                // A model name belongs to the selected provider. Require a new
+                // choice instead of submitting the previous provider's model.
+                selectModelBasedOnProvider(true, null);
+                saveModelSettings('');
                 updateModelOptionsForProvider(provider, false);
+                updateProviderConfigurationHelp();
 
                 // Save provider change to database
                 saveProviderSetting(provider);
@@ -1176,9 +1180,21 @@
         }
     }
 
-    /**
-     * Populate model provider dropdown
-     */
+    function selectedProviderConfigurationIssue() {
+        const provider = MODEL_PROVIDERS.find(item =>
+            item.value.toUpperCase() === (modelProviderSelect?.value || '').toUpperCase()
+        );
+        return provider?.configuration_issue || '';
+    }
+
+    function updateProviderConfigurationHelp() {
+        const help = document.getElementById('model-provider-configuration');
+        if (help) {
+            help.textContent = selectedProviderConfigurationIssue() ||
+                '连接状态尚未验证。可刷新模型列表，或输入该服务支持的模型名称。';
+        }
+    }
+
     function populateModelProviders() {
         if (!modelProviderSelect) return;
 
@@ -1198,7 +1214,7 @@
         MODEL_PROVIDERS.forEach(provider => {
             const option = document.createElement('option');
             option.value = provider.value;
-            option.textContent = provider.label;
+            option.textContent = provider.label + (provider.configuration_issue ? '（未配置）' : '');
             modelProviderSelect.appendChild(option);
         });
 
@@ -1210,6 +1226,7 @@
             SafeLogger.log('Initial provider from data attribute:', initialProvider);
             modelProviderSelect.value = initialProvider.toUpperCase();
         }
+        updateProviderConfigurationHelp();
 
         // Show custom endpoint input if OpenAI endpoint is selected
         if (endpointContainer) {
@@ -1383,6 +1400,8 @@
                 // If no matching model, clear and select first available
                 modelInput.value = '';
                 selectedModelValue = '';
+                const hiddenInput = document.getElementById('model_hidden');
+                if (hiddenInput) hiddenInput.value = '';
             }
         }
 
@@ -2626,6 +2645,14 @@
         if (sourceScope !== 'web' && (!localLibrarySelect || !localLibrarySelect.value.trim())) {
             showAlert('请先选择一个本地文库，或改用“公开 Web”。', 'error');
             localLibrarySelect?.focus();
+            return;
+        }
+
+        const configurationIssue = selectedProviderConfigurationIssue();
+        if (mode !== 'chat' && configurationIssue) {
+            applyAdvancedOptionsState(true);
+            showAlert(configurationIssue, 'error');
+            modelProviderSelect?.focus();
             return;
         }
 

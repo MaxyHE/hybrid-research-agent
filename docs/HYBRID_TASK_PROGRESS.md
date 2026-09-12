@@ -35,3 +35,10 @@ Queued research receives the application context needed by its background worker
 After a running task releases its user slot, the next queued task can execute
 through the same research service. Model-provider choices describe supported
 connections; configure the service address and credentials before first use.
+
+Changing model providers clears the previous model selection, including its
+saved value. Choose a model supported by the new provider. Providers missing a
+required API key are labelled unconfigured and the submission form explains
+where to configure it. This check does not verify connectivity or credentials;
+keyless local and custom endpoints remain supported. The configured Qwen route
+recognizes both OpenAI-style and Ollama-style model-name fields.

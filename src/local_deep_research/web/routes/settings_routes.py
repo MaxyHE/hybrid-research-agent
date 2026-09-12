@@ -1346,6 +1346,24 @@ def api_get_available_models():
         # it is already included here. The previous hardcoded LLAMACPP append
         # produced a duplicate entry in the dropdown.
         provider_options = get_discovered_provider_options()
+        from ...llm.providers.auto_discovery import get_provider_class
+
+        # Report missing required configuration without probing providers or
+        # exposing credentials. A blank issue does not assert connectivity.
+        provider_options = [dict(option) for option in provider_options]
+        for option in provider_options:
+            provider_class = get_provider_class(option["value"])
+            option["configuration_issue"] = ""
+            if (
+                provider_class
+                and provider_class.api_key_setting
+                and not provider_class.api_key_optional
+                and not str(
+                    _get_setting_from_session(provider_class.api_key_setting, "")
+                    or ""
+                ).strip()
+            ):
+                option["configuration_issue"] = "未配置 API 密钥，请先在连接与其他设置中填写。"
 
         # Homepage needs a usable saved choice, not network discovery of every
         # installed provider. Explicit refresh retains the full discovery path.

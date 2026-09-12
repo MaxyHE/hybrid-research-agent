@@ -48,7 +48,10 @@ def run_hybrid_odr(
     if should_cancel is not None and should_cancel():
         raise ResearchTerminatedException("Hybrid research cancelled before start")
     qwen_model = os.environ.get("LDR_HYBRID_QWEN_MODEL", "").strip()
-    use_qwen = bool(qwen_model and getattr(llm, "model_name", None) == qwen_model)
+    model_name = str(
+        getattr(llm, "model_name", None) or getattr(llm, "model", "") or ""
+    ).strip()
+    use_qwen = bool(qwen_model and model_name == qwen_model)
     use_located = not use_qwen and os.environ.get("LDR_HYBRID_EVIDENCE_HANDOFF", "").strip().lower() == "located"
     policy = odr_p1_deep_policy()
     options = {}
