@@ -40,6 +40,7 @@ def run_hybrid_odr(
     source_mode = source_mode or ("hybrid_available" if collection_id else "web_only")
     qwen_model = os.environ.get("LDR_HYBRID_QWEN_MODEL", "").strip()
     use_qwen = bool(qwen_model and getattr(llm, "model_name", None) == qwen_model)
+    use_located = not use_qwen and os.environ.get("LDR_HYBRID_EVIDENCE_HANDOFF", "").strip().lower() == "located"
     policy = odr_p1_deep_policy()
     options = {}
     if use_qwen:
@@ -75,6 +76,15 @@ def run_hybrid_odr(
             evidence_excerpt_max_chars=1200,
             evidence_brief_enabled=False, evidence_narrative_brief_enabled=True,
         )
+    if use_located:
+        from ...odr_baseline.located_handoff import LocatedHandoffRunner
+
+        class WebLocatedRunner(LocatedHandoffRunner):
+            def __init__(self, **kwargs):
+                super().__init__(writer_guidance=True, source_fact_handoff=True,
+                                 attributed_handoff=True, **kwargs)
+
+        options = {"runner_class": WebLocatedRunner}
     runner = build_hybrid_odr_runner(
         run_id=run_id,
         query=query,
@@ -120,7 +130,7 @@ def run_hybrid_odr(
                 "selected_collection_id": collection_id,
                 "source_mode": source_mode,
                 "execution_profile": "qwen-evidence-ledger" if use_qwen else "p1-deep",
-                "writer_context_version": runner.candidate_implementation if use_qwen else "default-h-off",
+                "writer_context_version": runner.candidate_implementation if use_qwen else ("located-attributed" if use_located else "default-h-off"),
             }
         },
         task_count=len(result.research_tasks),

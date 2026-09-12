@@ -127,12 +127,14 @@ def build_source_scoped_runner(
                 tools.pop("search_web", None)
             return tools
 
-    return ScopedRunner(
+    runner = ScopedRunner(
         query=source_scoped_query(query, source_mode, allowed_web_host_suffixes),
         connector=UnavailableWeb() if source_mode == "collection_only" else web_connector,
         collection_connector=None if source_mode == "web_only" else collection_connector,
         **kwargs,
     )
+    runner.original_user_query = query
+    return runner
 
 
 def _with_official_web_source_scope(

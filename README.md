@@ -1,6 +1,8 @@
 # Hybrid Research Agent
 
-**面向技术调研与复现准备的混合来源 Research Agent。**
+**Evidence-grounded research across Web & your library.**
+
+**面向技术调研与工程决策的多智能体研究系统。**
 
 连接用户文库与公开 Web，完成从问题拆解、资料发现、正文阅读到引用报告的研究流程。围绕 **层级式 Multi-Agent、Agent Harness、文档级检索与资源受限推理**，构建托管大模型和本地 Qwen 两条执行路线。演示使用公开文档模拟用户文库，产品不限于论文研究。
 
@@ -26,7 +28,8 @@
 | --- | --- | --- |
 | **文档候选覆盖** | Recall@8 **74.34% → 77.29%** | 完整 SciFact：5,183 篇文档、300 条官方查询；raw8 → raw64 / Document8 |
 | **固定候选池重排** | Recall@8 **77.29% → 79.06%**；MRR@8 **0.6139 → 0.6520** | 同一 raw64 池内 Cross-Encoder 重排，最终最多 8 篇文档 |
-| **研究交付** | 质量完成率 **91.7%（11/12）** | 三种来源各 4 题，指定官方来源条件，按预选连接故障位置恢复 |
+| **证据交接与写作** | 原题覆盖 **85.8%（51.5/60）**；已生成报告引用目标匹配 **100%** | 12 个固定任务、保存证据条件；包括未生成报告的任务，基于来源的 LLM 评分 |
+| **新增 Hybrid 案例** | Self-RAG 工程接入调研 **5/5 核心要求满足** | 文库论文＋官方实现与接口文档，实际检索到报告完整运行，单题来源复核 |
 | **本地推理工程** | **27B、双卡 4-bit、25/25 指定论文目标发现并读取** | 30题评测中10个文库任务的任务—论文目标 |
 
 检索指标由程序计算；报告质量按固定检查项与保存来源进行助手离线评审。重排功能已可选接入本发布副本，默认关闭，见[启用方法](docs/COLLECTION_RERANKING.md)。上述批量成绩来自保存的研发评测。30 题表示本地评测规模。版本、分层结果、完整质量表现及成本见 [评测说明](docs/RESULTS.md)。
@@ -68,11 +71,13 @@
 
 ### 3. 证据交接：连接“读过什么”与“写出了什么”
 
-来源身份、实际读取正文与报告引用贯穿研究过程。托管 H-off 路线由 Researcher 返回压缩研究笔记，Writer 接收原问题、任务列表、已读来源清单、笔记及未完成事项；Qwen 路线采用有限原文片段交接。完整来源快照留存供回查，笔记交接不等同于逐条事实校验。
+可选原文交接模式将来源片段与位置、结论主体、角色和适用条件一起交给 Writer，区分来源事实与模型建议，减少多阶段压缩中的对象混淆和条件丢失。Researcher 可在已读正文中定位关键词、展开相邻段落；完整快照保留供回查。证据结构提高可追溯性，不把模型生成的标签当作事实正确性的保证。
+
+设置 `LDR_HYBRID_EVIDENCE_HANDOFF=located` 后重启服务即可用于托管路线。默认仍使用 H-off 压缩笔记，Qwen 保留自己的有限证据流程。详见[原文交接与最新结果](docs/EVIDENCE_HANDOFF.md)。
 
 报告、来源与轨迹形成一组可回看的交付产物，便于定位问题发生在发现、读取、信息交接还是最终写作。
 
-核心代码：[sources.py](src/local_deep_research/odr_baseline/sources.py) · [qwen_writer.py](src/local_deep_research/odr_baseline/qwen_writer.py)
+核心代码：[located_handoff.py](src/local_deep_research/odr_baseline/located_handoff.py) · [sources.py](src/local_deep_research/odr_baseline/sources.py) · [qwen_writer.py](src/local_deep_research/odr_baseline/qwen_writer.py)
 
 ### 4. 本地模型适配：相同研究目标，不同执行策略
 

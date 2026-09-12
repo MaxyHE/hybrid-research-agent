@@ -43,7 +43,7 @@ from local_deep_research.odr_baseline.sources import (
 
 
 _MARKDOWN_SOURCE_RE = re.compile(
-    r"\[[^\]]*\]\((https?://[^)\s]+|/library/document/[^)\s]+)\)"
+    r"\[[^\]]*\]\((https?://[^)\s]+|/[^)\s]+)\)"
 )
 _HTTP_URL_RE = re.compile(r"https?://[^\s]+")
 _SOURCE_ID_CITATION_RE = re.compile(r"\[(source-\d+)\](?!\()")
@@ -1443,16 +1443,35 @@ class OdrBaselineRunner:
         source_id: str,
         task: str,
         task_budget: _ResearchTaskToolBudget | None,
+        start: int | None = None,
+        end: int | None = None,
     ) -> str:
         source = self._sources_by_id.get(source_id)
         if source is None:
             return "Unknown source id. Use only IDs returned by a search tool."
+        if start is not None or end is not None:
+            if source.content is None:
+                return "Read this source without a range first to obtain its snapshot."
+            left = 0 if start is None else start
+            right = min(len(source.content), left + self.policy.source_view_max_chars) if end is None else end
+            if not 0 <= left < right <= len(source.content):
+                return f"Use 0 <= start < end <= {len(source.content)} (end exclusive)."
+            right = min(right, left + self.policy.source_view_max_chars)
+            if not self._spend_tool(name="read_source", task=task, task_budget=task_budget):
+                return "This task's research-action allowance is exhausted; use fetched sources and finish research."
+            if task not in source.fetched_for:
+                source.fetched_for.append(task)
+            self._event("source_range_read", task=task, source_id=source_id,
+                        start=left, end=right, content_characters=right - left)
+            return (f"[{source.source_id}] {source.title}\nURL: {source.url}\n"
+                    f"Snapshot characters {left}:{right} of {len(source.content)} (end exclusive):\n\n"
+                    + source.content[left:right])
         # Concurrent research units may discover the same canonical URL.  A
         # per-source lock makes its full fetch and snapshot single-flight;
         # another worker then reuses exactly the same immutable text instead
         # of spending a duplicate tool call or racing the source state.
         with source._fetch_lock:
-            if source.content is None and source.fetch_error is None:
+            if source.content is None and source.fetch_error in (None, "public_fetch_dns_failed"):
                 if not self._spend_tool(name="read_source", task=task, task_budget=task_budget):
                     return "This task's research-action allowance is exhausted; use fetched sources and finish research."
                 try:
@@ -1474,6 +1493,7 @@ class OdrBaselineRunner:
                     if not isinstance(fetched, FetchedResource):
                         raise TypeError("connector.fetch returned an invalid resource")
                     source.content = fetched.content
+                    source.fetch_error = None
                     source.retrieved_at = fetched.retrieved_at
                     source.content_sha256 = sha256(fetched.content.encode("utf-8")).hexdigest()
                     source.title = fetched.title or source.title
@@ -1509,6 +1529,37 @@ class OdrBaselineRunner:
             f"Retrieved: {source.retrieved_at}\n\n"
             f"{_source_excerpt(source.content, maximum=self.policy.source_view_max_chars)}"
         )
+
+    def _search_in_source(
+        self, *, source_id: str, query: str, task: str,
+        task_budget: _ResearchTaskToolBudget | None,
+    ) -> str:
+        source = self._sources_by_id.get(source_id)
+        if source is None or source.content is None:
+            return "Read this source first; document search uses an already fetched snapshot."
+        words = query.split()
+        if not words:
+            return "Supply a keyword or short phrase to locate in this document."
+        if not self._spend_tool(name="search_in_source", task=task, task_budget=task_budget):
+            return "This task's research-action allowance is exhausted; use fetched sources and finish research."
+        # Match across PDF-extracted line breaks while preserving snapshot offsets.
+        pattern = re.compile(r"\s+".join(re.escape(word) for word in words), re.IGNORECASE)
+        matches = []
+        for match in pattern.finditer(source.content):
+            matches.append((match.start(), match.end()))
+            if len(matches) == 5:
+                break
+        self._event("source_text_searched", task=task, source_id=source_id,
+                    query=query, matches=[{"start": a, "end": b} for a, b in matches])
+        header = f"[{source_id}] {source.title}\nURL: {source.url}\nSnapshot length: {len(source.content)} characters.\n"
+        if not matches:
+            return header + "No literal phrase match. Try a shorter keyword or alternate wording; this does not establish that the topic is absent."
+        excerpts = []
+        for start, end in matches:
+            left, right = max(0, start - 300), min(len(source.content), end + 300)
+            excerpts.append(f"Match {start}:{end}; context {left}:{right}:\n{source.content[left:right]}")
+        return header + "Up to 5 matches; use read_source(start, end) to expand context.\n\n" + "\n\n".join(excerpts)
+
 
     def _research_tools(
         self,
@@ -1549,14 +1600,22 @@ class OdrBaselineRunner:
             tools["search_collection"] = search_collection
 
         @tool
-        def read_source(source_id: str) -> str:
-            """Read the full text of a source returned by a search tool."""
+        def read_source(source_id: str, start: int | None = None, end: int | None = None) -> str:
+            """Fetch a source overview, or expand a fetched snapshot using zero-based character start/end (end exclusive). Long overviews omit text; use search_in_source to locate missing sections."""
 
             return self._read_source(
                 source_id=source_id,
                 task=task,
                 task_budget=task_budget,
+                start=start,
+                end=end,
             )
+
+        @tool
+        def search_in_source(source_id: str, query: str) -> str:
+            """Find a keyword or literal phrase in an already fetched full snapshot; return original excerpts and character positions, without a network request."""
+            return self._search_in_source(source_id=source_id, query=query,
+                                          task=task, task_budget=task_budget)
 
         @tool
         def finish_research() -> str:
@@ -1565,6 +1624,7 @@ class OdrBaselineRunner:
             return "Research complete."
 
         tools["read_source"] = read_source
+        tools["search_in_source"] = search_in_source
         tools["finish_research"] = finish_research
         return tools
 
@@ -1771,6 +1831,11 @@ Do not invent source links or product abilities.
         )
         prompt = """You are a focused web researcher. Use the available tools to answer the
 assigned research question from primary or official sources where possible.
+
+Long source overviews omit parts of the saved full text. If a relevant section is
+missing from an overview, use search_in_source with a keyword or short phrase,
+then read_source with character start/end to expand its context before searching
+for another copy of the document. These actions use the existing tool budget.
 
 Work in a short tool-calling loop: search the public web, the local Collection, or
 both when they are useful to the assigned question; then read the most relevant
@@ -4000,7 +4065,7 @@ say so instead of citing an unfetched source. Distinguish facts from recommendat
 Include a final `### Sources` list containing only the fetched source handles actually
 used in the report.
 """
-            if self.policy.source_handle_evidence_handoff
+            if self.policy.source_handle_evidence_handoff or getattr(self, "_writer_source_handles", False)
             else """Every material factual conclusion must have an inline clickable Markdown citation
 in this form: `[descriptive source title](source-link)`. The `source-###`
 identifiers in the allowlist and research trail are internal handles, not reader-facing
