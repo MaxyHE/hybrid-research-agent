@@ -24,3 +24,9 @@ without replacing the cancellation outcome.
 These files support inspection of work already performed. Automatic resume is
 not implemented. The same cancellation and progress bridge applies to the
 configured default, Qwen, and located-evidence routes.
+
+Live Hybrid stage events retain their execution counters in Socket updates.
+Refreshing a cancelled run shows its terminated status and labels the prior
+progress message as the last record before termination. The local Hybrid launch
+script initializes the same milestone logging and log processing used by the
+standard Web entry point.

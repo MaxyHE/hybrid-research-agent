@@ -39,17 +39,25 @@ def main():
     os.environ["LDR_DATA_DIR"] = str(workspace_path(manifest["data_dir"]))
     sys.path.insert(0, str(ROOT / "src"))
 
-    from loguru import logger
-    logger.remove()
-    logger.add(sys.stderr, level="WARNING")
+    from local_deep_research.utilities.log_utils import (
+        config_logger, start_log_queue_processor, stop_log_queue_processor,
+        flush_log_queue,
+    )
+    config_logger("hybrid_web")
     from local_deep_research.web.app_factory import create_app
 
     app, socket_service = create_app()
+    start_log_queue_processor(app)
     port = args.port or config.get("port", 8766)
     print(f"Hybrid Research: http://127.0.0.1:{port}", flush=True)
     print(f"Collection account: {manifest['username']}", flush=True)
     print(f"Environment file loaded: {env_file.is_file()}", flush=True)
-    socket_service.run(host="127.0.0.1", port=port, debug=False)
+    try:
+        socket_service.run(host="127.0.0.1", port=port, debug=False)
+    finally:
+        stop_log_queue_processor()
+        with app.app_context():
+            flush_log_queue()
 
 
 if __name__ == "__main__":

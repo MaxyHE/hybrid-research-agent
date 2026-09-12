@@ -1362,7 +1362,7 @@ def run_research_process(research_id, query, mode, **kwargs):
                 # progress throttle would make the visible call ledger
                 # factually incomplete. These events are already bounded by
                 # the agent tool-call budget, so preserve each one.
-                if phase in {"tool_call", "observation", "tool_budget"}:
+                if phase in {"tool_call", "observation", "tool_budget"} or metadata.get("hybrid_event"):
                     should_emit = True
                 if not is_final:
                     now = time.monotonic()
@@ -1416,6 +1416,13 @@ def run_research_process(research_id, query, mode, **kwargs):
                         "message": message,
                         "phase": phase,
                     }
+                    # Preserve the Hybrid adapter's safe execution facts.
+                    if metadata.get("hybrid_event"):
+                        for key in (
+                            "hybrid_event", "event_sequence", "updated_at",
+                            "model_calls_started", "sources_read", "research_tasks",
+                        ):
+                            event_data[key] = metadata[key]
                     # Include additional metadata for MCP/ReAct strategy display
                     if metadata.get("thought"):
                         event_data["thought"] = metadata["thought"]

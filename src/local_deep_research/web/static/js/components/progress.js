@@ -25,7 +25,7 @@
         if (ResearchStates.isCompleted(normalized)) return '研究完成';
         if (normalized === window.RESEARCH_STATUS.QUEUED || normalized === 'queued') return '等待运行';
         if (ResearchStates.isFailed(normalized)) return '研究未完成';
-        if (normalized === 'cancelled' || normalized === 'terminated') return '研究已终止';
+        if (normalized === 'cancelled' || normalized === 'terminated' || normalized === 'suspended') return '研究已终止';
         return '研究进行中';
     }
 
@@ -349,7 +349,7 @@
         updateProgressUI(data);
 
         // If we have a milestone task, make sure it's set after updateProgressUI
-        if (milestoneTask && currentTaskText) {
+        if (milestoneTask && currentTaskText && !ResearchStates.isCancelled(data.status)) {
             SafeLogger.log('Setting milestone task:', milestoneTask);
             currentTaskText.textContent = milestoneTask;
             currentTaskText.dataset.lastMessage = milestoneTask;
@@ -359,12 +359,6 @@
         // Check if research is completed
         if (ResearchStates.isTerminal(data.status)) {
             handleResearchCompletion(data);
-        }
-
-        // Update the current query text if available
-        const currentQueryEl = document.getElementById('current-query');
-        if (currentQueryEl && data.query) {
-            currentQueryEl.textContent = data.query;
         }
 
         // If no task info was provided, leave the current task as is
@@ -517,6 +511,11 @@
                 }
             }
 
+            if (ResearchStates.isCancelled(data.status)) {
+                taskMessage = taskMessage ? `终止前最后记录：${taskMessage}` : '研究已终止。';
+                specificProgressMessage = true;
+            }
+
             // Update the task text if we found a message AND it's not just "In Progress"
             if (taskMessage && taskMessage.trim() !== 'In Progress' && taskMessage.trim() !== 'in progress') {
                 SafeLogger.log('Updating current task text to:', taskMessage);
@@ -540,10 +539,10 @@
         }
 
         // Update page title with progress
-        if (data.progress !== undefined) {
+        if (data.progress !== undefined && data.progress !== null) {
             // Ensure progress is capped at 100% for page title
             const cappedProgress = Math.max(0, Math.min(100, Math.floor(data.progress)));
-            document.title = `研究进行中（${cappedProgress}%）· Local Deep Research`;
+            document.title = `${runStatusLabel(data.status)}（${cappedProgress}%）· Local Deep Research`;
         }
 
         // Update favicon based on status
