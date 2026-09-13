@@ -77,6 +77,8 @@
 
 报告、来源与轨迹形成一组可回看的交付产物，便于定位问题发生在发现、读取、信息交接还是最终写作。
 
+研究任务支持按用户排队、实时阶段与执行计数、协作式取消。终止后保留已完成的研究笔记和来源原文，可从任务详情按用户隔离查看；详情页区分实际模型记录与提交配置。见[任务进度与取消材料](docs/HYBRID_TASK_PROGRESS.md)。
+
 核心代码：[located_handoff.py](src/local_deep_research/odr_baseline/located_handoff.py) · [sources.py](src/local_deep_research/odr_baseline/sources.py) · [qwen_writer.py](src/local_deep_research/odr_baseline/qwen_writer.py)
 
 ### 4. 本地模型适配：相同研究目标，不同执行策略
