@@ -1,127 +1,172 @@
 # Hybrid Research Agent
 
-**Evidence-grounded research across Web & your library.**
+**结合本地文库与公开 Web 的研究 Agent。**
 
-**面向技术调研与工程决策的多智能体研究系统。**
+Evidence-grounded research across the Web and your document library.
 
-连接用户文库与公开 Web，完成从问题拆解、资料发现、正文阅读到引用报告的研究流程。围绕 **层级式 Multi-Agent、Agent Harness、文档级检索与资源受限推理**，构建托管大模型和本地 Qwen 两条执行路线。演示使用公开文档模拟用户文库，产品不限于论文研究。
+从一个技术问题出发，拆解研究任务、检索文档与网页、读取正文，最终生成带来源引用的报告。适合论文比较、技术选型，以及从论文机制到官方实现的工程调研。
 
-**Agent Harness · Tool Calling · RAG / FAISS · Evidence-grounded Research · Local LLM**
+项目围绕四项工程工作展开：研究 Agent 的执行控制、文档级候选检索、原文证据交接，以及资源受限的本地模型适配。提供托管模型和本地 Qwen 两条执行路线，并通过网页管理研究任务与报告。
 
-[主要结果](#主要结果) · [工程亮点](#工程亮点) · [架构与代码](#架构与代码) · [运行准备](docs/QUICKSTART.md) · [评测口径](docs/RESULTS.md)
+[研究方式](#研究方式) · [快速开始](#快速开始) · [系统架构](#系统架构) · [核心设计](#核心设计) · [实验结果](#实验结果) · [文档导航](#文档导航)
 
-## 适合解决什么问题
+## 研究方式
 
-技术研究往往需要两类信息：相对稳定的论文与文档，以及持续变化的代码、数据和官方说明。Hybrid Research 将两者组织到同一研究任务中。
+研究支持三种来源范围：
 
-| 研究方式 | 典型问题 | 交付目标 |
+| 模式 | 使用的来源 | 典型任务 |
 | --- | --- | --- |
-| Collection | 比较 ReAct、ReWOO 与 LATS 的控制环及取舍 | 基于文库原文的多论文比较 |
-| Hybrid | 理解一篇论文，并核对官方仓库的复现准备 | 论文机制与当前实现的来源关联报告 |
-| Web | 核对技术工具的配置、接口与使用条件 | 基于实际读取网页的研究结论 |
+| Collection | 用户导入并建立索引的文库 | 比较多篇论文的机制与取舍 |
+| Web | 搜索并实际读取的公开网页 | 核对工具配置、接口和官方实现 |
+| Hybrid | 文库与 Web | 将论文原理与当前实现结合起来分析 |
 
-用户关注 **问题、来源、模型**；运行时负责研究编排、工具执行、预算和来源记录。
+网页支持查看研究阶段与执行计数、取消任务、查看已保存的研究材料，以及从历史记录重新打开报告。历史验证使用公开文档构建文库，运行时可导入自己有权使用的材料。
 
-## 主要结果
+## 快速开始
 
-| 维度 | 实测成果 | 评测范围 |
-| --- | --- | --- |
-| **文档候选覆盖** | Recall@8 **74.34% → 77.29%** | 完整 SciFact：5,183 篇文档、300 条官方查询；raw8 → raw64 / Document8 |
-| **固定候选池重排** | Recall@8 **77.29% → 79.06%**；MRR@8 **0.6139 → 0.6520** | 同一 raw64 池内 Cross-Encoder 重排，最终最多 8 篇文档 |
-| **证据交接与写作** | 原题覆盖 **85.8%（51.5/60）**；已生成报告引用目标匹配 **100%** | 12 个固定任务、保存证据条件；包括未生成报告的任务，基于来源的 LLM 评分 |
-| **新增 Hybrid 案例** | Self-RAG 工程接入调研 **5/5 核心要求满足** | 文库论文＋官方实现与接口文档，实际检索到报告完整运行，单题来源复核 |
-| **本地推理工程** | **27B、双卡 4-bit、25/25 指定论文目标发现并读取** | 30题评测中10个文库任务的任务—论文目标 |
+准备 **Python 3.12–3.14、Node.js 24 或以上**，以及可用的模型服务与搜索服务。以下命令使用 Python 3.12；也可换成 3.13 或 3.14。
 
-检索指标由程序计算；报告质量按固定检查项与保存来源进行助手离线评审。重排功能已可选接入本发布副本，默认关闭，见[启用方法](docs/COLLECTION_RERANKING.md)。上述批量成绩来自保存的研发评测。30 题表示本地评测规模。版本、分层结果、完整质量表现及成本见 [评测说明](docs/RESULTS.md)。
-
-## 工程亮点
-
-### 1. Agent Harness：把模型决策变成可管理的研究执行
-
-将研究控制流、工具调用与运行状态组织在同一运行时中：
-
-- **层级式多智能体**：Supervisor 派发任务，Researchers 在独立工具循环中研究，线程池支持并行，Writer 综合交付。
-- **调用预算控制**：模型与工具执行前检查计数和额度，为写作单独授予调用额度；不是仅在提示词中要求节省调用。
-- **工具执行控制**：限制单轮实际来源动作，按任务分配工具额度，记录未完成研究事项。
-- **执行可追踪**：记录任务状态、未完成事项、模型与工具调用，为诊断和版本对照提供依据。
-
-核心代码：[runtime.py](src/local_deep_research/odr_baseline/runtime.py) · [harness.py](src/local_deep_research/odr_baseline/harness.py)
-
-[真实执行实例](docs/EXECUTION_EXAMPLE.md)：查看一次正常Hybrid研究中的三任务分发、预算分配、来源动作及Writer交接。
-
-### 2. Document 级检索：让候选位覆盖更多研究对象
-
-多文档调研需要的是不同文档，而不仅是高相似度片段。将原始 chunk 候选池扩大至 64，按 Document 保留首次命中，再向 Agent 返回最多 8 篇文档；Agent 按需回读正文。
-
-```text
-向量检索：64 个 chunk
-         ↓ 按 Document 去重，保留首次排名
-研究候选：最多 8 篇不同文档
-         ↓ 按需读取
-正文证据：供后续研究与综合使用
+```bash
+git clone https://github.com/MaxyHE/hybrid-research-agent.git
+cd hybrid-research-agent
+python3.12 -m venv .venv
+.venv/bin/pip install -e .
+npm ci
+npm run build
+LDR_WEB_HOST=127.0.0.1 .venv/bin/ldr-web
 ```
 
-在固定 60 查询对照中，新增 42 条查询的指定目标召回从 **72.7% 提升至 83.6%**；原 18 条开发查询保持目标召回。提升主要体现在补齐多文档研究需求。
+打开启动输出中的本地地址，创建账号并配置模型与搜索服务。使用 Collection 或 Hybrid 时，先导入文档并建立文库索引，再提交研究问题。模型 API 与搜索服务可能产生费用。
 
-核心代码：[project_sources.py](src/local_deep_research/odr_baseline/project_sources.py)
+源码安装保留本仓库的研究改造。macOS 的 SQLCipher 依赖、数据目录、端口和已有文库启动器见[完整运行指南](docs/QUICKSTART.md)。
 
-可选Cross-Encoder对同一候选池的文档重排后返回前8篇，不增加生成模型调用。[本地重排配置](docs/COLLECTION_RERANKING.md)说明模型缓存、输入截断及执行元数据。
+本地 Qwen 通过已有的 OpenAI-compatible 模型端点接入；模型服务由用户单独部署。[连接步骤](docs/QUICKSTART.md#接入本地-qwen)说明准确模型名与路线选择。当前提供本地运行源码、配置说明和评测附件，尚无公共在线服务。
 
-中文问题检索英文文库时，可启用独立的本地 Qwen 翻译。固定开发集指定目标 Recall@8 进一步达到 100%，翻译耗时中位数 4.44 秒；英文跳过、重复译文复用。见[启用说明](docs/COLLECTION_QUERY_TRANSLATION.md)。[公开排名与指标重算](docs/evaluation/README.md)无需 API 或私有数据库。
-
-### 3. 证据交接：连接“读过什么”与“写出了什么”
-
-可选原文交接模式将来源片段与位置、结论主体、角色和适用条件一起交给 Writer，区分来源事实与模型建议，减少多阶段压缩中的对象混淆和条件丢失。Researcher 可在已读正文中定位关键词、展开相邻段落；完整快照保留供回查。证据结构提高可追溯性，不把模型生成的标签当作事实正确性的保证。
-
-设置 `LDR_HYBRID_EVIDENCE_HANDOFF=located` 后重启服务即可用于托管路线。默认仍使用 H-off 压缩笔记，Qwen 保留自己的有限证据流程。详见[原文交接与最新结果](docs/EVIDENCE_HANDOFF.md)。
-
-报告、来源与轨迹形成一组可回看的交付产物，便于定位问题发生在发现、读取、信息交接还是最终写作。
-
-研究任务支持按用户排队、实时阶段与执行计数、协作式取消。终止后保留已完成的研究笔记和来源原文，可从任务详情按用户隔离查看；详情页区分实际模型记录与提交配置。见[任务进度与取消材料](docs/HYBRID_TASK_PROGRESS.md)。
-
-核心代码：[located_handoff.py](src/local_deep_research/odr_baseline/located_handoff.py) · [sources.py](src/local_deep_research/odr_baseline/sources.py) · [qwen_writer.py](src/local_deep_research/odr_baseline/qwen_writer.py)
-
-### 4. 本地模型适配：相同研究目标，不同执行策略
-
-托管路线采用多阶段研究编排。本地 Qwen 路线针对推理资源组织需求计划、有限证据补充与多片段综合，配合双卡 4-bit 部署和固定任务评测，迭代上下文使用与研究流程。
-
-核心代码：[qwen_candidate.py](src/local_deep_research/odr_baseline/qwen_candidate.py)
-
-## 架构与代码
+## 系统架构
 
 ```text
 用户问题 + 来源范围 + 模型
-          │
-          ├─ 托管：Supervisor → Researchers → Writer
-          └─ 本地：需求计划 → 检索阅读 → 有限补缺 → 综合
-                              │
-                    Web / Collection 来源工具
-                              │
-                    正文快照 + 来源身份 + 预算
-                              │
-                       报告 + 引用 + trace
+              │
+              ├─ 托管路线
+              │  Supervisor → 并行 Researchers → Writer
+              │
+              └─ 本地 Qwen 路线
+                 需求计划 → 检索与阅读 → 有限补缺 → 多片段综合
+
+两条路线共用
+  来源工具：Web 搜索与读取 / Collection 检索与正文读取
+  运行记录：调用预算、来源身份、正文快照、任务状态与 trace
+  网页交付：报告、引用、执行进度与历史记录
 ```
 
-| 入口 | 看什么 |
+检索先回答“应该读哪些材料”，正文阅读再提供写作依据。运行时负责工具执行、额度检查和来源记录，模型负责研究决策与综合。两条路线共享产品入口，根据模型与推理资源采用不同的研究流程。
+
+技术栈：Python、Flask、LangChain 兼容模型与工具接口、FAISS、Transformers、bitsandbytes。双卡本地推理在 Linux / Slurm 环境验证。
+
+## 核心设计
+
+### Agent Harness 与研究执行控制
+
+多阶段研究需要协调任务、工具和调用资源。在上游研究控制流与预算语义的基础上，本项目将混合来源工具和运行状态接入统一运行时：Supervisor 拆分任务，Researchers 在各自的工具循环中研究，Writer 汇总交付。
+
+- **执行前检查额度**：研究模型调用共享总额度，各任务拥有工具额度；写作阶段单独授予模型调用额度。
+- **控制单轮来源动作**：模型返回多个工具调用时，按单轮上限执行，并为每个调用返回对应的工具消息，让后续决策基于已返回的结果。
+- **管理任务生命周期**：记录未完成事项、阶段与调用事件；支持按用户排队和协作式取消，取消后保留已完成的笔记与来源正文。
+
+[实际执行实例](docs/EXECUTION_EXAMPLE.md)记录了一次三任务并行研究的分发、额度分配和 Writer 交接。[任务控制说明](docs/HYBRID_TASK_PROGRESS.md)介绍进度与取消材料。
+
+代码：[runtime.py](src/local_deep_research/odr_baseline/runtime.py) · [harness.py](src/local_deep_research/odr_baseline/harness.py) · [hybrid_task_control.py](src/local_deep_research/web/services/hybrid_task_control.py)
+
+### 文档级候选检索
+
+多论文研究需要覆盖不同文档。同一文档的多个相似 chunk 会占用有限候选位，因此文库接口先扩大 chunk 候选池，再按文档去重，向 Agent 返回用于后续阅读的文档候选。
+
+```text
+FAISS 检索 64 个 chunk
+        ↓ 按文档去重，保留首次命中顺序
+最多 8 篇候选文档
+        ↓ Agent 按需读取正文
+用于研究与综合的来源证据
+```
+
+可选 Cross-Encoder 在同一候选池内重排文档，默认关闭；中文问题检索英文文库时，可启用本地 Qwen 查询翻译。两项能力的模型准备、配置与测量范围见[文档重排](docs/COLLECTION_RERANKING.md)和[查询翻译](docs/COLLECTION_QUERY_TRANSLATION.md)。
+
+代码：[project_sources.py](src/local_deep_research/odr_baseline/project_sources.py)
+
+### 原文证据交接与上下文组织
+
+Researcher 到 Writer 的多阶段摘要可能丢失结论对象、适用条件和原文依据。可选原文交接模式将研究结论与支持片段一起传递，附上来源身份、原文位置、结论主体、信息角色和适用条件。Researcher 可以在已读正文中定位关键词并展开相邻段落，完整快照保留供回查。
+
+后续研究上下文使用带来源 ID 与 URL 的工作笔记，减少重复携带正文；写作时按所选模式接收压缩笔记或带位置的原文证据。报告、来源和运行轨迹共同支持对发现、阅读、交接及写作环节的检查。
+
+托管路线默认使用压缩笔记，设置 `LDR_HYBRID_EVIDENCE_HANDOFF=located` 后启用原文交接。本地 Qwen 使用自己的证据流程。用法与评测见[原文交接说明](docs/EVIDENCE_HANDOFF.md)。
+
+代码：[located_handoff.py](src/local_deep_research/odr_baseline/located_handoff.py) · [sources.py](src/local_deep_research/odr_baseline/sources.py)
+
+### 资源受限的本地模型适配
+
+本地路线将用户问题拆成可独立回答的需求，为需求指定文库或 Web 来源，再执行检索、阅读和有限补缺。Writer 综合多个正文片段，并分别限制片段长度、单来源长度和总证据上下文，控制本地推理负担。
+
+该流程在 **27B、双卡 4-bit** 部署环境进行验证，与托管路线的层级式多智能体编排分开实现。网页通过准确模型名选择 Qwen 路线，两条路线共用来源选择、报告与历史入口。
+
+代码：[qwen_candidate.py](src/local_deep_research/odr_baseline/qwen_candidate.py) · [qwen_writer.py](src/local_deep_research/odr_baseline/qwen_writer.py)
+
+## 实验结果
+
+### 检索组件对照
+
+完整 SciFact 语料包含 **5,183 篇文档、300 条官方测试查询**。使用同一 embedding 与 FAISS 索引，按最终文档排名计算指标：
+
+| 策略 | micro Recall@8 | MRR@8 |
+| --- | ---: | ---: |
+| 原始 top 8 chunks，文档不补位 | 74.34% | 0.6115 |
+| top 64 chunks → 文档去重 → 8 篇 | 77.29% | 0.6139 |
+| 同一 top 64 池 → Cross-Encoder → 8 篇 | 79.06% | 0.6520 |
+
+候选扩展与文档去重提高了相关文档覆盖，固定池重排进一步改善前 8 篇的排序表现。[结果说明](docs/RESULTS.md)包含 nDCG、60 查询开发对照、中文查询翻译及模型选型结果。
+
+公开排名附件支持离线重算指标，只需 Python 标准库，无需模型或 API：
+
+```bash
+python3 scripts/recompute-scifact-metrics.py
+```
+
+该命令从保存的排名重新计算成绩；重新执行检索还需准备语料、索引和模型。详见[评测附件](docs/evaluation/README.md)。
+
+### 研究交付与证据交接
+
+原文交接候选在 12 个固定任务的保存证据上重新组织材料并写作，按 60 个原题检查项获得 **51.5/60（85.8%）**。评分采用对照保存来源的 LLM 评审，包含未生成报告的任务。已生成报告中的引用目标全部匹配已读来源目录，内容支持程度由质量评审另行检查。
+
+另一次新增 Self-RAG 工程接入调研实际执行文库与 Web 检索、阅读和报告生成，来源复核中 **5/5 核心要求满足**。保存证据写作评测和新增端到端单题分别记录，见[证据交接评测](docs/EVIDENCE_HANDOFF.md)。
+
+### 本地模型验证
+
+冻结 Qwen v6.2 的 30 题固定评测覆盖 Web、Collection、Hybrid，各 10 题：
+
+| 测量内容 | 结果 |
 | --- | --- |
-| [研究运行时](src/local_deep_research/odr_baseline/) | 编排、预算、混合来源与本地策略 |
-| [网页研究服务](src/local_deep_research/web/services/hybrid_odr_service.py) | 产品界面到研究流程的接线 |
-| [架构说明](docs/ARCHITECTURE.md) | 模块职责与代码导航 |
-| [结果说明](docs/RESULTS.md) | 指标定义、对照范围与版本 |
-| [仓库内容规划](docs/REPOSITORY_GUIDE.md) | 当前材料与后续演示、复现附件 |
+| 质量完成率，首次尝试 | 17/30（56.7%） |
+| 质量完成率，指定连接故障恢复后 | 18/30（60.0%） |
+| 10 个文库任务中的指定论文发现与读取 | 25/25 个任务—论文目标 |
 
-技术栈：**Python · Flask · LangChain 兼容模型/工具接口 · FAISS · Transformers · bitsandbytes · Linux / Slurm**。
+这些结果分别描述报告质量和来源获取。当前网页接入的是后续 Qwen 流程，完整 Hybrid 交付仍待验收；30 题成绩对应上述冻结版本。版本、质量判定与恢复记录见[完整结果](docs/RESULTS.md)和[历史运行记录](docs/DEMO_RUNS.md)。
 
-## 运行与演示
+## 文档导航
 
-[运行准备](docs/QUICKSTART.md)提供源码安装、前端构建和文库配置步骤。已完成独立 Python 环境安装、前端构建与浏览器登录/注册页访问；完整研究交付验证见[发布状态](docs/RELEASE_STATUS.md)。[真实报告节选](docs/examples/hybrid-report-excerpt.md)展示论文与官方实现相结合的交付形式。
+| 你想了解什么 | 入口 |
+| --- | --- |
+| 安装、文库配置与本地模型连接 | [快速开始](docs/QUICKSTART.md) |
+| 模块职责、贡献范围与代码入口 | [架构说明](docs/ARCHITECTURE.md) |
+| 一次真实研究如何运行 | [执行实例](docs/EXECUTION_EXAMPLE.md) |
+| 历史网页运行与内容复核 | [运行记录](docs/DEMO_RUNS.md) |
+| 实验设置、指标与版本 | [结果说明](docs/RESULTS.md) · [离线重算](docs/evaluation/README.md) |
+| 当前集成与验证状态 | [发布状态](docs/RELEASE_STATUS.md) |
+| 仓库材料与公开附件范围 | [材料导航](docs/REPOSITORY_GUIDE.md) |
 
-网页默认使用托管研究控制流。设置 `LDR_HYBRID_QWEN_MODEL` 为本地端点的准确模型名后，选择该模型会进入 Qwen 需求驱动证据流程；两条路线共用来源选择、报告和历史入口。连接方法见[快速开始](docs/QUICKSTART.md)。本地 30 题成绩对应冻结 v6.2，后续开发代码与旧版成绩分别记录。
+## 上游来源与许可
 
-[真实网页演示与截图](docs/DEMO_RUNS.md)：RAPTOR 本地论文 × 官方 GitHub，包含完整执行记录、引用链接修复及报告复核说明。
+应用基础采用 [LearningCircuit/local-deep-research](https://github.com/LearningCircuit/local-deep-research)，研究控制流与部分提示词改编自 [langchain-ai/open_deep_research](https://github.com/langchain-ai/open_deep_research)，预算与未完成任务语义适配自 [jmlon/deep-research-harness](https://github.com/jmlon/deep-research-harness/tree/393d907239ee649f85dd888de715d8379e8b4a87)。
 
-## 开源来源与许可
+本项目的改造集中于混合来源运行时集成、文档级候选接口、证据交接、本地模型执行适配、网页任务控制及工程评测。上游作者和 MIT 许可信息保留在 [LICENSE](LICENSE)、[ODR LICENSE](src/local_deep_research/odr_baseline/LICENSE)、[Harness LICENSE](src/local_deep_research/odr_baseline/HARNESS_LICENSE) 与 [NOTICE](src/local_deep_research/odr_baseline/NOTICE.md) 中；同步来源见[源码来源记录](docs/PROVENANCE.md)。
 
-应用基础采用 [local-deep-research](https://github.com/LearningCircuit/local-deep-research)，研究控制流与部分提示词改编自 [Open Deep Research](https://github.com/langchain-ai/open_deep_research)，部分预算语义参考 deep-research-harness。
-
-本项目工作集中于混合来源研究运行时、Document 级候选接口、约束与证据交接、本地资源适配及工程评测。保留上游作者与许可证，见 [LICENSE](LICENSE)、[ODR LICENSE](src/local_deep_research/odr_baseline/LICENSE) 和 [来源记录](docs/PROVENANCE.md)。
+仓库提供源码、配置说明、历史运行记录和精简评测附件。账号凭据、用户数据库、模型权重及完整来源正文快照保存在仓库之外。
