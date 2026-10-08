@@ -1,0 +1,56 @@
+{
+  "publisher": "Qwen",
+  "repository": "Qwen/Qwen3-Reranker-0.6B",
+  "mirror": "modelscope.cn",
+  "official_huggingface_weight_sha256": "27cd75a405b9c1b46b59abfd88aaa209e6fed2a1972cde9b70e7659537c5e65b",
+  "files": [
+    {
+      "Path": "config.json",
+      "Size": 727,
+      "Sha256": "d479c427a9ca5295218063d4f9aca4f297ab4ac27487cca7af42c84643d51ef0",
+      "Revision": "793e9a4d0c65b957e02923202124de8c768f3a50"
+    },
+    {
+      "Path": "generation_config.json",
+      "Size": 214,
+      "Sha256": "81051cd3f6e77013827148d0b8a6ead93f8ac390d5ab805f849199f0af6a08db",
+      "Revision": "793e9a4d0c65b957e02923202124de8c768f3a50"
+    },
+    {
+      "Path": "merges.txt",
+      "Size": 1671853,
+      "Sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+      "Revision": "793e9a4d0c65b957e02923202124de8c768f3a50"
+    },
+    {
+      "Path": "tokenizer.json",
+      "Size": 11422654,
+      "Sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "Revision": "793e9a4d0c65b957e02923202124de8c768f3a50"
+    },
+    {
+      "Path": "tokenizer_config.json",
+      "Size": 9706,
+      "Sha256": "253153d0738ceb4c668d2eff957714dd2bea0b56de772a9fdccd96cbf517e6a0",
+      "Revision": "793e9a4d0c65b957e02923202124de8c768f3a50"
+    },
+    {
+      "Path": "vocab.json",
+      "Size": 2776833,
+      "Sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+      "Revision": "793e9a4d0c65b957e02923202124de8c768f3a50"
+    },
+    {
+      "Path": "model.safetensors",
+      "Size": 1191588280,
+      "Sha256": "27cd75a405b9c1b46b59abfd88aaa209e6fed2a1972cde9b70e7659537c5e65b",
+      "Revision": "b9862cbd5ada07d9132206b63692ea7601807eee"
+    },
+    {
+      "Path": "README.md",
+      "Size": 14742,
+      "Sha256": "5bba8c734f6dd3ae48317b4139317e45a7fce48fc55e15670b23a0dd15492ab6",
+      "Revision": "0311d7b88fd535395d154b17fe08f85327306508"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "status": "complete",
+  "phase": "test",
+  "queries": 300,
+  "pairs": 19200,
+  "truncated_pairs": 0,
+  "arm_gpu_forward_seconds": {
+    "B": 307.88823679089546
+  },
+  "wall_seconds": 320.9227556679398,
+  "model_load_seconds": 3.2594295921735466,
+  "max_input_tokens_observed": 2049,
+  "peak_allocated_gpu_bytes": 1743717376,
+  "torch": "2.4.0+cu121",
+  "transformers": "5.5.4",
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "dtype": "bfloat16",
+  "batch_size": 8,
+  "max_length": 4096,
+  "attention": "sdpa",
+  "model": "Qwen/Qwen3-Reranker-0.6B",
+  "synthetic_control_logit_diffs": [
+    6.0625,
+    -12.40625
+  ],
+  "candidate_sha256": "242224a4693ad52081edc3fa4864eb616df3c08504c5929b1bc7a503a13783d7",
+  "scoring_script_sha256": "5e103181febd4e65d41e259a07b3a7b42df8ff6e8137ed29836a0219af4d94d7",
+  "tasks": {
+    "B": "Given a scientific claim, retrieve research papers that provide evidence supporting or refuting the claim."
+  }
+}

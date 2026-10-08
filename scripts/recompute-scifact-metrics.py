@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 RANKINGS_PATH = Path(__file__).resolve().parents[1] / "docs/evaluation/scifact-300-rankings.json"
-ARMS = ("raw8", "document8_baseline", "cross_encoder_rerank8")
+ARMS = ("raw8", "document8_baseline", "cross_encoder_rerank8", "bm25_8", "rrf_8", "rrf_minilm_rerank8", "rrf_qwen3_rerank8")
 
 
 def compute(rows, arm):

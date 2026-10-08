@@ -1,0 +1,33 @@
+{
+  "status": "complete",
+  "phase": "dev",
+  "queries": 160,
+  "pairs": 20480,
+  "truncated_pairs": 0,
+  "arm_gpu_forward_seconds": {
+    "A": 166.44699889142066,
+    "B": 167.5480621913448
+  },
+  "wall_seconds": 347.8825320638716,
+  "model_load_seconds": 23.573637682013214,
+  "max_input_tokens_observed": 2049,
+  "peak_allocated_gpu_bytes": 1743717376,
+  "torch": "2.4.0+cu121",
+  "transformers": "5.5.4",
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "dtype": "bfloat16",
+  "batch_size": 8,
+  "max_length": 4096,
+  "attention": "sdpa",
+  "model": "Qwen/Qwen3-Reranker-0.6B",
+  "synthetic_control_logit_diffs": [
+    7.6875,
+    -11.203125
+  ],
+  "candidate_sha256": "124524f0e8dd498bed7dbd8c6882462fda04d09f5ad16b8675d251881bc93f9a",
+  "scoring_script_sha256": "5e103181febd4e65d41e259a07b3a7b42df8ff6e8137ed29836a0219af4d94d7",
+  "tasks": {
+    "A": "Given a web search query, retrieve relevant passages that answer the query",
+    "B": "Given a scientific claim, retrieve research papers that provide evidence supporting or refuting the claim."
+  }
+}

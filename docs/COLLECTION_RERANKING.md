@@ -18,3 +18,7 @@ export LDR_COLLECTION_CROSS_ENCODER_CACHE=/path/to/existing/hf_cache
 重排只改变候选顺序，不调用生成API，不改变研究任务、官网来源范围或Writer策略。长文档只使用截断后的前段，完整论文检索不等同于SciFact摘要检索。
 
 全库组件对照见[结果](RESULTS.md)，已保存排名的指标重算见[评测附件](evaluation/README.md)。组件结果不等于端到端报告质量提升。
+
+## 后续离线实验
+
+2026-10-07 的[向量 + BM25 + RRF + Qwen3 重排实验](SCIFACT_QWEN3_RERANKING.md)在同一 SciFact 测试集达到 Recall@8=86.73%、MRR@8=0.7544。该离线原型与上面的网页 MiniLM 开关分开；启用本页环境变量不会自动加载 Qwen3，也不会启用 BM25/RRF。

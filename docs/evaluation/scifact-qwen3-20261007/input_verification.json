@@ -1,0 +1,11 @@
+{
+  "corpus_documents": 5183,
+  "dev_queries": 160,
+  "test_queries": 300,
+  "disjoint_query_ids": true,
+  "all_candidates_valid_unique_64": true,
+  "answer_labels_absent_from_scoring_inputs": true,
+  "protocol_sha256": "11b15cb4b8833f9cd9741e4511379a3d63152e8683bf7e7689906b559d2ed69b",
+  "dev_candidate_sha256": "124524f0e8dd498bed7dbd8c6882462fda04d09f5ad16b8675d251881bc93f9a",
+  "test_candidate_sha256": "242224a4693ad52081edc3fa4864eb616df3c08504c5929b1bc7a503a13783d7"
+}

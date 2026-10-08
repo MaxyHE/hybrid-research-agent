@@ -1,0 +1,8 @@
+{
+  "forward_seconds_per_query_mean": 1.0262941226363183,
+  "forward_seconds_per_query_p95": 1.3974522990640255,
+  "measured_scope": "Qwen reranking forward pass over 64 candidates, batch8 within query, excludes tokenization, retrieval, model loading and file writing; not user-facing full-request latency",
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "peak_pytorch_allocated_bytes": 1743717376,
+  "test_scoring_wall_seconds": 320.9227556679398
+}
