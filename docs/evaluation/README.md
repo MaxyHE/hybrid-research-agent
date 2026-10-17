@@ -1,5 +1,13 @@
 # 离线重算检索成绩
 
+## 最新五臂与中文检索追加附件
+
+```bash
+python scripts/recompute-retrieval-followup.py
+```
+
+[retrieval-followup-20261016/](retrieval-followup-20261016/README.md)提供五条英文完整链路排名、四条中文原段落链路排名、57组聚合快照、池内／池外分解、K曲线与HNSW搜索测量。BGE开发预选Recall87.91%、MRR0.7483；同环境MiniLM为86.73%／0.7493。详情见[报告](../RETRIEVAL_FOLLOWUP.md)。下方保留原2026-10-07材料。
+
 ## SciFact300 公开排名附件
 
 ```bash
@@ -14,7 +22,7 @@ python scripts/recompute-scifact-metrics.py
 
 ## 新增混合召回与 Qwen3 重排附件
 
-2026-10-07 的最新方案为 Recall@8 **86.73%**、MRR@8 **0.7544**、nDCG@8 **0.7784**；排除历史 10 条审计查询后分别为 **86.50% / 0.7543 / 0.7777**。上述重算脚本同时输出 BM25、RRF、RRF+旧 MiniLM 及 RRF+Qwen3 四个新增实验臂。
+2026-10-07 的历史方案为 Recall@8 **86.73%**、MRR@8 **0.7544**、nDCG@8 **0.7784**；排除历史 10 条审计查询后分别为 **86.50% / 0.7543 / 0.7777**。上述重算脚本同时输出 BM25、RRF、RRF+旧 MiniLM 及 RRF+Qwen3 四个新增实验臂。
 
 [scifact-qwen3-20261007/](scifact-qwen3-20261007/)保存开发选型、开发/测试候选池、逐对 yes/no 分数、运行摘要和来源哈希。query/document ID 均来自公开 SciFact；模型权重、全文语料和私有数据库不在附件中。独立检验已发布分数与排名的一致性：
 

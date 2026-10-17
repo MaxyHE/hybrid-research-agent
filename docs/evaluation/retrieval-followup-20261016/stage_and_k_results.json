@@ -1,0 +1,247 @@
+{
+  "en_minilm_legacy256": {
+    "misses_at_8": 45,
+    "outside_candidates": 19,
+    "inside_candidates_below_8": 26,
+    "k_curve": [
+      {
+        "k": 4,
+        "hits": 270,
+        "relevant_relations": 339,
+        "micro_recall": 0.7964601769911505,
+        "maximum_document_slots_per_query": 4
+      },
+      {
+        "k": 8,
+        "hits": 294,
+        "relevant_relations": 339,
+        "micro_recall": 0.8672566371681416,
+        "maximum_document_slots_per_query": 8
+      },
+      {
+        "k": 12,
+        "hits": 305,
+        "relevant_relations": 339,
+        "micro_recall": 0.8997050147492626,
+        "maximum_document_slots_per_query": 12
+      },
+      {
+        "k": 16,
+        "hits": 311,
+        "relevant_relations": 339,
+        "micro_recall": 0.9174041297935103,
+        "maximum_document_slots_per_query": 16
+      },
+      {
+        "k": 32,
+        "hits": 319,
+        "relevant_relations": 339,
+        "micro_recall": 0.9410029498525073,
+        "maximum_document_slots_per_query": 32
+      },
+      {
+        "k": 64,
+        "hits": 320,
+        "relevant_relations": 339,
+        "micro_recall": 0.943952802359882,
+        "maximum_document_slots_per_query": 64
+      }
+    ]
+  },
+  "en_bge_base_en_no_query_instruction": {
+    "misses_at_8": 41,
+    "outside_candidates": 14,
+    "inside_candidates_below_8": 27,
+    "k_curve": [
+      {
+        "k": 4,
+        "hits": 270,
+        "relevant_relations": 339,
+        "micro_recall": 0.7964601769911505,
+        "maximum_document_slots_per_query": 4
+      },
+      {
+        "k": 8,
+        "hits": 298,
+        "relevant_relations": 339,
+        "micro_recall": 0.8790560471976401,
+        "maximum_document_slots_per_query": 8
+      },
+      {
+        "k": 12,
+        "hits": 307,
+        "relevant_relations": 339,
+        "micro_recall": 0.9056047197640118,
+        "maximum_document_slots_per_query": 12
+      },
+      {
+        "k": 16,
+        "hits": 313,
+        "relevant_relations": 339,
+        "micro_recall": 0.9233038348082596,
+        "maximum_document_slots_per_query": 16
+      },
+      {
+        "k": 32,
+        "hits": 324,
+        "relevant_relations": 339,
+        "micro_recall": 0.9557522123893806,
+        "maximum_document_slots_per_query": 32
+      },
+      {
+        "k": 64,
+        "hits": 325,
+        "relevant_relations": 339,
+        "micro_recall": 0.9587020648967551,
+        "maximum_document_slots_per_query": 64
+      }
+    ]
+  },
+  "en_bge_base_en": {
+    "misses_at_8": 41,
+    "outside_candidates": 14,
+    "inside_candidates_below_8": 27,
+    "k_curve": [
+      {
+        "k": 4,
+        "hits": 271,
+        "relevant_relations": 339,
+        "micro_recall": 0.799410029498525,
+        "maximum_document_slots_per_query": 4
+      },
+      {
+        "k": 8,
+        "hits": 298,
+        "relevant_relations": 339,
+        "micro_recall": 0.8790560471976401,
+        "maximum_document_slots_per_query": 8
+      },
+      {
+        "k": 12,
+        "hits": 307,
+        "relevant_relations": 339,
+        "micro_recall": 0.9056047197640118,
+        "maximum_document_slots_per_query": 12
+      },
+      {
+        "k": 16,
+        "hits": 314,
+        "relevant_relations": 339,
+        "micro_recall": 0.9262536873156342,
+        "maximum_document_slots_per_query": 16
+      },
+      {
+        "k": 32,
+        "hits": 324,
+        "relevant_relations": 339,
+        "micro_recall": 0.9557522123893806,
+        "maximum_document_slots_per_query": 32
+      },
+      {
+        "k": 64,
+        "hits": 325,
+        "relevant_relations": 339,
+        "micro_recall": 0.9587020648967551,
+        "maximum_document_slots_per_query": 64
+      }
+    ]
+  },
+  "en_qwen_domain_d1024": {
+    "misses_at_8": 42,
+    "outside_candidates": 16,
+    "inside_candidates_below_8": 26,
+    "k_curve": [
+      {
+        "k": 4,
+        "hits": 270,
+        "relevant_relations": 339,
+        "micro_recall": 0.7964601769911505,
+        "maximum_document_slots_per_query": 4
+      },
+      {
+        "k": 8,
+        "hits": 297,
+        "relevant_relations": 339,
+        "micro_recall": 0.8761061946902655,
+        "maximum_document_slots_per_query": 8
+      },
+      {
+        "k": 12,
+        "hits": 307,
+        "relevant_relations": 339,
+        "micro_recall": 0.9056047197640118,
+        "maximum_document_slots_per_query": 12
+      },
+      {
+        "k": 16,
+        "hits": 314,
+        "relevant_relations": 339,
+        "micro_recall": 0.9262536873156342,
+        "maximum_document_slots_per_query": 16
+      },
+      {
+        "k": 32,
+        "hits": 322,
+        "relevant_relations": 339,
+        "micro_recall": 0.9498525073746312,
+        "maximum_document_slots_per_query": 32
+      },
+      {
+        "k": 64,
+        "hits": 323,
+        "relevant_relations": 339,
+        "micro_recall": 0.9528023598820059,
+        "maximum_document_slots_per_query": 64
+      }
+    ]
+  },
+  "en_qwen_full_domain_d1024": {
+    "misses_at_8": 42,
+    "outside_candidates": 17,
+    "inside_candidates_below_8": 25,
+    "k_curve": [
+      {
+        "k": 4,
+        "hits": 270,
+        "relevant_relations": 339,
+        "micro_recall": 0.7964601769911505,
+        "maximum_document_slots_per_query": 4
+      },
+      {
+        "k": 8,
+        "hits": 297,
+        "relevant_relations": 339,
+        "micro_recall": 0.8761061946902655,
+        "maximum_document_slots_per_query": 8
+      },
+      {
+        "k": 12,
+        "hits": 307,
+        "relevant_relations": 339,
+        "micro_recall": 0.9056047197640118,
+        "maximum_document_slots_per_query": 12
+      },
+      {
+        "k": 16,
+        "hits": 315,
+        "relevant_relations": 339,
+        "micro_recall": 0.9292035398230089,
+        "maximum_document_slots_per_query": 16
+      },
+      {
+        "k": 32,
+        "hits": 321,
+        "relevant_relations": 339,
+        "micro_recall": 0.9469026548672567,
+        "maximum_document_slots_per_query": 32
+      },
+      {
+        "k": 64,
+        "hits": 322,
+        "relevant_relations": 339,
+        "micro_recall": 0.9498525073746312,
+        "maximum_document_slots_per_query": 64
+      }
+    ]
+  }
+}

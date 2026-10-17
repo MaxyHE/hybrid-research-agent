@@ -1,0 +1,440 @@
+[
+  {
+    "query_id": "1",
+    "query": "0-dimensional biomaterials show inductive properties.",
+    "qrels": {
+      "31715818": 1
+    },
+    "rankings": {
+      "en_minilm_legacy256": {
+        "31715818": 9
+      },
+      "en_bge_base_en_no_query_instruction": {
+        "31715818": null
+      },
+      "en_bge_base_en": {
+        "31715818": 12
+      },
+      "en_qwen_domain_d1024": {
+        "31715818": null
+      },
+      "en_qwen_full_domain_d1024": {
+        "31715818": null
+      }
+    },
+    "bge_top8": [
+      "16532419",
+      "4346436",
+      "17388232",
+      "21456232",
+      "6219790",
+      "51728753",
+      "40212412",
+      "10582939"
+    ],
+    "documents": {
+      "31715818": {
+        "title": "New opportunities: the use of nanotechnologies to manipulate and track stem cells.",
+        "qrel_positive": true
+      },
+      "16532419": {
+        "title": "Induction of stem-like cells with malignant properties by chronic exposure of human lung epithelial cells to single-walled carbon nanotubes",
+        "qrel_positive": false
+      },
+      "4346436": {
+        "title": "Nonlinear Elasticity in Biological Gels",
+        "qrel_positive": false
+      },
+      "17388232": {
+        "title": "Mechanical regulation of cell function with geometrically modulated elastomeric substrates",
+        "qrel_positive": false
+      }
+    }
+  },
+  {
+    "query_id": "13",
+    "query": "5% of perinatal mortality is due to low birth weight.",
+    "qrels": {
+      "1606628": 1
+    },
+    "rankings": {
+      "en_minilm_legacy256": {
+        "1606628": 39
+      },
+      "en_bge_base_en_no_query_instruction": {
+        "1606628": 37
+      },
+      "en_bge_base_en": {
+        "1606628": 37
+      },
+      "en_qwen_domain_d1024": {
+        "1606628": 42
+      },
+      "en_qwen_full_domain_d1024": {
+        "1606628": 46
+      }
+    },
+    "bge_top8": [
+      "7662395",
+      "1263446",
+      "33740844",
+      "11748341",
+      "28633594",
+      "27123743",
+      "11360768",
+      "26611834"
+    ],
+    "documents": {
+      "1606628": {
+        "title": "Estimates of global prevalence of childhood underweight in 1990 and 2015.",
+        "qrel_positive": true
+      },
+      "7662395": {
+        "title": "Perinatal mortality in rural China: retrospective cohort study.",
+        "qrel_positive": false
+      },
+      "1263446": {
+        "title": "Determinants of neonatal mortality in Indonesia",
+        "qrel_positive": false
+      },
+      "33740844": {
+        "title": "Effect of women's nutrition before and during early pregnancy on maternal and infant outcomes: a systematic review.",
+        "qrel_positive": false
+      }
+    }
+  },
+  {
+    "query_id": "132",
+    "query": "Aspirin inhibits the production of PGE2.",
+    "qrels": {
+      "7975937": 1
+    },
+    "rankings": {
+      "en_minilm_legacy256": {
+        "7975937": null
+      },
+      "en_bge_base_en_no_query_instruction": {
+        "7975937": null
+      },
+      "en_bge_base_en": {
+        "7975937": null
+      },
+      "en_qwen_domain_d1024": {
+        "7975937": null
+      },
+      "en_qwen_full_domain_d1024": {
+        "7975937": null
+      }
+    },
+    "bge_top8": [
+      "2443495",
+      "6945691",
+      "9159125",
+      "3866315",
+      "6923961",
+      "21181273",
+      "58006489",
+      "27615329"
+    ],
+    "documents": {
+      "7975937": {
+        "title": "Cyclooxygenase-Dependent Tumor Growth through Evasion of Immunity",
+        "qrel_positive": true
+      },
+      "2443495": {
+        "title": "Characterization of prostaglandin E2 production by Candida albicans.",
+        "qrel_positive": false
+      },
+      "6945691": {
+        "title": "The modulation of human natural killer cell activity by prostaglandins.",
+        "qrel_positive": false
+      },
+      "9159125": {
+        "title": "Lipopolysaccharide-dependent prostaglandin E(2) production is regulated by the glutathione-dependent prostaglandin E(2) synthase gene induced by the Toll-like receptor 4/MyD88/NF-IL6 pathway.",
+        "qrel_positive": false
+      }
+    }
+  },
+  {
+    "query_id": "239",
+    "query": "Cellular aging closely links to an older appearance.",
+    "qrels": {
+      "14079881": 1
+    },
+    "rankings": {
+      "en_minilm_legacy256": {
+        "14079881": 9
+      },
+      "en_bge_base_en_no_query_instruction": {
+        "14079881": 9
+      },
+      "en_bge_base_en": {
+        "14079881": 9
+      },
+      "en_qwen_domain_d1024": {
+        "14079881": 9
+      },
+      "en_qwen_full_domain_d1024": {
+        "14079881": 10
+      }
+    },
+    "bge_top8": [
+      "3230557",
+      "19343151",
+      "9559146",
+      "7514614",
+      "615047",
+      "516867",
+      "9291668",
+      "40349336"
+    ],
+    "documents": {
+      "14079881": {
+        "title": "Perceived age as clinically useful biomarker of ageing: cohort study.",
+        "qrel_positive": true
+      },
+      "3230557": {
+        "title": "The Hallmarks of Aging",
+        "qrel_positive": false
+      },
+      "19343151": {
+        "title": "p16INK4A is a robust in vivo biomarker of cellular aging in human skin.",
+        "qrel_positive": false
+      },
+      "9559146": {
+        "title": "Senescent Cells, Tumor Suppression, and Organismal Aging: Good Citizens, Bad Neighbors",
+        "qrel_positive": false
+      }
+    }
+  },
+  {
+    "query_id": "275",
+    "query": "Combining phosphatidylinositide 3-kinase and MEK 1/2 inhibitors is effective at treating KRAS mutant tumors.",
+    "qrels": {
+      "4961038": 1,
+      "14241418": 1,
+      "14819804": 1
+    },
+    "rankings": {
+      "en_minilm_legacy256": {
+        "4961038": 1,
+        "14241418": 14,
+        "14819804": 3
+      },
+      "en_bge_base_en_no_query_instruction": {
+        "4961038": 1,
+        "14241418": 12,
+        "14819804": 3
+      },
+      "en_bge_base_en": {
+        "4961038": 1,
+        "14241418": 14,
+        "14819804": 3
+      },
+      "en_qwen_domain_d1024": {
+        "4961038": 1,
+        "14241418": 12,
+        "14819804": 3
+      },
+      "en_qwen_full_domain_d1024": {
+        "4961038": 1,
+        "14241418": 14,
+        "14819804": 3
+      }
+    },
+    "bge_top8": [
+      "4961038",
+      "4920376",
+      "14819804",
+      "24190159",
+      "28651643",
+      "19752008",
+      "29321530",
+      "1285713"
+    ],
+    "documents": {
+      "4961038": {
+        "title": "Effective Use of PI3K and MEK Inhibitors to Treat Mutant K-Ras G12D and PIK3CA H1047R Murine Lung Cancers",
+        "qrel_positive": true
+      },
+      "14241418": {
+        "title": "NVP-BEZ235, a dual PI3K/mTOR inhibitor, prevents PI3K signaling and inhibits the growth of cancer cells with activating PI3K mutations.",
+        "qrel_positive": true
+      },
+      "14819804": {
+        "title": "Mutations in the phosphatidylinositol-3-kinase pathway predict for antitumor activity of the inhibitor PX-866 whereas oncogenic Ras is a dominant predictor for resistance.",
+        "qrel_positive": true
+      },
+      "4920376": {
+        "title": "Long-Term ERK Inhibition in KRAS-Mutant Pancreatic Cancer Is Associated with MYC Degradation and Senescence-like Growth Suppression.",
+        "qrel_positive": false
+      }
+    }
+  },
+  {
+    "query_id": "452",
+    "query": "Gene expression does not vary appreciably across genetically identical cells.",
+    "qrels": {
+      "12804937": 1,
+      "464511": 1
+    },
+    "rankings": {
+      "en_minilm_legacy256": {
+        "12804937": 3,
+        "464511": null
+      },
+      "en_bge_base_en_no_query_instruction": {
+        "12804937": 4,
+        "464511": null
+      },
+      "en_bge_base_en": {
+        "12804937": 4,
+        "464511": null
+      },
+      "en_qwen_domain_d1024": {
+        "12804937": 4,
+        "464511": 13
+      },
+      "en_qwen_full_domain_d1024": {
+        "12804937": 4,
+        "464511": null
+      }
+    },
+    "bge_top8": [
+      "16237005",
+      "9154703",
+      "17702490",
+      "12804937",
+      "4632921",
+      "4378885",
+      "21855837",
+      "37437064"
+    ],
+    "documents": {
+      "12804937": {
+        "title": "Nature, Nurture, or Chance: Stochastic Gene Expression and Its Consequences",
+        "qrel_positive": true
+      },
+      "464511": {
+        "title": "Memory and Modularity in Cell-Fate Decision Making",
+        "qrel_positive": true
+      },
+      "16237005": {
+        "title": "Single-RNA counting reveals alternative modes of gene expression in yeast",
+        "qrel_positive": false
+      },
+      "9154703": {
+        "title": "Single-Cell RNA-Seq Reveals Dynamic, Random Monoallelic Gene Expression in Mammalian Cells",
+        "qrel_positive": false
+      },
+      "17702490": {
+        "title": "Chromatin structure and gene expression programs of human embryonic and induced pluripotent stem cells.",
+        "qrel_positive": false
+      }
+    }
+  },
+  {
+    "query_id": "691",
+    "query": "Leukemia associated Rho guanine nucleotide-exchange factor represses RhoA in response to SRC activation.",
+    "qrels": {
+      "10991183": 1
+    },
+    "rankings": {
+      "en_minilm_legacy256": {
+        "10991183": 10
+      },
+      "en_bge_base_en_no_query_instruction": {
+        "10991183": 10
+      },
+      "en_bge_base_en": {
+        "10991183": 9
+      },
+      "en_qwen_domain_d1024": {
+        "10991183": 9
+      },
+      "en_qwen_full_domain_d1024": {
+        "10991183": 10
+      }
+    },
+    "bge_top8": [
+      "45764440",
+      "5270265",
+      "33076846",
+      "4231060",
+      "1782201",
+      "29073751",
+      "19510470",
+      "885056"
+    ],
+    "documents": {
+      "10991183": {
+        "title": "The Rho GEFs LARG and GEF-H1 regulate the mechanical response to force on integrins",
+        "qrel_positive": true
+      },
+      "45764440": {
+        "title": "Inhibition of SRC expression and activity inhibits tumor progression and metastasis of human pancreatic adenocarcinoma cells in an orthotopic nude mouse model.",
+        "qrel_positive": false
+      },
+      "5270265": {
+        "title": "Combating trastuzumab resistance by targeting SRC, a common node downstream of multiple resistance pathways",
+        "qrel_positive": false
+      },
+      "33076846": {
+        "title": "Role of RhoA-specific guanine exchange factors in regulation of endomitosis in megakaryocytes.",
+        "qrel_positive": false
+      }
+    }
+  },
+  {
+    "query_id": "716",
+    "query": "Low expression of miR7a exerts a biological function in testis.",
+    "qrels": {
+      "18421962": 1
+    },
+    "rankings": {
+      "en_minilm_legacy256": {
+        "18421962": null
+      },
+      "en_bge_base_en_no_query_instruction": {
+        "18421962": 17
+      },
+      "en_bge_base_en": {
+        "18421962": 20
+      },
+      "en_qwen_domain_d1024": {
+        "18421962": null
+      },
+      "en_qwen_full_domain_d1024": {
+        "18421962": null
+      }
+    },
+    "bge_top8": [
+      "13290521",
+      "86602746",
+      "12440953",
+      "2000038",
+      "5271210",
+      "17544977",
+      "9159495",
+      "32556431"
+    ],
+    "documents": {
+      "18421962": {
+        "title": "Assessing the ceRNA hypothesis with quantitative measurements of miRNA and target abundance.",
+        "qrel_positive": true
+      },
+      "13290521": {
+        "title": "MicroRNA-7: A miRNA with expanding roles in development and disease.",
+        "qrel_positive": false
+      },
+      "86602746": {
+        "title": "MicroRNAs: small RNAs with a big role in gene regulation",
+        "qrel_positive": false
+      },
+      "12440953": {
+        "title": "Roles for MicroRNAs in Conferring Robustness to Biological Processes",
+        "qrel_positive": false
+      }
+    }
+  }
+]

@@ -1,0 +1,222 @@
+{
+  "arm": "zh_e5",
+  "document_vectors_arm": "zh_e5",
+  "cpu_threads": 1,
+  "seed": 42,
+  "corpus_subset_method": "Random vector subsets, no qrels used; latency and ANN fidelity only",
+  "warning": "ANN recall measures overlap with exact nearest neighbors, not semantic document recall",
+  "results": [
+    {
+      "vectors": 5000,
+      "dimension": 384,
+      "flat": {
+        "build_seconds": 0.0016187503933906555,
+        "index_bytes": 7680045,
+        "p50_ms": 0.19593723118305206,
+        "p95_ms": 0.25838660076260556,
+        "mean_ms": 0.203716175747104,
+        "queries": 128
+      },
+      "hnsw": {
+        "32": {
+          "M": 32,
+          "efConstruction": 80,
+          "efSearch": 32,
+          "build_seconds": 0.46488104201853275,
+          "index_bytes": 9037250,
+          "ann_recall_at8": 0.921875,
+          "ann_recall_at64": 0.8050537109375,
+          "p50_ms": 0.05681253969669342,
+          "p95_ms": 0.07161451503634453,
+          "mean_ms": 0.057521130656823516,
+          "queries": 128
+        },
+        "64": {
+          "M": 32,
+          "efConstruction": 80,
+          "efSearch": 64,
+          "build_seconds": 0.46488104201853275,
+          "index_bytes": 9037250,
+          "ann_recall_at8": 0.9677734375,
+          "ann_recall_at64": 0.9119873046875,
+          "p50_ms": 0.08435454219579697,
+          "p95_ms": 0.13518165796995152,
+          "mean_ms": 0.08934798825066537,
+          "queries": 128
+        },
+        "128": {
+          "M": 32,
+          "efConstruction": 80,
+          "efSearch": 128,
+          "build_seconds": 0.46488104201853275,
+          "index_bytes": 9037250,
+          "ann_recall_at8": 0.98828125,
+          "ann_recall_at64": 0.9710693359375,
+          "p50_ms": 0.14925003051757812,
+          "p95_ms": 0.21313158795237538,
+          "mean_ms": 0.15852053184062243,
+          "queries": 128
+        }
+      }
+    },
+    {
+      "vectors": 20000,
+      "dimension": 384,
+      "flat": {
+        "build_seconds": 0.011192584410309792,
+        "index_bytes": 30720045,
+        "p50_ms": 0.7299995049834251,
+        "p95_ms": 1.2375522404909134,
+        "mean_ms": 0.7907480467110872,
+        "queries": 128
+      },
+      "hnsw": {
+        "32": {
+          "M": 32,
+          "efConstruction": 80,
+          "efSearch": 32,
+          "build_seconds": 3.049978708848357,
+          "index_bytes": 36162530,
+          "ann_recall_at8": 0.8330078125,
+          "ann_recall_at64": 0.7159423828125,
+          "p50_ms": 0.08575059473514557,
+          "p95_ms": 0.11587813496589655,
+          "mean_ms": 0.08928190800361335,
+          "queries": 128
+        },
+        "64": {
+          "M": 32,
+          "efConstruction": 80,
+          "efSearch": 64,
+          "build_seconds": 3.049978708848357,
+          "index_bytes": 36162530,
+          "ann_recall_at8": 0.904296875,
+          "ann_recall_at64": 0.83984375,
+          "p50_ms": 0.13979151844978333,
+          "p95_ms": 0.209562387317419,
+          "mean_ms": 0.14777634351048619,
+          "queries": 128
+        },
+        "128": {
+          "M": 32,
+          "efConstruction": 80,
+          "efSearch": 128,
+          "build_seconds": 3.049978708848357,
+          "index_bytes": 36162530,
+          "ann_recall_at8": 0.962890625,
+          "ann_recall_at64": 0.926025390625,
+          "p50_ms": 0.22826995700597763,
+          "p95_ms": 0.30350396409630775,
+          "mean_ms": 0.23774140572641045,
+          "queries": 128
+        }
+      }
+    },
+    {
+      "vectors": 50000,
+      "dimension": 384,
+      "flat": {
+        "build_seconds": 0.026483500376343727,
+        "index_bytes": 76800045,
+        "p50_ms": 2.4648336693644524,
+        "p95_ms": 5.187198612838979,
+        "mean_ms": 2.7741217199945822,
+        "queries": 128
+      },
+      "hnsw": {
+        "32": {
+          "M": 32,
+          "efConstruction": 80,
+          "efSearch": 32,
+          "build_seconds": 10.685918623581529,
+          "index_bytes": 90412578,
+          "ann_recall_at8": 0.7568359375,
+          "ann_recall_at64": 0.6484375,
+          "p50_ms": 0.17089489847421646,
+          "p95_ms": 0.2636680379509925,
+          "mean_ms": 0.17768584075383842,
+          "queries": 128
+        },
+        "64": {
+          "M": 32,
+          "efConstruction": 80,
+          "efSearch": 64,
+          "build_seconds": 10.685918623581529,
+          "index_bytes": 90412578,
+          "ann_recall_at8": 0.8671875,
+          "ann_recall_at64": 0.78369140625,
+          "p50_ms": 0.2846457064151764,
+          "p95_ms": 0.4158129915595054,
+          "mean_ms": 0.29006434488110244,
+          "queries": 128
+        },
+        "128": {
+          "M": 32,
+          "efConstruction": 80,
+          "efSearch": 128,
+          "build_seconds": 10.685918623581529,
+          "index_bytes": 90412578,
+          "ann_recall_at8": 0.935546875,
+          "ann_recall_at64": 0.8853759765625,
+          "p50_ms": 0.48751942813396454,
+          "p95_ms": 0.6810744293034077,
+          "mean_ms": 0.4973042232450098,
+          "queries": 128
+        }
+      }
+    },
+    {
+      "vectors": 100999,
+      "dimension": 384,
+      "flat": {
+        "build_seconds": 0.06927566602826118,
+        "index_bytes": 155134509,
+        "p50_ms": 5.80097921192646,
+        "p95_ms": 8.251008205115792,
+        "mean_ms": 5.982816117466427,
+        "queries": 128
+      },
+      "hnsw": {
+        "32": {
+          "M": 32,
+          "efConstruction": 80,
+          "efSearch": 32,
+          "build_seconds": 25.849368082359433,
+          "index_bytes": 182626998,
+          "ann_recall_at8": 0.724609375,
+          "ann_recall_at64": 0.5960693359375,
+          "p50_ms": 0.15589594841003418,
+          "p95_ms": 0.20296480506658554,
+          "mean_ms": 0.15925627667456865,
+          "queries": 128
+        },
+        "64": {
+          "M": 32,
+          "efConstruction": 80,
+          "efSearch": 64,
+          "build_seconds": 25.849368082359433,
+          "index_bytes": 182626998,
+          "ann_recall_at8": 0.8232421875,
+          "ann_recall_at64": 0.7301025390625,
+          "p50_ms": 0.26583392173051834,
+          "p95_ms": 0.3580362536013125,
+          "mean_ms": 0.2760390780167654,
+          "queries": 128
+        },
+        "128": {
+          "M": 32,
+          "efConstruction": 80,
+          "efSearch": 128,
+          "build_seconds": 25.849368082359433,
+          "index_bytes": 182626998,
+          "ann_recall_at8": 0.8994140625,
+          "ann_recall_at64": 0.843505859375,
+          "p50_ms": 0.5031246691942215,
+          "p95_ms": 0.6894617341458796,
+          "mean_ms": 0.512999453349039,
+          "queries": 128
+        }
+      }
+    }
+  ]
+}

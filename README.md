@@ -113,27 +113,31 @@ Researcher 到 Writer 的多阶段摘要可能丢失结论对象、适用条件�
 
 ## 实验结果
 
-### 检索组件对照
+### 检索选型与完整链路
 
-完整 SciFact 语料包含 **5,183 篇文档、300 条官方测试查询**。使用同一 embedding 与 FAISS 索引，按最终文档排名计算指标：
+完整SciFact包含 **5,183篇标题摘要、14,940个原chunk、300条历史测试查询、339个相关文档关系**。2026-10-14至16日，在各自64篇RRF候选上使用同一Qwen3重排器，最终返回8篇：
 
-| 策略 | micro Recall@8 | MRR@8 |
-| --- | ---: | ---: |
-| 原始 top 8 chunks，文档不补位 | 74.34% | 0.6115 |
-| top 64 chunks → 文档去重 → 8 篇 | 77.29% | 0.6139 |
-| 同一 top 64 池 → MiniLM Cross-Encoder → 8 篇 | 79.06% | 0.6520 |
-| 向量 + BM25 → RRF → 8 篇 | 81.12% | 0.6841 |
-| RRF 候选池 → Qwen3-Reranker → 8 篇 | **86.73%** | **0.7544** |
+| Embedding配置 | micro Recall@8 | MRR@8 |
+|---|---:|---:|
+| MiniLM，原chunk | 86.73%（294/339） | 0.7493 |
+| BGE-base，无查询指令，开发预选 | **87.91%（298/339）** | 0.7483 |
+| BGE-base，标准查询指令 | **87.91%（298/339）** | 0.7513 |
+| Qwen3-Embedding，原chunk／领域指令 | 87.61%（297/339） | 0.7478 |
+| Qwen3-Embedding，标题摘要整文档／领域指令 | 87.61%（297/339） | 0.7471 |
 
-最新离线实验采用向量与 BM25 双路召回、文档去重、RRF 融合及 Qwen3-Reranker-0.6B 重排；相较原始检索，Recall@8 从 74.34% 提升至 **86.73%**，MRR@8 从 0.6115 提升至 **0.7544**。重排指令在 160 条与测试查询不重叠的开发查询上选定并冻结。该实验是检索组件原型，当前网页默认链路仍为上述 FAISS 文档去重路线；不据此推定完整 Agent 的报告质量。实验设置与 GPU 成本见[混合检索与 Qwen3 重排实验](docs/SCIFACT_QWEN3_RERANKING.md)。[结果说明](docs/RESULTS.md)包含 nDCG、60 查询开发对照、中文查询翻译及模型选型结果。
+BGE开发预选方案覆盖更多相关文档，但MRR没有同步提高；较大的Qwen embedding在当前任务中没有带来更好的最终排序表现。旧MiniLM重排环境的MRR为0.7544，上表统一使用新环境重评分，不拼接不同版本指标。
 
-公开排名附件支持离线重算指标，只需 Python 标准库，无需模型或 API：
+补充实验还覆盖 **57组embedding／分块配置、100,999条中文问答库、Flat/HNSW取舍和真实失败案例**。主BGE方案剩余41个漏检关系分为14个池外与27个池内；固定排名从K=8扩大到12可将Recall提高到90.56%，同时增加阅读量，未据历史测试重新选择最优K。
+
+详细的前因、条件、负结果和范围见[检索追加实验](docs/RETRIEVAL_FOLLOWUP.md)与[失败分析](docs/RETRIEVAL_FAILURE_ANALYSIS.md)。网页默认仍是FAISS文档去重路线，新链路是离线实验；检索Recall不代表完整报告正确率。
+
+只用Python标准库即可从公开排名重算最新结果，无需模型或API：
 
 ```bash
-python3 scripts/recompute-scifact-metrics.py
+python scripts/recompute-retrieval-followup.py
 ```
 
-该命令从保存的排名重新计算成绩；重新执行检索还需准备语料、索引和模型。详见[评测附件](docs/evaluation/README.md)。
+原始raw8→文档去重→混合召回→重排的历史组件对照保留在[结果说明](docs/RESULTS.md)和[2026-10-07实验](docs/SCIFACT_QWEN3_RERANKING.md)，可用 `python scripts/recompute-scifact-metrics.py` 重算。附件与可复核范围见[评测导航](docs/evaluation/README.md)。
 
 ### 研究交付与证据交接
 

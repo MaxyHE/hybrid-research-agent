@@ -1,0 +1,126 @@
+# 57组embedding与分块聚合结果
+
+2026-10-14批次。完整重排的最新五臂结果见[主报告](../../RETRIEVAL_FOLLOWUP.md)。本表是纯向量文档召回；统一raw64向量命中后按文档去重、最终K=8。MRR也按文档计算。
+
+| 配置 | 文本/块数 | 维度 | 编码截断比例 | 评估部分 | Recall@8 | MRR@8 | nDCG@8 |
+|---|---:|---:|---:|---|---:|---:|---:|
+| en_bge_base_en | 14940 | 768 | 0.00% | dev | 89.44% | 0.7903 | 0.8103 |
+| en_bge_base_en | 14940 | 768 | 0.00% | historical_test | 84.96% | 0.7094 | 0.7398 |
+| en_bge_base_en_no_query_instruction | 14940 | 768 | 0.00% | dev | 88.89% | 0.8119 | 0.8260 |
+| en_bge_base_en_no_query_instruction | 14940 | 768 | 0.00% | historical_test | 84.07% | 0.7048 | 0.7356 |
+| en_bge_small_en | 14940 | 384 | 0.00% | dev | 83.89% | 0.7774 | 0.7872 |
+| en_bge_small_en | 14940 | 384 | 0.00% | historical_test | 81.12% | 0.6751 | 0.7044 |
+| en_bge_small_en_no_query_instruction | 14940 | 384 | 0.00% | dev | 85.56% | 0.7760 | 0.7933 |
+| en_bge_small_en_no_query_instruction | 14940 | 384 | 0.00% | historical_test | 81.71% | 0.6888 | 0.7188 |
+| en_e5_legacy256 | 14940 | 384 | 8.06% | dev | 82.22% | 0.7263 | 0.7459 |
+| en_e5_legacy256 | 14940 | 384 | 8.06% | historical_test | 74.34% | 0.6349 | 0.6617 |
+| en_e5_legacy512 | 14940 | 384 | 0.05% | dev | 82.78% | 0.7354 | 0.7537 |
+| en_e5_legacy512 | 14940 | 384 | 0.05% | historical_test | 74.34% | 0.6329 | 0.6602 |
+| en_e5_legacy512_no_prefix | 14940 | 384 | 0.05% | dev | 80.00% | 0.6743 | 0.7028 |
+| en_e5_legacy512_no_prefix | 14940 | 384 | 0.05% | historical_test | 75.22% | 0.5960 | 0.6302 |
+| en_e5_legacy512_no_query_prefix | 14940 | 384 | 0.05% | dev | 83.89% | 0.7156 | 0.7430 |
+| en_e5_legacy512_no_query_prefix | 14940 | 384 | 0.05% | historical_test | 74.04% | 0.6074 | 0.6389 |
+| en_minilm_char_1000_0 | 14586 | 384 | 2.95% | dev | 81.11% | 0.6963 | 0.7197 |
+| en_minilm_char_1000_0 | 14586 | 384 | 2.95% | historical_test | 78.76% | 0.6193 | 0.6578 |
+| en_minilm_char_600_120 | 21730 | 384 | 0.03% | dev | 82.22% | 0.7016 | 0.7262 |
+| en_minilm_char_600_120 | 21730 | 384 | 0.03% | historical_test | 77.88% | 0.6335 | 0.6664 |
+| en_minilm_legacy256 | 14940 | 384 | 3.21% | dev | 82.22% | 0.7059 | 0.7316 |
+| en_minilm_legacy256 | 14940 | 384 | 3.21% | historical_test | 77.29% | 0.6139 | 0.6519 |
+| en_minilm_legacy512 | 14940 | 384 | 0.00% | dev | 82.22% | 0.7028 | 0.7293 |
+| en_minilm_legacy512 | 14940 | 384 | 0.00% | historical_test | 77.29% | 0.6125 | 0.6509 |
+| en_minilm_token_128_16 | 22300 | 384 | 0.00% | dev | 83.33% | 0.7022 | 0.7304 |
+| en_minilm_token_128_16 | 22300 | 384 | 0.00% | historical_test | 77.29% | 0.6269 | 0.6617 |
+| en_minilm_token_240_0 | 13663 | 384 | 0.00% | dev | 81.11% | 0.6928 | 0.7204 |
+| en_minilm_token_240_0 | 13663 | 384 | 0.00% | historical_test | 77.88% | 0.6156 | 0.6538 |
+| en_minilm_token_240_32 | 13748 | 384 | 0.00% | dev | 81.67% | 0.6960 | 0.7251 |
+| en_minilm_token_240_32 | 13748 | 384 | 0.00% | historical_test | 76.70% | 0.6110 | 0.6481 |
+| en_minilm_token_240_64 | 14091 | 384 | 0.00% | dev | 81.11% | 0.6982 | 0.7251 |
+| en_minilm_token_240_64 | 14091 | 384 | 0.00% | historical_test | 78.17% | 0.6100 | 0.6521 |
+| en_qwen_domain_d1024 | 14940 | 1024 | 0.00% | dev | 84.44% | 0.7472 | 0.7660 |
+| en_qwen_domain_d1024 | 14940 | 1024 | 0.00% | historical_test | 82.01% | 0.6737 | 0.7061 |
+| en_qwen_domain_d384 | 14940 | 384 | 0.00% | dev | 83.89% | 0.7129 | 0.7406 |
+| en_qwen_domain_d384 | 14940 | 384 | 0.00% | historical_test | 79.94% | 0.6537 | 0.6868 |
+| en_qwen_domain_d512 | 14940 | 512 | 0.00% | dev | 82.22% | 0.7191 | 0.7404 |
+| en_qwen_domain_d512 | 14940 | 512 | 0.00% | historical_test | 79.35% | 0.6570 | 0.6878 |
+| en_qwen_full_domain_d1024 | 5183 | 1024 | 0.00% | dev | 83.33% | 0.7399 | 0.7595 |
+| en_qwen_full_domain_d1024 | 5183 | 1024 | 0.00% | historical_test | 82.60% | 0.6702 | 0.7027 |
+| en_qwen_full_domain_d384 | 5183 | 384 | 0.00% | dev | 81.11% | 0.6896 | 0.7161 |
+| en_qwen_full_domain_d384 | 5183 | 384 | 0.00% | historical_test | 80.83% | 0.6642 | 0.6939 |
+| en_qwen_full_domain_d512 | 5183 | 512 | 0.00% | dev | 82.22% | 0.7093 | 0.7333 |
+| en_qwen_full_domain_d512 | 5183 | 512 | 0.00% | historical_test | 81.42% | 0.6551 | 0.6894 |
+| en_qwen_full_generic_d1024 | 5183 | 1024 | 0.00% | dev | 82.22% | 0.7365 | 0.7541 |
+| en_qwen_full_generic_d1024 | 5183 | 1024 | 0.00% | historical_test | 82.30% | 0.6698 | 0.7011 |
+| en_qwen_full_generic_d384 | 5183 | 384 | 0.00% | dev | 81.67% | 0.6919 | 0.7195 |
+| en_qwen_full_generic_d384 | 5183 | 384 | 0.00% | historical_test | 80.24% | 0.6449 | 0.6785 |
+| en_qwen_full_generic_d512 | 5183 | 512 | 0.00% | dev | 81.67% | 0.6997 | 0.7254 |
+| en_qwen_full_generic_d512 | 5183 | 512 | 0.00% | historical_test | 80.83% | 0.6525 | 0.6853 |
+| en_qwen_full_none_d1024 | 5183 | 1024 | 0.00% | dev | 84.44% | 0.7167 | 0.7423 |
+| en_qwen_full_none_d1024 | 5183 | 1024 | 0.00% | historical_test | 80.24% | 0.6485 | 0.6807 |
+| en_qwen_full_none_d384 | 5183 | 384 | 0.00% | dev | 82.78% | 0.6730 | 0.7059 |
+| en_qwen_full_none_d384 | 5183 | 384 | 0.00% | historical_test | 76.70% | 0.6193 | 0.6509 |
+| en_qwen_full_none_d512 | 5183 | 512 | 0.00% | dev | 81.11% | 0.6879 | 0.7134 |
+| en_qwen_full_none_d512 | 5183 | 512 | 0.00% | historical_test | 79.06% | 0.6226 | 0.6575 |
+| en_qwen_generic_d1024 | 14940 | 1024 | 0.00% | dev | 85.00% | 0.7460 | 0.7662 |
+| en_qwen_generic_d1024 | 14940 | 1024 | 0.00% | historical_test | 81.42% | 0.6670 | 0.7006 |
+| en_qwen_generic_d384 | 14940 | 384 | 0.00% | dev | 82.78% | 0.7067 | 0.7314 |
+| en_qwen_generic_d384 | 14940 | 384 | 0.00% | historical_test | 81.12% | 0.6471 | 0.6834 |
+| en_qwen_generic_d512 | 14940 | 512 | 0.00% | dev | 82.78% | 0.7260 | 0.7463 |
+| en_qwen_generic_d512 | 14940 | 512 | 0.00% | historical_test | 82.01% | 0.6523 | 0.6901 |
+| en_qwen_none_d1024 | 14940 | 1024 | 0.00% | dev | 82.22% | 0.7081 | 0.7334 |
+| en_qwen_none_d1024 | 14940 | 1024 | 0.00% | historical_test | 78.76% | 0.6290 | 0.6621 |
+| en_qwen_none_d384 | 14940 | 384 | 0.00% | dev | 78.89% | 0.6910 | 0.7113 |
+| en_qwen_none_d384 | 14940 | 384 | 0.00% | historical_test | 76.11% | 0.5829 | 0.6220 |
+| en_qwen_none_d512 | 14940 | 512 | 0.00% | dev | 81.67% | 0.7037 | 0.7271 |
+| en_qwen_none_d512 | 14940 | 512 | 0.00% | historical_test | 76.99% | 0.5996 | 0.6357 |
+| zh_bge_large_zh | 100999 | 1024 | 0.40% | dev | 66.67% | 0.5711 | 0.5946 |
+| zh_bge_large_zh | 100999 | 1024 | 0.40% | heldout | 67.29% | 0.5649 | 0.5913 |
+| zh_bge_large_zh_no_query_instruction | 100999 | 1024 | 0.40% | dev | 64.00% | 0.5578 | 0.5779 |
+| zh_bge_large_zh_no_query_instruction | 100999 | 1024 | 0.40% | heldout | 66.14% | 0.5474 | 0.5751 |
+| zh_bge_large_zh_token240 | 110792 | 1024 | 0.00% | dev | 66.00% | 0.5670 | 0.5900 |
+| zh_bge_large_zh_token240 | 110792 | 1024 | 0.00% | heldout | 66.57% | 0.5589 | 0.5851 |
+| zh_bge_large_zh_token240_no_query_instruction | 110792 | 1024 | 0.00% | dev | 64.00% | 0.5514 | 0.5731 |
+| zh_bge_large_zh_token240_no_query_instruction | 110792 | 1024 | 0.00% | heldout | 64.57% | 0.5414 | 0.5671 |
+| zh_bge_small_zh | 100999 | 512 | 0.40% | dev | 58.00% | 0.4870 | 0.5097 |
+| zh_bge_small_zh | 100999 | 512 | 0.40% | heldout | 57.29% | 0.4643 | 0.4906 |
+| zh_bge_small_zh_no_query_instruction | 100999 | 512 | 0.40% | dev | 58.00% | 0.4837 | 0.5071 |
+| zh_bge_small_zh_no_query_instruction | 100999 | 512 | 0.40% | heldout | 56.14% | 0.4552 | 0.4810 |
+| zh_bge_small_zh_token240 | 110792 | 512 | 0.00% | dev | 57.67% | 0.4812 | 0.5045 |
+| zh_bge_small_zh_token240 | 110792 | 512 | 0.00% | heldout | 56.86% | 0.4537 | 0.4815 |
+| zh_bge_small_zh_token240_no_query_instruction | 110792 | 512 | 0.00% | dev | 57.67% | 0.4787 | 0.5026 |
+| zh_bge_small_zh_token240_no_query_instruction | 110792 | 512 | 0.00% | heldout | 55.29% | 0.4497 | 0.4749 |
+| zh_e5 | 100999 | 384 | 0.00% | dev | 52.67% | 0.4595 | 0.4760 |
+| zh_e5 | 100999 | 384 | 0.00% | heldout | 50.29% | 0.4065 | 0.4301 |
+| zh_e5_no_query_prefix | 100999 | 384 | 0.00% | dev | 53.00% | 0.4502 | 0.4696 |
+| zh_e5_no_query_prefix | 100999 | 384 | 0.00% | heldout | 49.57% | 0.4022 | 0.4250 |
+| zh_e5_token240 | 110792 | 384 | 0.00% | dev | 52.67% | 0.4557 | 0.4730 |
+| zh_e5_token240 | 110792 | 384 | 0.00% | heldout | 50.00% | 0.4058 | 0.4289 |
+| zh_e5_token240_no_query_prefix | 110792 | 384 | 0.00% | dev | 52.00% | 0.4501 | 0.4673 |
+| zh_e5_token240_no_query_prefix | 110792 | 384 | 0.00% | heldout | 49.57% | 0.4012 | 0.4241 |
+| zh_minilm | 100999 | 384 | 6.41% | dev | 2.67% | 0.0173 | 0.0196 |
+| zh_minilm | 100999 | 384 | 6.41% | heldout | 2.43% | 0.0139 | 0.0163 |
+| zh_minilm_token240 | 110792 | 384 | 0.00% | dev | 2.67% | 0.0168 | 0.0191 |
+| zh_minilm_token240 | 110792 | 384 | 0.00% | heldout | 2.43% | 0.0138 | 0.0163 |
+| zh_qwen_domain_d1024 | 100999 | 1024 | 0.00% | dev | 61.67% | 0.5408 | 0.5595 |
+| zh_qwen_domain_d1024 | 100999 | 1024 | 0.00% | heldout | 62.71% | 0.5242 | 0.5491 |
+| zh_qwen_domain_d384 | 100999 | 384 | 0.00% | dev | 60.33% | 0.5258 | 0.5448 |
+| zh_qwen_domain_d384 | 100999 | 384 | 0.00% | heldout | 61.57% | 0.5101 | 0.5358 |
+| zh_qwen_domain_d512 | 100999 | 512 | 0.00% | dev | 62.67% | 0.5375 | 0.5589 |
+| zh_qwen_domain_d512 | 100999 | 512 | 0.00% | heldout | 62.00% | 0.5127 | 0.5388 |
+| zh_qwen_generic_d1024 | 100999 | 1024 | 0.00% | dev | 62.00% | 0.5349 | 0.5559 |
+| zh_qwen_generic_d1024 | 100999 | 1024 | 0.00% | heldout | 62.71% | 0.5283 | 0.5525 |
+| zh_qwen_generic_d384 | 100999 | 384 | 0.00% | dev | 62.67% | 0.5331 | 0.5559 |
+| zh_qwen_generic_d384 | 100999 | 384 | 0.00% | heldout | 61.86% | 0.5152 | 0.5405 |
+| zh_qwen_generic_d512 | 100999 | 512 | 0.00% | dev | 62.33% | 0.5409 | 0.5610 |
+| zh_qwen_generic_d512 | 100999 | 512 | 0.00% | heldout | 62.14% | 0.5163 | 0.5420 |
+| zh_qwen_none_d1024 | 100999 | 1024 | 0.00% | dev | 62.67% | 0.5059 | 0.5355 |
+| zh_qwen_none_d1024 | 100999 | 1024 | 0.00% | heldout | 60.86% | 0.5109 | 0.5348 |
+| zh_qwen_none_d384 | 100999 | 384 | 0.00% | dev | 61.00% | 0.4870 | 0.5172 |
+| zh_qwen_none_d384 | 100999 | 384 | 0.00% | heldout | 59.43% | 0.4970 | 0.5207 |
+| zh_qwen_none_d512 | 100999 | 512 | 0.00% | dev | 62.00% | 0.5058 | 0.5336 |
+| zh_qwen_none_d512 | 100999 | 512 | 0.00% | heldout | 59.29% | 0.5011 | 0.5235 |
+
+英文dev为官方train抽取160条，historical_test为历史官方test的300条；中文dev/heldout为官方dev内拆分的300/700条。两种任务之间不可直接比较高低。
+
+编码器FP32与Qwen CUDA/BF16、原块与不同视图、编码缓存及设备差异均在聚合JSON中记录；这不是单一变量的架构或速度排名。中文token分块使用统一MiniLM tokenizer正文240/重叠32，最终按原文档去重。
+
+聚合快照见[embedding_sweep_summaries.json](embedding_sweep_summaries.json)。本附件提供全部聚合统计，逐查询重算仅覆盖另外发布排名的五条英文完整链路和四条中文原段落链路。

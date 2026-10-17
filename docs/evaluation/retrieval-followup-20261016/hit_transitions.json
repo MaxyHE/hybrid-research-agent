@@ -1,0 +1,18 @@
+{
+  "en_qwen_domain_d1024": {
+    "recovered_vs_minilm": 4,
+    "lost_vs_minilm": 1,
+    "net_vs_minilm": 3,
+    "recovered_vs_dev_bge": 1,
+    "lost_vs_dev_bge": 2,
+    "net_vs_dev_bge": -1
+  },
+  "en_qwen_full_domain_d1024": {
+    "recovered_vs_minilm": 4,
+    "lost_vs_minilm": 1,
+    "net_vs_minilm": 3,
+    "recovered_vs_dev_bge": 1,
+    "lost_vs_dev_bge": 2,
+    "net_vs_dev_bge": -1
+  }
+}

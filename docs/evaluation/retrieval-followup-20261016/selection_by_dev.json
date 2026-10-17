@@ -1,0 +1,10 @@
+{
+  "english_dense_by_dev_mrr": "en_bge_base_en_no_query_instruction",
+  "english_rrf_by_dev_mrr": "en_bge_base_en_no_query_instruction",
+  "chinese_dense_by_dev_mrr": "zh_bge_large_zh",
+  "decoder_exploration": {
+    "english_same_chunks": "en_qwen_domain_d1024",
+    "english_title_abstract_document": "en_qwen_full_domain_d1024",
+    "chinese_original_paragraph": "zh_qwen_generic_d512"
+  }
+}

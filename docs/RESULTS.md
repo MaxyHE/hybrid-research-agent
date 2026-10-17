@@ -2,7 +2,15 @@
 
 最新原文交接候选的固定任务评分和新增完整 Hybrid 案例见 [证据交接评测](EVIDENCE_HANDOFF.md)。下方 91.7% 是历史指定来源版本成绩，不是最新候选的端到端成功率。
 
-## 主检索结果：完整 SciFact
+## 最新检索追加实验：2026-10-14至16日
+
+[完整报告](RETRIEVAL_FOLLOWUP.md)整合57组embedding／分块、五条完整召回重排链路、中文问答检索和FAISS索引测量。开发预选BGE无指令版本为298/339＝87.91%、MRR0.7483；同环境MiniLM为294/339＝86.73%、MRR0.7493；两种Qwen embedding完整链路均为297/339＝87.61%。提高覆盖与改善首个相关结果的名次是不同目标。
+
+当前BGE漏检41＝14池外＋27池内；[案例分析](RETRIEVAL_FAILURE_ANALYSIS.md)说明定向语义诊断和K敏感性。最新公开排名可用 `python scripts/recompute-retrieval-followup.py` 独立核算。没有重测Agent报告质量，也没有切换网页默认检索配置。
+
+下方保留旧环境与历史组件增量，不将旧MRR0.7544附到本轮BGE上。
+
+## 历史检索组件对照：2026-10-07 完整 SciFact
 
 5,183篇文档、14,940 chunks、300条官方test查询、339个相关文档对；all-MiniLM-L6-v2，recursive 1000/200，归一化FAISS flat。各行均以最终文档序列计算指标。
 

@@ -1,0 +1,19 @@
+{
+  "export_date": "2026-10-17",
+  "description": "Curated public attachments; local absolute paths removed from metadata; predictions and metric values unchanged. SHA256 applies to exported files.",
+  "files_sha256": {
+    "README.md": "f66ee3542f63a08fc181fe82621a32fb9e4829fe8c288510236a3594bd5c48ae",
+    "all_missed_relations.json": "bb2acba5c9ce7ed24f6760189513cbeb133786774f005a21c12bb1652811a536",
+    "chinese_rankings.json": "434583e63ce1f50ea744b30d2b3ef6ff4fe7c067a6f68192d5c0c1355f11f8c9",
+    "embedding-sweep.md": "4805b31a0d2843fff551751f11dbb4f75595b8ebbc94cbdfaec0721e8b5c5a8f",
+    "embedding_sweep_summaries.json": "effa4f3a68ab20c558da5b9e0a7f94064cffceb9308d5bc8b0f577d6037db968",
+    "hit_transitions.json": "ef34aa447e9affa43dd7d0ae59b3cbe7bdf6289d444a587235a86a3c95d66546",
+    "index_zh_e5.json": "bfbffc2ec660e7feb1f298110f8c2516f33d41cb6adaa6287676cbb9bd286338",
+    "protocol.json": "6d5ed1965012f5f53ca51e0962139cc422f59ae21d9ebfdac1337bfa859b234e",
+    "rankings.json": "c9c9c8a3c765d8b08933e9d13391727ab5438e84933350c9c8bc79fc587a7b70",
+    "results.json": "31bcbf0efb1cdc420e7c486266c8b2f91eab182edfe53e7bb521d4f180f46306",
+    "selection_by_dev.json": "1199951e39d4e3b5160ee290ac33a06d5a342af179279d921a852eaff8cc0934",
+    "semantic_cases.json": "ad1e9bf07136995619b7454549a251bd4f9b32c8715edbfce6cb9b5a43ffb1d2",
+    "stage_and_k_results.json": "b8cbbeedce78afbaf5cf18a7eb0c95d8872641c9ed9464d6d80657dfed6529cb"
+  }
+}

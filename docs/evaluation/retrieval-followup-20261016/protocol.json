@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-16",
+  "status": "frozen_before_new_inference",
+  "scope": "Historical SciFact 300 queries / 339 relevant document pairs; not a fresh blind test",
+  "arms": [
+    "en_qwen_domain_d1024",
+    "en_qwen_full_domain_d1024"
+  ],
+  "selection": {
+    "english_same_chunks": "en_qwen_domain_d1024",
+    "english_title_abstract_document": "en_qwen_full_domain_d1024",
+    "chinese_original_paragraph": "zh_qwen_generic_d512"
+  },
+  "frozen": {
+    "candidate_documents": 64,
+    "final_k": 8,
+    "rrf_constant": 60,
+    "instruction": "Given a scientific claim, retrieve research papers that provide evidence supporting or refuting the claim.",
+    "scorer": "Qwen/Qwen3-Reranker-0.6B",
+    "batch": 8,
+    "dtype": "bfloat16",
+    "attention": "sdpa",
+    "max_length": 4096
+  },
+  "cache_policy": "Reuse identical frozen pair scorer cache only if model/config hashes agree and 8 full original candidate-union anchors reproduce within 1e-5 logit difference",
+  "new_unique_pairs": 5553,
+  "anchor_queries": 8,
+  "anchor_pairs": 690,
+  "inputs_sha256": "8e819b16f0c6e6efc5984dd8b4b8cdd12763ed91c66fae1d63f7c36f95a02b2b",
+  "candidate_pools_sha256": "b47a2c0601091d8e9cc3e5a0812c43dfdc3c6013ac74ef2906397a18b1ec94e4",
+  "cache_sha256": "80d039f9a40fce174efd9f57e67ffe8841e1c3515d9889ea7f22637c6b77cb2b",
+  "selection_sha256": "1199951e39d4e3b5160ee290ac33a06d5a342af179279d921a852eaff8cc0934",
+  "original_scorer_sha256": "f0282486ddfd7013010d12af4ce939e4b07571b1136704d11eef5e2826c58093",
+  "comparison": "Each arm searches/reranks only its own pool; union is for pair-computation reuse only",
+  "no_new_encoding_or_training": true,
+  "no_report_generation_evaluation": true
+}

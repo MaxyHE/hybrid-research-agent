@@ -1,0 +1,1278 @@
+{
+  "en_minilm_legacy256": [
+    {
+      "query_id": "1",
+      "doc_id": "31715818",
+      "rank_in_64": 9,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "13",
+      "doc_id": "1606628",
+      "rank_in_64": 39,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "36",
+      "doc_id": "5152028",
+      "rank_in_64": 14,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "132",
+      "doc_id": "7975937",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "133",
+      "doc_id": "38485364",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "239",
+      "doc_id": "14079881",
+      "rank_in_64": 9,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "275",
+      "doc_id": "14241418",
+      "rank_in_64": 14,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "303",
+      "doc_id": "4388470",
+      "rank_in_64": 9,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "312",
+      "doc_id": "6173523",
+      "rank_in_64": 15,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "421",
+      "doc_id": "11172205",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "437",
+      "doc_id": "18399038",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "452",
+      "doc_id": "464511",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "475",
+      "doc_id": "18678095",
+      "rank_in_64": 12,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "502",
+      "doc_id": "13071728",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "540",
+      "doc_id": "25007443",
+      "rank_in_64": 21,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "544",
+      "doc_id": "24221369",
+      "rank_in_64": 12,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "554",
+      "doc_id": "1049501",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "560",
+      "doc_id": "40096222",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "619",
+      "doc_id": "2565138",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "691",
+      "doc_id": "10991183",
+      "rank_in_64": 10,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "715",
+      "doc_id": "18421962",
+      "rank_in_64": 13,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "716",
+      "doc_id": "18421962",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "775",
+      "doc_id": "32275758",
+      "rank_in_64": 31,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "820",
+      "doc_id": "8646760",
+      "rank_in_64": 28,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "821",
+      "doc_id": "8646760",
+      "rank_in_64": 29,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "834",
+      "doc_id": "5483793",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "870",
+      "doc_id": "195689316",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "873",
+      "doc_id": "1180972",
+      "rank_in_64": 9,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "873",
+      "doc_id": "19307912",
+      "rank_in_64": 20,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "873",
+      "doc_id": "27393799",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "887",
+      "doc_id": "18855191",
+      "rank_in_64": 20,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "913",
+      "doc_id": "3203590",
+      "rank_in_64": 16,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "914",
+      "doc_id": "3203590",
+      "rank_in_64": 18,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "975",
+      "doc_id": "5304891",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1110",
+      "doc_id": "13770184",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1132",
+      "doc_id": "9283422",
+      "rank_in_64": 18,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1175",
+      "doc_id": "31272411",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1199",
+      "doc_id": "16760369",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1213",
+      "doc_id": "14407673",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1226",
+      "doc_id": "13777138",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1281",
+      "doc_id": "4387784",
+      "rank_in_64": 10,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1316",
+      "doc_id": "27910499",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1332",
+      "doc_id": "5304891",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1362",
+      "doc_id": "8290953",
+      "rank_in_64": 12,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1363",
+      "doc_id": "8290953",
+      "rank_in_64": 16,
+      "stage": "ranking_or_cutoff"
+    }
+  ],
+  "en_bge_base_en_no_query_instruction": [
+    {
+      "query_id": "1",
+      "doc_id": "31715818",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "13",
+      "doc_id": "1606628",
+      "rank_in_64": 37,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "36",
+      "doc_id": "5152028",
+      "rank_in_64": 14,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "132",
+      "doc_id": "7975937",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "133",
+      "doc_id": "38485364",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "239",
+      "doc_id": "14079881",
+      "rank_in_64": 9,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "275",
+      "doc_id": "14241418",
+      "rank_in_64": 12,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "303",
+      "doc_id": "4388470",
+      "rank_in_64": 9,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "312",
+      "doc_id": "6173523",
+      "rank_in_64": 14,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "437",
+      "doc_id": "18399038",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "452",
+      "doc_id": "464511",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "475",
+      "doc_id": "18678095",
+      "rank_in_64": 13,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "502",
+      "doc_id": "13071728",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "540",
+      "doc_id": "25007443",
+      "rank_in_64": 20,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "544",
+      "doc_id": "24221369",
+      "rank_in_64": 13,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "554",
+      "doc_id": "1049501",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "560",
+      "doc_id": "40096222",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "691",
+      "doc_id": "10991183",
+      "rank_in_64": 10,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "715",
+      "doc_id": "18421962",
+      "rank_in_64": 15,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "716",
+      "doc_id": "18421962",
+      "rank_in_64": 17,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "775",
+      "doc_id": "32275758",
+      "rank_in_64": 30,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "820",
+      "doc_id": "8646760",
+      "rank_in_64": 31,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "821",
+      "doc_id": "8646760",
+      "rank_in_64": 30,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "834",
+      "doc_id": "5483793",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "873",
+      "doc_id": "1180972",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "873",
+      "doc_id": "19307912",
+      "rank_in_64": 24,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "887",
+      "doc_id": "18855191",
+      "rank_in_64": 17,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "913",
+      "doc_id": "3203590",
+      "rank_in_64": 19,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "914",
+      "doc_id": "3203590",
+      "rank_in_64": 19,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "975",
+      "doc_id": "5304891",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1110",
+      "doc_id": "13770184",
+      "rank_in_64": 19,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1132",
+      "doc_id": "9283422",
+      "rank_in_64": 18,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1175",
+      "doc_id": "31272411",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1191",
+      "doc_id": "30655442",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1199",
+      "doc_id": "16760369",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1213",
+      "doc_id": "14407673",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1281",
+      "doc_id": "4387784",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1316",
+      "doc_id": "27910499",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1332",
+      "doc_id": "5304891",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1362",
+      "doc_id": "8290953",
+      "rank_in_64": 10,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1363",
+      "doc_id": "8290953",
+      "rank_in_64": 13,
+      "stage": "ranking_or_cutoff"
+    }
+  ],
+  "en_bge_base_en": [
+    {
+      "query_id": "1",
+      "doc_id": "31715818",
+      "rank_in_64": 12,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "13",
+      "doc_id": "1606628",
+      "rank_in_64": 37,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "36",
+      "doc_id": "5152028",
+      "rank_in_64": 14,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "132",
+      "doc_id": "7975937",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "133",
+      "doc_id": "38485364",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "239",
+      "doc_id": "14079881",
+      "rank_in_64": 9,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "275",
+      "doc_id": "14241418",
+      "rank_in_64": 14,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "312",
+      "doc_id": "6173523",
+      "rank_in_64": 13,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "421",
+      "doc_id": "11172205",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "437",
+      "doc_id": "18399038",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "452",
+      "doc_id": "464511",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "475",
+      "doc_id": "18678095",
+      "rank_in_64": 14,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "502",
+      "doc_id": "13071728",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "540",
+      "doc_id": "25007443",
+      "rank_in_64": 20,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "544",
+      "doc_id": "24221369",
+      "rank_in_64": 12,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "554",
+      "doc_id": "1049501",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "560",
+      "doc_id": "40096222",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "619",
+      "doc_id": "2565138",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "691",
+      "doc_id": "10991183",
+      "rank_in_64": 9,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "715",
+      "doc_id": "18421962",
+      "rank_in_64": 16,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "716",
+      "doc_id": "18421962",
+      "rank_in_64": 20,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "775",
+      "doc_id": "32275758",
+      "rank_in_64": 28,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "820",
+      "doc_id": "8646760",
+      "rank_in_64": 24,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "821",
+      "doc_id": "8646760",
+      "rank_in_64": 25,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "834",
+      "doc_id": "5483793",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "873",
+      "doc_id": "1180972",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "873",
+      "doc_id": "19307912",
+      "rank_in_64": 24,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "887",
+      "doc_id": "18855191",
+      "rank_in_64": 16,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "913",
+      "doc_id": "3203590",
+      "rank_in_64": 19,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "914",
+      "doc_id": "3203590",
+      "rank_in_64": 19,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "975",
+      "doc_id": "5304891",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1110",
+      "doc_id": "13770184",
+      "rank_in_64": 20,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1132",
+      "doc_id": "9283422",
+      "rank_in_64": 18,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1175",
+      "doc_id": "31272411",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1199",
+      "doc_id": "16760369",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1213",
+      "doc_id": "14407673",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1281",
+      "doc_id": "4387784",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1316",
+      "doc_id": "27910499",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1332",
+      "doc_id": "5304891",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1362",
+      "doc_id": "8290953",
+      "rank_in_64": 10,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1363",
+      "doc_id": "8290953",
+      "rank_in_64": 13,
+      "stage": "ranking_or_cutoff"
+    }
+  ],
+  "en_qwen_domain_d1024": [
+    {
+      "query_id": "1",
+      "doc_id": "31715818",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "13",
+      "doc_id": "1606628",
+      "rank_in_64": 42,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "36",
+      "doc_id": "5152028",
+      "rank_in_64": 14,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "132",
+      "doc_id": "7975937",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "133",
+      "doc_id": "38485364",
+      "rank_in_64": 12,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "239",
+      "doc_id": "14079881",
+      "rank_in_64": 9,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "275",
+      "doc_id": "14241418",
+      "rank_in_64": 12,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "303",
+      "doc_id": "4388470",
+      "rank_in_64": 9,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "312",
+      "doc_id": "6173523",
+      "rank_in_64": 15,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "421",
+      "doc_id": "11172205",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "431",
+      "doc_id": "28937856",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "437",
+      "doc_id": "18399038",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "452",
+      "doc_id": "464511",
+      "rank_in_64": 13,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "475",
+      "doc_id": "18678095",
+      "rank_in_64": 14,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "502",
+      "doc_id": "13071728",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "540",
+      "doc_id": "25007443",
+      "rank_in_64": 20,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "544",
+      "doc_id": "24221369",
+      "rank_in_64": 12,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "554",
+      "doc_id": "1049501",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "560",
+      "doc_id": "40096222",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "691",
+      "doc_id": "10991183",
+      "rank_in_64": 9,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "715",
+      "doc_id": "18421962",
+      "rank_in_64": 13,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "716",
+      "doc_id": "18421962",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "775",
+      "doc_id": "32275758",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "820",
+      "doc_id": "8646760",
+      "rank_in_64": 27,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "821",
+      "doc_id": "8646760",
+      "rank_in_64": 27,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "834",
+      "doc_id": "5483793",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "873",
+      "doc_id": "1180972",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "873",
+      "doc_id": "19307912",
+      "rank_in_64": 23,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "887",
+      "doc_id": "18855191",
+      "rank_in_64": 23,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "913",
+      "doc_id": "3203590",
+      "rank_in_64": 18,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "914",
+      "doc_id": "3203590",
+      "rank_in_64": 16,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "975",
+      "doc_id": "5304891",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1110",
+      "doc_id": "13770184",
+      "rank_in_64": 17,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1132",
+      "doc_id": "9283422",
+      "rank_in_64": 18,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1175",
+      "doc_id": "31272411",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1199",
+      "doc_id": "16760369",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1213",
+      "doc_id": "14407673",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1281",
+      "doc_id": "4387784",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1316",
+      "doc_id": "27910499",
+      "rank_in_64": 12,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1332",
+      "doc_id": "5304891",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1362",
+      "doc_id": "8290953",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1363",
+      "doc_id": "8290953",
+      "rank_in_64": 13,
+      "stage": "ranking_or_cutoff"
+    }
+  ],
+  "en_qwen_full_domain_d1024": [
+    {
+      "query_id": "1",
+      "doc_id": "31715818",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "13",
+      "doc_id": "1606628",
+      "rank_in_64": 46,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "36",
+      "doc_id": "5152028",
+      "rank_in_64": 14,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "132",
+      "doc_id": "7975937",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "133",
+      "doc_id": "38485364",
+      "rank_in_64": 12,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "239",
+      "doc_id": "14079881",
+      "rank_in_64": 10,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "275",
+      "doc_id": "14241418",
+      "rank_in_64": 14,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "303",
+      "doc_id": "4388470",
+      "rank_in_64": 9,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "312",
+      "doc_id": "6173523",
+      "rank_in_64": 16,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "421",
+      "doc_id": "11172205",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "431",
+      "doc_id": "28937856",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "437",
+      "doc_id": "18399038",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "452",
+      "doc_id": "464511",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "475",
+      "doc_id": "18678095",
+      "rank_in_64": 14,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "502",
+      "doc_id": "13071728",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "540",
+      "doc_id": "25007443",
+      "rank_in_64": 20,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "544",
+      "doc_id": "24221369",
+      "rank_in_64": 16,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "554",
+      "doc_id": "1049501",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "560",
+      "doc_id": "40096222",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "691",
+      "doc_id": "10991183",
+      "rank_in_64": 10,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "715",
+      "doc_id": "18421962",
+      "rank_in_64": 16,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "716",
+      "doc_id": "18421962",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "775",
+      "doc_id": "32275758",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "820",
+      "doc_id": "8646760",
+      "rank_in_64": 29,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "821",
+      "doc_id": "8646760",
+      "rank_in_64": 28,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "834",
+      "doc_id": "5483793",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "873",
+      "doc_id": "1180972",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "873",
+      "doc_id": "19307912",
+      "rank_in_64": 24,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "887",
+      "doc_id": "18855191",
+      "rank_in_64": 24,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "913",
+      "doc_id": "3203590",
+      "rank_in_64": 15,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "914",
+      "doc_id": "3203590",
+      "rank_in_64": 16,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "975",
+      "doc_id": "5304891",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1110",
+      "doc_id": "13770184",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1132",
+      "doc_id": "9283422",
+      "rank_in_64": 18,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1175",
+      "doc_id": "31272411",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1199",
+      "doc_id": "16760369",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1213",
+      "doc_id": "14407673",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1281",
+      "doc_id": "4387784",
+      "rank_in_64": 12,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1316",
+      "doc_id": "27910499",
+      "rank_in_64": 12,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1332",
+      "doc_id": "5304891",
+      "rank_in_64": null,
+      "stage": "candidate_pool"
+    },
+    {
+      "query_id": "1362",
+      "doc_id": "8290953",
+      "rank_in_64": 12,
+      "stage": "ranking_or_cutoff"
+    },
+    {
+      "query_id": "1363",
+      "doc_id": "8290953",
+      "rank_in_64": 11,
+      "stage": "ranking_or_cutoff"
+    }
+  ]
+}
